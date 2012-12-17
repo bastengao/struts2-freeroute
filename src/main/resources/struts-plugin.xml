@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <bean type="com.gaohui.struts2.mapping.RouteMappingHandler" name="routeMappingHandler"
+          class="com.gaohui.struts2.mapping.DefaultRouteMappingHandler"/>
+
+    <bean type="com.opensymphony.xwork2.config.PackageProvider" name="myPackageProvider"
+          class="com.gaohui.struts2.mapping.MyPackageProvider"/>
+
+    <bean type="org.apache.struts2.dispatcher.mapper.ActionMapper" name="myMapper"
+          class="com.gaohui.struts2.mapping.DefaultActionMapper"/>
+
+    <constant name="struts.mapping.myConfig" value="hello"/>
+    <constant name="struts.mapper.class" value="myMapper"/>
+</struts>
