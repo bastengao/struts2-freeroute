@@ -1,4 +1,4 @@
-package com.gaohui.struts2.mapping;
+package org.apache.struts2.freeroute;
 
 /**
  * @author bastengao

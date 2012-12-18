@@ -1,7 +1,9 @@
-package com.gaohui.struts2.mapping;
+package org.apache.struts2.freeroute;
 
 import com.gaohui.action.BookController;
 import com.google.common.reflect.ClassPath;
+import org.apache.struts2.freeroute.MyPackageProvider;
+import org.apache.struts2.freeroute.RouteMapping;
 import org.junit.Assert;
 import org.junit.Test;
 

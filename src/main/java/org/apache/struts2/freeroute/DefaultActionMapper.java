@@ -1,4 +1,4 @@
-package com.gaohui.struts2.mapping;
+package org.apache.struts2.freeroute;
 
 import com.opensymphony.xwork2.config.ConfigurationManager;
 import com.opensymphony.xwork2.inject.Inject;

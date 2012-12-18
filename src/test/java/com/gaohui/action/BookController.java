@@ -1,6 +1,6 @@
 package com.gaohui.action;
 
-import com.gaohui.struts2.mapping.annotation.Route;
+import org.apache.struts2.freeroute.annotation.Route;
 
 /**
  * @author bastengao

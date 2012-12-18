@@ -1,6 +1,6 @@
-package com.gaohui.struts2.mapping;
+package org.apache.struts2.freeroute;
 
-import com.gaohui.struts2.mapping.annotation.Route;
+import org.apache.struts2.freeroute.annotation.Route;
 
 import java.lang.reflect.Method;
 

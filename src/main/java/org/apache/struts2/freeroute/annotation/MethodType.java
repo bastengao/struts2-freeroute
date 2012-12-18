@@ -1,4 +1,4 @@
-package com.gaohui.struts2.mapping.annotation;
+package org.apache.struts2.freeroute.annotation;
 
 /**
  * enum of http method

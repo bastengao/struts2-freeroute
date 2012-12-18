@@ -3,7 +3,7 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <constant name="struts.mapper.class" value="com.gaohui.struts2.mapping.DefaultActionMapper"/>
+    <constant name="struts.mapper.class" value="org.apache.struts2.freeroute.DefaultActionMapper"/>
 
     <package name="my-struts" extends="struts-default">
         <action name="hello">

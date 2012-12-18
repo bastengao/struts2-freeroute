@@ -3,14 +3,14 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <bean type="com.gaohui.struts2.mapping.RouteMappingHandler" name="routeMappingHandler"
-          class="com.gaohui.struts2.mapping.DefaultRouteMappingHandler"/>
+    <bean type="org.apache.struts2.freeroute.RouteMappingHandler" name="routeMappingHandler"
+          class="org.apache.struts2.freeroute.DefaultRouteMappingHandler"/>
 
     <bean type="com.opensymphony.xwork2.config.PackageProvider" name="myPackageProvider"
-          class="com.gaohui.struts2.mapping.MyPackageProvider"/>
+          class="org.apache.struts2.freeroute.MyPackageProvider"/>
 
     <bean type="org.apache.struts2.dispatcher.mapper.ActionMapper" name="myMapper"
-          class="com.gaohui.struts2.mapping.DefaultActionMapper"/>
+          class="org.apache.struts2.freeroute.DefaultActionMapper"/>
 
     <constant name="struts.mapping.myConfig" value="hello"/>
     <constant name="struts.mapper.class" value="myMapper"/>

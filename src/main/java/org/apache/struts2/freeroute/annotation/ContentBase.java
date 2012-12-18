@@ -1,4 +1,4 @@
-package com.gaohui.struts2.mapping.annotation;
+package org.apache.struts2.freeroute.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

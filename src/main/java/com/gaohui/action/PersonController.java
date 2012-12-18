@@ -1,8 +1,8 @@
 package com.gaohui.action;
 
-import com.gaohui.struts2.mapping.annotation.ContentBase;
-import com.gaohui.struts2.mapping.annotation.MethodType;
-import com.gaohui.struts2.mapping.annotation.Route;
+import org.apache.struts2.freeroute.annotation.ContentBase;
+import org.apache.struts2.freeroute.annotation.MethodType;
+import org.apache.struts2.freeroute.annotation.Route;
 import com.opensymphony.xwork2.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
