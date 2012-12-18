@@ -3,6 +3,9 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
+    <bean type="com.opensymphony.xwork2.UnknownHandler" name="freeRouteUnknownHandler"
+          class="org.apache.struts2.freeroute.DefaultUnknownHandler"/>
+
     <bean type="org.apache.struts2.freeroute.RouteMappingHandler" name="routeMappingHandler"
           class="org.apache.struts2.freeroute.DefaultRouteMappingHandler"/>
 

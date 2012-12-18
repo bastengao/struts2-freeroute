@@ -116,9 +116,11 @@ public class MyPackageProvider implements PackageProvider {
     private ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
         ActionConfig.Builder actionCfgBuilder = new ActionConfig.Builder(packageConfigBuilder.getName(), actionName, className);
         actionCfgBuilder.methodName(methodName);
+
+        //TODO 去掉默认的写死页面
         ResultConfig.Builder resultBuilder = new ResultConfig.Builder("success", "org.apache.struts2.dispatcher.ServletDispatcherResult");
         resultBuilder.addParam("location", "/pages/content.html");
-        actionCfgBuilder.addResultConfig(resultBuilder.build());
+        //actionCfgBuilder.addResultConfig(resultBuilder.build());
 
         return actionCfgBuilder.build();
     }

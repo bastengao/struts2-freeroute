@@ -20,17 +20,17 @@ public class PersonController {
     @Route("/persons/create")
     public String toCreate() {
         log.debug("toCreate:{}", id);
-        return Action.SUCCESS;
+        return "my-result";
     }
 
     @Route("/create")
     public String toCreate1() {
-        return Action.SUCCESS;
+        return "my-result";
     }
 
     @Route("/persons/create2")
     public String toCreate2() {
-        return null;
+        return "/my-result2";
     }
 
     @Route("/persons/nested/create3")
