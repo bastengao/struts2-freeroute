@@ -68,9 +68,20 @@ public class MyPackageProvider implements PackageProvider {
                 for (RouteMapping routeMapping : routeMappings) {
                     String routePath = routeMapping.getRoute().value();
                     routePath = ActionUtil.padSlash(routePath);
+                    routePath = RouteUtil.flatRoutePath(routePath);
+
+                    /**
+                     * 如果 routePath 中有 pathVariable,
+                     * 例如 "/persons/{id}" 那么将路由转化为 "/persons/__id__"
+                     * "/persons/{id}/edit" 转化为 "/persons/__id__/edit"
+                     */
+
+                    //添加路由映射
+                    routeMappingHandler.put(routePath, routeMapping);
+
+                    //create action config
                     String namespace = ActionUtil.namespace(routePath);
                     String actionName = ActionUtil.actionName(routePath);
-                    routeMappingHandler.put(routePath, routeMapping);
                     PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(namespace, packages);
                     ActionConfig actionCfg = createActionConfig(packageCfgBuilder, classInfo.getName(), routeMapping.getMethod().getName(), actionName);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);

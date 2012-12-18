@@ -44,10 +44,10 @@ public class PersonController {
     }
 
     // {id} value in path will be set to this#id property.
-    //@Route(value = "/{id}", method = MethodType.GET)
+    @Route(value = "/persons/{id}", method = MethodType.GET)
     public String show() {
         //will render by "/pages/content.html"
-        return "content";
+        return "my-result";
     }
 
     //@Route("/{id}/edit")

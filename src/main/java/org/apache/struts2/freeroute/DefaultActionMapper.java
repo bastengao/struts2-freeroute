@@ -58,16 +58,17 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
     }
 
     private ActionMapping parseAndFindRouteMapping(HttpServletRequest request) {
-        String servletPath = request.getServletPath();
-        RouteMapping routeMapping = routeMappingHandler.route(servletPath);
+        RouteMapping routeMapping = routeMappingHandler.route(request);
 
         if (routeMapping == null) {
             return null;
         }
         log.debug("routeMapping:{}", routeMapping);
 
+        //TODO 这里的的处理步骤与 MyPackageProvider 处理一致
         String routePath = routeMapping.getRoute().value();
         routePath = ActionUtil.padSlash(routePath);
+        routePath = RouteUtil.flatRoutePath(routePath);
 
         String namespace = ActionUtil.namespace(routePath);
         namespace = ActionUtil.padSlash(namespace);

@@ -13,20 +13,15 @@ public class RouteMapping {
     private Class action;
     private Method method;
 
-    /**
-     * @param route
-     * @param method
-     * @deprecated
-     */
-    public RouteMapping(Route route, Method method) {
-        this.route = route;
-        this.method = method;
-    }
+    // routePath 上是否有 pathVariable
+    private boolean hasPathVariables;
 
     public RouteMapping(Route route, Class action, Method method) {
         this.route = route;
         this.action = action;
         this.method = method;
+
+        hasPathVariables = RouteUtil.hasPathVariables(route.value());
     }
 
     public Route getRoute() {
@@ -41,4 +36,7 @@ public class RouteMapping {
         return method;
     }
 
+    public boolean hasPathVariables() {
+        return hasPathVariables;
+    }
 }
