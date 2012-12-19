@@ -7,8 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * @author bastengao
@@ -40,21 +43,12 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
 
 
         ActionMapping actionMapping0 = parseAndFindRouteMapping(request);
-        if (true) {
-            if (actionMapping0 != null) {
-                return actionMapping0;
-            }
+        if (actionMapping0 != null) {
+            return actionMapping0;
         }
 
 
-        ActionMapping actionMapping = super.getMapping(request, configManager);
-
-        if (actionMapping != null) {
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("id", 999);
-            actionMapping.setParams(params);
-        }
-        return actionMapping;
+        return super.getMapping(request, configManager);
     }
 
     private ActionMapping parseAndFindRouteMapping(HttpServletRequest request) {
@@ -77,6 +71,28 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         ActionMapping actionMapping = new ActionMapping();
         actionMapping.setNamespace(namespace);
         actionMapping.setName(actionName);
+        setParams(actionMapping, routeMapping, request);
         return actionMapping;
+    }
+
+    private void setParams(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
+        if (routeMapping.hasPathVariables()) {
+            Map<String, Object> params = new HashMap<String, Object>();
+            String servletPath = request.getServletPath();
+            Matcher matcher = routeMapping.getRoutePathPattern().matcher(servletPath);
+            List<String> values = new ArrayList<String>();
+            //只匹配一次,  完成匹配
+            if (matcher.find()) {
+                int groupCount = matcher.groupCount();
+                for (int c = 1; c <= groupCount; c++) {
+                    values.add(matcher.group(c));
+                }
+            }
+            List<String> names = routeMapping.getVariableNames();
+            for (int i = 0; i < names.size(); i++) {
+                params.put(names.get(i), values.get(i));
+            }
+            actionMapping.setParams(params);
+        }
     }
 }

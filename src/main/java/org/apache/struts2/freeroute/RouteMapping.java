@@ -3,6 +3,9 @@ package org.apache.struts2.freeroute;
 import org.apache.struts2.freeroute.annotation.Route;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author bastengao
@@ -15,13 +18,20 @@ public class RouteMapping {
 
     // routePath 上是否有 pathVariable
     private boolean hasPathVariables;
+    private List<String> variableNames;
+    private Pattern routePathPattern;
 
     public RouteMapping(Route route, Class action, Method method) {
         this.route = route;
         this.action = action;
         this.method = method;
 
-        hasPathVariables = RouteUtil.hasPathVariables(route.value());
+        String routePath = route.value();
+        this.hasPathVariables = RouteUtil.hasPathVariables(routePath);
+        if (hasPathVariables) {
+            routePathPattern = Pattern.compile(RouteUtil.toRoutePathPattern(routePath));
+            variableNames = Collections.unmodifiableList(RouteUtil.pathVariableNames(routePath));
+        }
     }
 
     public Route getRoute() {
@@ -38,5 +48,13 @@ public class RouteMapping {
 
     public boolean hasPathVariables() {
         return hasPathVariables;
+    }
+
+    public List<String> getVariableNames() {
+        return variableNames;
+    }
+
+    public Pattern getRoutePathPattern() {
+        return routePathPattern;
     }
 }

@@ -31,8 +31,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     @Override
     public void put(String key, RouteMapping routeMapping) {
         if (routeMapping.hasPathVariables()) {
-            //TODO 写死的正则
-            dynamicRoutes.put(Pattern.compile(routeMapping.getRoute().value()), routeMapping);
+            // 正则 => 路由
+            dynamicRoutes.put(routeMapping.getRoutePathPattern(), routeMapping);
         } else {
             staticRoutes.put(key, routeMapping);
         }
@@ -49,7 +49,12 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return staticRoutes.get(servletPath);
         }
 
-        // TODO try dynamicRoutes
+        // try dynamicRoutes
+        for(Pattern pattern: dynamicRoutes.keySet()){
+            if(pattern.matcher(servletPath).matches()){
+                return dynamicRoutes.get(pattern);
+            }
+        }
         return null;
     }
 }

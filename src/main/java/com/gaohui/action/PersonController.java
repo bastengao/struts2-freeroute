@@ -47,6 +47,13 @@ public class PersonController {
     @Route(value = "/persons/{id}", method = MethodType.GET)
     public String show() {
         //will render by "/pages/content.html"
+        System.out.println(id);
+        return "my-result";
+    }
+
+    @Route("/persons/{id}.xml")
+    public String showXml(){
+        System.out.println(id);
         return "my-result";
     }
 
