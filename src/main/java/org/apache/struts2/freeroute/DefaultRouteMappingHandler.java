@@ -44,11 +44,13 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         //1. servletPath ( 其中可以包括 pathVariable 的匹配 )
         //2. http method
         //3. 特定的 param
+
+        // TODO 路径匹配后，继续匹配 method  和 param
+
         String servletPath = request.getServletPath();
         if (staticRoutes.containsKey(servletPath)) {
             return staticRoutes.get(servletPath);
         }
-
         // try dynamicRoutes
         for(Pattern pattern: dynamicRoutes.keySet()){
             if(pattern.matcher(servletPath).matches()){
