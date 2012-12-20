@@ -133,6 +133,7 @@ public class MyPackageProvider implements PackageProvider {
 
     @VisibleForTesting
     public static Set<ClassPath.ClassInfo> findControllers() throws IOException {
+        //TODO 可配置默认扫描包
         String controllerPackage = "com.gaohui.action";
         ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
 
