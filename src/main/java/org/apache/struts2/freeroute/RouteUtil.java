@@ -6,10 +6,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 路由工具类
+ *
  * @author bastengao
  * @date 12-12-18 23:25
  */
 public class RouteUtil {
+
+    //路径变量正则 "/{([a-zA-Z]+)}"
+    public static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("/\\{([a-zA-Z]+)\\}");
+
     private RouteUtil() {
     }
 
@@ -20,15 +26,7 @@ public class RouteUtil {
      * @return
      */
     public static boolean hasPathVariables(String routePath) {
-        // "/{[a-zA-Z]+}"
-        //TODO 这里用一种比较简单的办法, 应该使用正则
-        /**
-         if (routePath.contains("{") && routePath.contains("}")) {
-         return true;
-         }
-         */
-        Pattern pattern = Pattern.compile("/\\{[a-za-z]+\\}");
-        Matcher matcher = pattern.matcher(routePath);
+        Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
         return matcher.find();
     }
 
@@ -44,23 +42,22 @@ public class RouteUtil {
      * @return
      */
     public static String toRoutePathPattern(String routePath) {
-        Pattern pattern = Pattern.compile("/\\{([a-zA-Z]+)\\}");
-        Matcher matcher = pattern.matcher(routePath);
-        List<String> variableNames = new ArrayList<String>();
-        while (matcher.find()) {
-            variableNames.add(matcher.group(1));
-        }
-        matcher.reset();
+        List<String> variableNames =  pathVariableNames(routePath);
         String result = routePath;
         for (String variableName : variableNames) {
-            result = pattern.matcher(result).replaceFirst(String.format("/([a-zA-Z0-9]+)", variableName));
+            result = PATH_VARIABLE_PATTERN.matcher(result).replaceFirst("/([a-zA-Z0-9]+)");
         }
         return result;
     }
 
+    /**
+     * 返回路由中的变量名
+     *
+     * @param routePath
+     * @return
+     */
     public static List<String> pathVariableNames(String routePath){
-        Pattern pattern = Pattern.compile("/\\{([a-zA-Z]+)\\}");
-        Matcher matcher = pattern.matcher(routePath);
+        Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
         List<String> variableNames = new ArrayList<String>();
         while (matcher.find()) {
             variableNames.add(matcher.group(1));
