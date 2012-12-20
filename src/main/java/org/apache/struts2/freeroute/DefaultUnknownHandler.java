@@ -1,11 +1,17 @@
 package org.apache.struts2.freeroute;
 
 import com.opensymphony.xwork2.*;
+import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
+import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 默认处理未知的 result 或者 action.
@@ -17,12 +23,21 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultUnknownHandler implements UnknownHandler {
     private final static Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);
+    public static final Map<String, String> SUFFIXES = new HashMap<String, String>();
+
+    static {
+        SUFFIXES.put("freemarker", ".ftl");
+        SUFFIXES.put("velocity", ".vm");
+        SUFFIXES.put("dispatcher", "");
+    }
 
     private ObjectFactory objectFactory;
+    private Configuration configuration;
 
     @Inject
-    public DefaultUnknownHandler(ObjectFactory objectFactory) {
+    public DefaultUnknownHandler(ObjectFactory objectFactory, Configuration configuration) {
         this.objectFactory = objectFactory;
+        this.configuration = configuration;
     }
 
     @Override
@@ -36,13 +51,10 @@ public class DefaultUnknownHandler implements UnknownHandler {
         //这是我的菜, 更擅长处理未知的 result
         log.debug("catch result[{}] of action[{}]", resultCode, actionName);
 
-        //TODO 动态处理内容的路径，形式如 velocity, freemarker, jsp, html
-        String resultPath = ActionUtil.padSlash(resultCode + ".html");
-        log.debug("resultPath:{}", resultPath);
-        ResultConfig.Builder resultBuilder = new ResultConfig.Builder(resultCode, "org.apache.struts2.dispatcher.ServletDispatcherResult");
-        resultBuilder.addParam("location", resultPath);
-        ResultConfig resultConfig = resultBuilder.build();
-
+        ResultConfig resultConfig = parseResultCodeToResultConfig(actionConfig, resultCode);
+        if (resultConfig == null) {
+            return null;
+        }
 
         try {
             return objectFactory.buildResult(resultConfig, actionContext.getContextMap());
@@ -56,4 +68,56 @@ public class DefaultUnknownHandler implements UnknownHandler {
         //这不是我的菜
         return null;
     }
+
+    /**
+     * 解析 resultCode 为 ResultConfig, 如果无法解析则返回 null
+     *
+     * @param actionConfig
+     * @param resultCode
+     * @return
+     */
+    private ResultConfig parseResultCodeToResultConfig(ActionConfig actionConfig, String resultCode) {
+        String packageName = actionConfig.getPackageName();
+        PackageConfig packageConfig = configuration.getPackageConfig(packageName);
+        Map<String, ResultTypeConfig> resultTypes = packageConfig.getAllResultTypeConfigs();
+
+        log.debug("packageName:{}", packageName);
+        log.debug("resultTypes:{}", resultTypes);
+
+        ResultConfig resultConfig = findResultConfig(resultCode, resultTypes);
+        if (resultConfig == null) {
+            return null;
+        }
+
+        return resultConfig;
+    }
+
+    /**
+     * 找能够处理的 resultType, 目前只支持 dispatcher, freemarker, velocity
+     *
+     * @param resultCode
+     * @param resultTypes
+     * @return
+     */
+    private ResultConfig findResultConfig(String resultCode, Map<String, ResultTypeConfig> resultTypes) {
+        // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html
+        for (String type : SUFFIXES.keySet()) {
+            //startWith("type:")
+            if (resultCode.startsWith(type + ":")) {
+                ResultTypeConfig typeConfig = resultTypes.get(type);
+                ResultConfig.Builder resultBuilder = new ResultConfig.Builder(resultCode, typeConfig.getClassName());
+                if (typeConfig.getParams() != null) {
+                    resultBuilder.addParams(typeConfig.getParams());
+                }
+
+                String path = resultCode.substring(type.length() + 1);
+                String suffix = SUFFIXES.get(type); //后缀
+                resultBuilder.addParam(typeConfig.getDefaultResultParam(), path + suffix);
+                return resultBuilder.build();
+            }
+        }
+
+        return null;
+    }
+
 }

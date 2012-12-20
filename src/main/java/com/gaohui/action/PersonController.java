@@ -3,7 +3,6 @@ package com.gaohui.action;
 import org.apache.struts2.freeroute.annotation.ContentBase;
 import org.apache.struts2.freeroute.annotation.MethodType;
 import org.apache.struts2.freeroute.annotation.Route;
-import com.opensymphony.xwork2.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,17 +19,17 @@ public class PersonController {
     @Route("/persons/create")
     public String toCreate() {
         log.debug("toCreate:{}", id);
-        return "my-result";
+        return "dispatcher:/my-result.html";
     }
 
     @Route("/create")
     public String toCreate1() {
-        return "my-result";
+        return "dispatcher:/my-result.html";
     }
 
     @Route("/persons/create2")
     public String toCreate2() {
-        return "/my-result2";
+        return "dispatcher:/my-result2.html";
     }
 
     @Route("/persons/nested/create3")
@@ -48,13 +47,19 @@ public class PersonController {
     public String show() {
         //will render by "/pages/content.html"
         System.out.println(id);
-        return "my-result";
+        return "freemarker:/my-result";
     }
 
     @Route("/persons/{id}.xml")
     public String showXml(){
         System.out.println(id);
-        return "my-result";
+        return "dispatcher:/my-result.html";
+    }
+
+    @Route("/persons/{id}.jsp")
+    public String showJsp(){
+        System.out.println(id);
+        return "dispatcher:/my-result.jsp";
     }
 
     //@Route("/{id}/edit")

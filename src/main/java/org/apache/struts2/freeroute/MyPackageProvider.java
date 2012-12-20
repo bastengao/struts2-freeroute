@@ -1,6 +1,5 @@
 package org.apache.struts2.freeroute;
 
-import org.apache.struts2.freeroute.annotation.Route;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
@@ -10,8 +9,8 @@ import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
-import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.freeroute.annotation.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +100,8 @@ public class MyPackageProvider implements PackageProvider {
     /**
      * 默认父包
      *
+     * TODO 可以配置默认父包
+     *
      * @return
      */
     private PackageConfig defaultParentPackage() {
@@ -127,12 +128,6 @@ public class MyPackageProvider implements PackageProvider {
     private ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
         ActionConfig.Builder actionCfgBuilder = new ActionConfig.Builder(packageConfigBuilder.getName(), actionName, className);
         actionCfgBuilder.methodName(methodName);
-
-        //TODO 去掉默认的写死页面
-        ResultConfig.Builder resultBuilder = new ResultConfig.Builder("success", "org.apache.struts2.dispatcher.ServletDispatcherResult");
-        resultBuilder.addParam("location", "/pages/content.html");
-        //actionCfgBuilder.addResultConfig(resultBuilder.build());
-
         return actionCfgBuilder.build();
     }
 
