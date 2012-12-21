@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 /**
+ * 针对当前访问的 request 解析为合适的 ActionMapping
+ *
  * @author bastengao
  * @date 12-12-16 00:11
  */
@@ -26,11 +28,6 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
     public void setRouteMappingHandler(RouteMappingHandler routeMappingHandler) {
         log.trace("routeMappingHandler:{}", routeMappingHandler);
         this.routeMappingHandler = routeMappingHandler;
-    }
-
-    @Inject(required = false, value = "struts.mapping.myConfig")
-    public void setMyConfig(String config) {
-        log.debug("config:{}", config);
     }
 
     @Override
@@ -59,7 +56,7 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         }
         log.debug("routeMapping:{}", routeMapping);
 
-        //TODO 这里的的处理步骤与 MyPackageProvider 处理一致
+        //TODO 这里的的处理步骤与 ControllerPackageProvider 处理一致
         String routePath = routeMapping.getRoute().value();
         routePath = ActionUtil.padSlash(routePath);
         routePath = RouteUtil.flatRoutePath(routePath);

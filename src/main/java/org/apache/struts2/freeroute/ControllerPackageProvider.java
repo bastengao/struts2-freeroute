@@ -20,19 +20,28 @@ import java.util.*;
 
 
 /**
+ * 对 controller 进行扫描，并对其进行配置(PackageConfig, ActionConfig)
+ *
  * @author bastengao
  * @date 12-12-16 13:56
  */
-public class MyPackageProvider implements PackageProvider {
-    private static final Logger log = LoggerFactory.getLogger(MyPackageProvider.class);
+public class ControllerPackageProvider implements PackageProvider {
+    private static final Logger log = LoggerFactory.getLogger(ControllerPackageProvider.class);
 
     private Configuration configuration;
     private RouteMappingHandler routeMappingHandler;
+    // controller 所在的包
+    private String controllerPackage;
 
     @Inject("routeMappingHandler")
     private void setRouteMappingHandler(RouteMappingHandler routeMappingHandler) {
         log.trace("routeMappingHandler:{}", routeMappingHandler);
         this.routeMappingHandler = routeMappingHandler;
+    }
+
+    @Inject(value = "struts.freeroute.controllerPackage", required = true)
+    private void setControllerPackage(String controllerPackage) {
+        this.controllerPackage = controllerPackage;
     }
 
     @Override
@@ -62,7 +71,7 @@ public class MyPackageProvider implements PackageProvider {
 
         try {
             //分析所有的 "Controller"
-            for (ClassPath.ClassInfo classInfo : findControllers()) {
+            for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
                     String routePath = routeMapping.getRoute().value();
@@ -99,7 +108,7 @@ public class MyPackageProvider implements PackageProvider {
 
     /**
      * 默认父包
-     *
+     * <p/>
      * TODO 可以配置默认父包
      *
      * @return
@@ -132,9 +141,7 @@ public class MyPackageProvider implements PackageProvider {
     }
 
     @VisibleForTesting
-    public static Set<ClassPath.ClassInfo> findControllers() throws IOException {
-        //TODO 可配置默认扫描包
-        String controllerPackage = "com.gaohui.action";
+    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage) throws IOException {
         ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
 
         Set<ClassPath.ClassInfo> allClasses = classPath.getTopLevelClassesRecursive(controllerPackage);

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
+ * 处理所有的路由信息
+ *
  * @author bastengao
  * @date 12-12-16 22:58
  */
@@ -25,16 +27,16 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
      * 默认 key 是 @Route.value 的值
      *
-     * @param key
+     * @param flattedRoutePath
      * @param routeMapping
      */
     @Override
-    public void put(String key, RouteMapping routeMapping) {
+    public void put(String flattedRoutePath, RouteMapping routeMapping) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
             dynamicRoutes.put(routeMapping.getRoutePathPattern(), routeMapping);
         } else {
-            staticRoutes.put(key, routeMapping);
+            staticRoutes.put(flattedRoutePath, routeMapping);
         }
     }
 

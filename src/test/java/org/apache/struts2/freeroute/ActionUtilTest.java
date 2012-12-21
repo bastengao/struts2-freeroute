@@ -1,6 +1,5 @@
 package org.apache.struts2.freeroute;
 
-import org.apache.struts2.freeroute.MyPackageProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,35 +10,35 @@ import org.junit.Test;
 public class ActionUtilTest {
     @Test
     public void testNamespaceFromRoutePath() {
-        String namespace = MyPackageProvider.namespace("/persons/show");
+        String namespace = ControllerPackageProvider.namespace("/persons/show");
         Assert.assertNotNull(namespace);
         Assert.assertEquals("/persons", namespace);
 
 
-        namespace = MyPackageProvider.namespace("persons-show");
+        namespace = ControllerPackageProvider.namespace("persons-show");
         Assert.assertNotNull(namespace);
         Assert.assertEquals("", namespace);
     }
 
     @Test
     public void testActionNameFromRoutePath() {
-        String actionName = MyPackageProvider.actionName("persons-show");
+        String actionName = ControllerPackageProvider.actionName("persons-show");
         Assert.assertNotNull(actionName);
         Assert.assertEquals("persons-show", actionName);
 
-        actionName = MyPackageProvider.actionName("/persons/show");
+        actionName = ControllerPackageProvider.actionName("/persons/show");
         Assert.assertNotNull(actionName);
         Assert.assertEquals("show", actionName);
     }
 
     @Test
     public void testPadSlash() {
-        Assert.assertEquals("/", MyPackageProvider.padSlash(""));
+        Assert.assertEquals("/", ControllerPackageProvider.padSlash(""));
 
-        Assert.assertEquals("/", MyPackageProvider.padSlash("/"));
+        Assert.assertEquals("/", ControllerPackageProvider.padSlash("/"));
 
-        Assert.assertEquals("/abc", MyPackageProvider.padSlash("/abc"));
+        Assert.assertEquals("/abc", ControllerPackageProvider.padSlash("/abc"));
 
-        Assert.assertEquals("/abc", MyPackageProvider.padSlash("abc"));
+        Assert.assertEquals("/abc", ControllerPackageProvider.padSlash("abc"));
     }
 }
