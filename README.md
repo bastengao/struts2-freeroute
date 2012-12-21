@@ -17,10 +17,11 @@
 struts.xml
 ```xml
 <struts>
-    <constant name="struts.freeroute.controllerPackage" value="com.gaohui"/>
+    <constant name="struts.freeroute.controllerPackage" value="com.example"/>
 </struts>
 ```
 
+com.example.BookController.java
 ```java
 public class BookController{
     private int id;
@@ -36,7 +37,7 @@ public class BookController{
 }
 ```
 
-book.jsp
+webapp/book.jsp
 ```jsp
 <!DOCTYPE html>
 <html>
