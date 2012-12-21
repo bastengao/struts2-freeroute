@@ -4,6 +4,7 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <constant name="struts.freeroute.controllerPackage" value="com.gaohui"/>
+    <constant name="struts.freeroute.defaultParentPackage" value="my-struts"/>
 
     <package name="my-struts" extends="struts-default">
         <action name="hello">

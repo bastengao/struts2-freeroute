@@ -20,4 +20,5 @@
           class="org.apache.struts2.freeroute.DefaultActionMapper"/>
 
     <constant name="struts.mapper.class" value="freeRouteMapper"/>
+    <constant name="struts.freeroute.defaultParentPackage" value="struts-default"/>
 </struts>

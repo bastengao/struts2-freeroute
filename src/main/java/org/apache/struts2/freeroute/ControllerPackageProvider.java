@@ -32,6 +32,8 @@ public class ControllerPackageProvider implements PackageProvider {
     private RouteMappingHandler routeMappingHandler;
     // controller 所在的包
     private String controllerPackage;
+    // 默认父包 (如果没有配置，默认为 "struts-default")
+    private String defaultParentPackage;
 
     @Inject("routeMappingHandler")
     private void setRouteMappingHandler(RouteMappingHandler routeMappingHandler) {
@@ -42,6 +44,11 @@ public class ControllerPackageProvider implements PackageProvider {
     @Inject(value = "struts.freeroute.controllerPackage", required = true)
     private void setControllerPackage(String controllerPackage) {
         this.controllerPackage = controllerPackage;
+    }
+
+    @Inject(value = "struts.freeroute.defaultParentPackage", required = true)
+    private void setDefaultParentPackage(String defaultParentPackage) {
+        this.defaultParentPackage = defaultParentPackage;
     }
 
     @Override
@@ -108,13 +115,11 @@ public class ControllerPackageProvider implements PackageProvider {
 
     /**
      * 默认父包
-     * <p/>
-     * TODO 可以配置默认父包
      *
      * @return
      */
     private PackageConfig defaultParentPackage() {
-        return configuration.getPackageConfig("struts-default");
+        return configuration.getPackageConfig(defaultParentPackage);
     }
 
     private PackageConfig.Builder findOrCreatePackage(String namespace, Map<String, PackageConfig.Builder> packages) {
