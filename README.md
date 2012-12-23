@@ -84,7 +84,9 @@ struts.xml
 
 ### 路由映射
 
+在`Controller`任意方法上加`@Route`注解则表示一条路由.
 
+例如：
 ```java
 public MyController{
     @Route("/helloworld")
@@ -93,6 +95,33 @@ public MyController{
     }
 }
 ```
+#### 路径
+
+`/helloworld` => `http://localhost:8080/example/helloworld`
+```java
+@Route("/helloworld")
+```
+
+`/nested/path/mapping` =>  `http://localhost:8080/exmpale/nested/path/mapping`
+```java
+@Route("/nested/path/mapping")
+```
+
+#### HTTP method
+
+#### HTTP 参数
+
+### 返回页面
+
+`Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/exmaple.html`.
+
+目前支持三种类型:
+
++ dispatcher
+    * html
+    * jsp
++ velocity
++ freemarker
 
 free mapping route just like Spring MVC
 
