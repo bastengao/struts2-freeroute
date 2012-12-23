@@ -68,6 +68,8 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         ActionMapping actionMapping = new ActionMapping();
         actionMapping.setNamespace(namespace);
         actionMapping.setName(actionName);
+        //TODO 不知道什么作用
+        actionMapping.setMethod(routeMapping.getMethod().getName());
         setParams(actionMapping, routeMapping, request);
         return actionMapping;
     }

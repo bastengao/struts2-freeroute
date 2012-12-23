@@ -1,5 +1,7 @@
 package org.apache.struts2.freeroute;
 
+import org.apache.struts2.freeroute.annotation.MethodType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,7 +44,7 @@ public class RouteUtil {
      * @return
      */
     public static String toRoutePathPattern(String routePath) {
-        List<String> variableNames =  pathVariableNames(routePath);
+        List<String> variableNames = pathVariableNames(routePath);
         String result = routePath;
         for (String variableName : variableNames) {
             result = PATH_VARIABLE_PATTERN.matcher(result).replaceFirst("/([a-zA-Z0-9]+)");
@@ -56,13 +58,13 @@ public class RouteUtil {
      * @param routePath
      * @return
      */
-    public static List<String> pathVariableNames(String routePath){
+    public static List<String> pathVariableNames(String routePath) {
         Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
         List<String> variableNames = new ArrayList<String>();
         while (matcher.find()) {
             variableNames.add(matcher.group(1));
         }
-        return  variableNames;
+        return variableNames;
     }
 
     /**
@@ -78,5 +80,20 @@ public class RouteUtil {
         routePath = routePath.replaceAll("\\{", "__");
         routePath = routePath.replaceAll("}", "__");
         return routePath;
+    }
+
+    /**
+     * 根据 http method 返回对应的枚举
+     * 如果没有匹配的返回 MethodType.NONE
+     *
+     * @param method
+     * @return
+     */
+    public static MethodType valueOfMethod(String method) {
+        try{
+             return MethodType.valueOf(method.toUpperCase());
+        }catch (IllegalArgumentException e){
+            return MethodType.NONE;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.apache.struts2.freeroute;
 
+import org.apache.struts2.freeroute.annotation.MethodType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -62,23 +63,23 @@ public class RouteUtilTest {
 
     @Test
     public void testToRoutePathPattern() {
-       String patternStr =  RouteUtil.toRoutePathPattern("/persons/{id}");
-       Assert.assertEquals("/persons/([a-zA-Z0-9]+)", patternStr);
+        String patternStr = RouteUtil.toRoutePathPattern("/persons/{id}");
+        Assert.assertEquals("/persons/([a-zA-Z0-9]+)", patternStr);
     }
 
     @Test
-    public void testToRoutePathPattern2(){
-        String patternStr =  RouteUtil.toRoutePathPattern("/persons/{id}");
+    public void testToRoutePathPattern2() {
+        String patternStr = RouteUtil.toRoutePathPattern("/persons/{id}");
         Matcher matcher = Pattern.compile(patternStr).matcher("/persons/123");
         Assert.assertTrue(matcher.matches());
 
-        String patternStr2 =  RouteUtil.toRoutePathPattern("/persons/{id}/edit/{name}");
+        String patternStr2 = RouteUtil.toRoutePathPattern("/persons/{id}/edit/{name}");
         Matcher matcher2 = Pattern.compile(patternStr2).matcher("/persons/123/edit/basten");
         Assert.assertTrue(matcher2.matches());
     }
 
     @Test
-    public void testVariableNames(){
+    public void testVariableNames() {
         List<String> names = RouteUtil.pathVariableNames("/persons/{id}");
         Assert.assertEquals(1, names.size());
         Assert.assertEquals("id", names.get(0));
@@ -87,5 +88,14 @@ public class RouteUtilTest {
         Assert.assertEquals(2, names2.size());
         Assert.assertEquals("id", names2.get(0));
         Assert.assertEquals("name", names2.get(1));
+    }
+
+    @Test
+    public void testValueOf() {
+        Assert.assertSame(MethodType.GET, RouteUtil.valueOfMethod("GET"));
+
+        Assert.assertSame(MethodType.GET, RouteUtil.valueOfMethod("get"));
+
+        Assert.assertSame(MethodType.NONE, RouteUtil.valueOfMethod("notExists"));
     }
 }

@@ -1,8 +1,12 @@
 package org.apache.struts2.freeroute;
 
 
+import com.google.common.collect.ArrayListMultimap;
+import org.apache.struts2.freeroute.annotation.MethodType;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -17,12 +21,13 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * 可将 mapping 分成两种，一种是静态的 直接通过 Map 就可以快速找到路由；
      * 另一种是有 pathVariable 的，需要通过正则匹配查找路由
      */
-    private Map<String, RouteMapping> staticRoutes = new LinkedHashMap<String, RouteMapping>();
+    //private Map<String, RouteMapping> staticRoutes = new LinkedHashMap<String, RouteMapping>();
+    private ArrayListMultimap<String, RouteMapping> staticRoutes = ArrayListMultimap.create();
 
     /**
      * routePath 中包括 pathVariable 中的路由映射
      */
-    private Map<Pattern, RouteMapping> dynamicRoutes = new LinkedHashMap<Pattern, RouteMapping>();
+    private Map<String, RouteMapping> dynamicRoutes = new LinkedHashMap<String, RouteMapping>();
 
     /**
      * 默认 key 是 @Route.value 的值
@@ -34,7 +39,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     public void put(String flattedRoutePath, RouteMapping routeMapping) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
-            dynamicRoutes.put(routeMapping.getRoutePathPattern(), routeMapping);
+            dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
         } else {
             staticRoutes.put(flattedRoutePath, routeMapping);
         }
@@ -47,18 +52,97 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         //2. http method
         //3. 特定的 param
 
-        // TODO 路径匹配后，继续匹配 method  和 param
-
         String servletPath = request.getServletPath();
+
+        // 路径匹配后，继续匹配 method  和 param
         if (staticRoutes.containsKey(servletPath)) {
-            return staticRoutes.get(servletPath);
+            // TODO 使用与 dynamicRoutes  的逻辑
+            return findMaxWeight(request, staticRoutes.get(servletPath));
         }
+
         // try dynamicRoutes
-        for(Pattern pattern: dynamicRoutes.keySet()){
-            if(pattern.matcher(servletPath).matches()){
-                return dynamicRoutes.get(pattern);
+        for (RouteMapping routeMapping : dynamicRoutes.values()) {
+            Pattern pattern = routeMapping.getRoutePathPattern();
+            if (pattern.matcher(servletPath).matches()) {
+                return routeMapping;
             }
         }
         return null;
+    }
+
+    /**
+     * 根据已经匹配 servletPath 的路由集合找出最匹配的路由
+     *
+     * @param request
+     * @param routeMappings
+     * @return
+     */
+    private RouteMapping findMaxWeight(HttpServletRequest request, List<RouteMapping> routeMappings) {
+        int maxWeight = -1;
+        RouteMapping maxWeightRoute = null;
+        for (RouteMapping routeMapping : routeMappings) {
+            int weight = weightOfRoute(request, routeMapping);
+            if (weight > 0) {
+                if (weight > maxWeight) {
+                    maxWeight = weight;
+                    maxWeightRoute = routeMapping;
+                }
+            }
+        }
+        return maxWeightRoute;
+    }
+
+    /**
+     * 返回请求与匹配的路由的权重. 如果不匹配返回小于 0 的值，如果匹配返回权重值。
+     * 其中 method 的权重比 param 权重高
+     * weight = method(GET, POST, PUT, DELETE) * 20  +  param * 1
+     * weight = method(NONE) * 10  +  param * 1
+     *
+     * @param request
+     * @param routeMapping
+     * @return
+     */
+    private static int weightOfRoute(HttpServletRequest request, RouteMapping routeMapping) {
+        // 测试 method 是否匹配，
+        if (!isMatchMethod(request, routeMapping)) {
+            return -1;
+        }
+
+        // 测试是否匹配 param
+        if (!isMatchParams(request, routeMapping)) {
+            return -1;
+        }
+
+        // 计算 method 权重
+        int methodWeight = 0;
+        // MethodType.NONE 权重为 10, 其他为 20
+        if (routeMapping.getRoute().method() == MethodType.NONE) {
+            methodWeight = 10;
+        } else {
+            methodWeight = 20;
+        }
+
+        //TODO 添加 param 处理逻辑
+        // 计算 param 权重
+        int paramWeight = 0;
+        return methodWeight + paramWeight;
+    }
+
+    private static boolean isMatchMethod(HttpServletRequest request, RouteMapping routeMapping) {
+        if (routeMapping.getRoute().method() == MethodType.NONE) {
+            return true;
+        }
+
+        MethodType methodType = RouteUtil.valueOfMethod(request.getMethod());
+        if (methodType == null) {
+            return false;
+        }
+
+        return routeMapping.getRoute().method() == methodType;
+    }
+
+    private static boolean isMatchParams(HttpServletRequest request, RouteMapping routeMapping) {
+        //TODO
+        return true;
     }
 }

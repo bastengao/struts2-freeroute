@@ -29,6 +29,13 @@ public class PersonController {
 
     @Route("/persons/create2")
     public String toCreate2() {
+        System.out.println("create2");
+        return "dispatcher:/my-result2.html";
+    }
+
+    @Route(value = "/persons/create2", method = MethodType.POST)
+    public String toCreate2Post() {
+        System.out.println("create2 post");
         return "dispatcher:/my-result2.html";
     }
 

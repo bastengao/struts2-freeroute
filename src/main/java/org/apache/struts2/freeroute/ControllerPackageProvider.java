@@ -81,6 +81,8 @@ public class ControllerPackageProvider implements PackageProvider {
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
+                    //TODO bug: 同样的路径, 不同的 method 映射的是同一个 action
+
                     String routePath = routeMapping.getRoute().value();
                     routePath = ActionUtil.padSlash(routePath);
                     routePath = RouteUtil.flatRoutePath(routePath);

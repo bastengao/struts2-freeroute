@@ -27,4 +27,11 @@ public @interface Route {
      * @return
      */
     MethodType method() default MethodType.NONE;
+
+    /**
+     * 指定的参数
+     *
+     * @return
+     */
+    String [] params() default {};
 }
