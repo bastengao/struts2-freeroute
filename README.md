@@ -6,7 +6,7 @@
 
 ```xml
 <dependency>
-    <groupId>org.apache.struts2.freeroute</groupId>
+    <groupId>org.apache.struts</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
     <version>${version}</version>
 </dependency>
@@ -59,7 +59,7 @@ free mapping route just like Spring MVC
 
 ```xml
 <dependency>
-    <groupId>org.apache.struts2.freeroute</groupId>
+    <groupId>org.apache.struts</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
     <version>${version}</version>
 </dependency>
