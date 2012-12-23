@@ -5,29 +5,33 @@ import com.google.common.collect.ArrayListMultimap;
 import org.apache.struts2.freeroute.annotation.MethodType;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
  * 处理所有的路由信息
+ * <p/>
+ * 可将 mapping 分成两种，一种是静态的 直接通过 Map 就可以快速找到路由；
+ * 另一种是有 pathVariable 的，需要通过正则匹配查找路由
  *
  * @author bastengao
  * @date 12-12-16 22:58
  */
 public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
-     * 可将 mapping 分成两种，一种是静态的 直接通过 Map 就可以快速找到路由；
-     * 另一种是有 pathVariable 的，需要通过正则匹配查找路由
+     * 静态路由
      */
-    //private Map<String, RouteMapping> staticRoutes = new LinkedHashMap<String, RouteMapping>();
     private ArrayListMultimap<String, RouteMapping> staticRoutes = ArrayListMultimap.create();
 
     /**
      * routePath 中包括 pathVariable 中的路由映射
      */
-    private Map<String, RouteMapping> dynamicRoutes = new LinkedHashMap<String, RouteMapping>();
+    //private Map<String, RouteMapping> dynamicRoutes = new LinkedHashMap<String, RouteMapping>();
+    private ArrayListMultimap<String, RouteMapping> dynamicRoutes = ArrayListMultimap.create();
+    private Map<String, Pattern> dynamicRoutesPattern = new HashMap<String, Pattern>();
 
     /**
      * 默认 key 是 @Route.value 的值
@@ -40,6 +44,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
             dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
+            dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
         } else {
             staticRoutes.put(flattedRoutePath, routeMapping);
         }
@@ -56,15 +61,17 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
         // 路径匹配后，继续匹配 method  和 param
         if (staticRoutes.containsKey(servletPath)) {
-            // TODO 使用与 dynamicRoutes  的逻辑
-            return findMaxWeight(request, staticRoutes.get(servletPath));
+            //匹配 servletPath 的路由
+            List<RouteMapping> matchPathRouteMapping = staticRoutes.get(servletPath);
+            return findMaxWeight(request, matchPathRouteMapping);
         }
 
         // try dynamicRoutes
-        for (RouteMapping routeMapping : dynamicRoutes.values()) {
-            Pattern pattern = routeMapping.getRoutePathPattern();
-            if (pattern.matcher(servletPath).matches()) {
-                return routeMapping;
+        for (Map.Entry<String, Pattern> patternEntry : dynamicRoutesPattern.entrySet()) {
+            if (patternEntry.getValue().matcher(servletPath).matches()) {
+                //匹配 servletPath 的路由
+                List<RouteMapping> matchPathRouteMappings = dynamicRoutes.get(patternEntry.getKey());
+                return findMaxWeight(request, matchPathRouteMappings);
             }
         }
         return null;

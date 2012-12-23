@@ -54,6 +54,16 @@ public class PersonController {
     public String show() {
         //will render by "/pages/content.html"
         System.out.println(id);
+        System.out.println("get");
+        return "freemarker:/my-result";
+    }
+
+    // {id} value in path will be set to this#id property.
+    @Route(value = "/persons/{id}", method = MethodType.POST)
+    public String show2() {
+        //will render by "/pages/content.html"
+        System.out.println(id);
+        System.out.println("post");
         return "freemarker:/my-result";
     }
 
