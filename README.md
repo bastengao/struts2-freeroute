@@ -128,7 +128,9 @@ public String user(){
 
 `/users/{id}/tags/{name}` => `http://HOST:PORT/users/1013/tags/free`
 ```java
+// {id}
 private int id;
+// {name}
 private String name
 
 @Route("/users/{id}/tags/{name}")
@@ -140,6 +142,26 @@ public String tagedUser(){
 ```
 
 #### HTTP method
+
+可以通过`@Route.method`指定特定的 HTTP method 来缩小映射条件.
+
+method 目前有以下类型:
+
+* DELETE
+* GET
+* HEAD
+* OPTIONS
+* POST
+* PUT
+* TRACE
+* NONE
+
+`@Route.method`默认为`MethodType.NONE`, 表示匹配任意一种 HTTP method.
+
+只响应 POST 请求, `POST http://HOST:PORT/users`
+```java
+@Route(value="/users", method=MethodType.POST)
+```
 
 #### HTTP 参数
 
