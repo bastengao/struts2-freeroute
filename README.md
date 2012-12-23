@@ -97,14 +97,27 @@ public MyController{
 ```
 #### 路径
 
-`/helloworld` => `http://localhost:8080/example/helloworld`
+`http://HOST:PORT/helloworld` => `/helloworld`
 ```java
 @Route("/helloworld")
 ```
 
-`/nested/path/mapping` =>  `http://localhost:8080/exmpale/nested/path/mapping`
+`http://HOST:PORT/nested/path/mapping` => `/nested/path/mapping`
 ```java
 @Route("/nested/path/mapping")
+```
+
+`http://HOST:PORT/users/1013` => `/users/{id}`
+```java
+// {id} 变量值将会赋
+private id;
+
+@Route("/users/{id}")
+public String user(){
+    //...
+}
+
+// setter, getter
 ```
 
 #### HTTP method
@@ -113,7 +126,7 @@ public MyController{
 
 ### 返回页面
 
-`Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/exmaple.html`.
+`Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`.
 
 目前支持三种类型:
 
