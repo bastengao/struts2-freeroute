@@ -97,24 +97,43 @@ public MyController{
 ```
 #### 路径
 
-`http://HOST:PORT/helloworld` => `/helloworld`
+* 简单路径映射
+
+`/helloworld` => `http://HOST:PORT/helloworld`
 ```java
 @Route("/helloworld")
 ```
 
-`http://HOST:PORT/nested/path/mapping` => `/nested/path/mapping`
+* 嵌套路径映射
+
+`/nested/path/mapping` => `http://HOST:PORT/nested/path/mapping`
 ```java
 @Route("/nested/path/mapping")
 ```
 
-`http://HOST:PORT/users/1013` => `/users/{id}`
+* 路径中包含变量(pathVariable)
+
+`/users/{id}` => `http://HOST:PORT/users/1013`
 ```java
-// {id} 变量值将会赋
-private id;
+// id将会赋{id}变量值
+private int id;
 
 @Route("/users/{id}")
 public String user(){
     //...
+}
+
+// setter, getter
+```
+
+`/users/{id}/tags/{name}` => `http://HOST:PORT/users/1013/tags/free`
+```java
+private int id;
+private String name
+
+@Route("/users/{id}/tags/{name}")
+public String tagedUser(){
+    //....
 }
 
 // setter, getter
