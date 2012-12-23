@@ -52,6 +52,30 @@ webapp/book.jsp
 
 访问 "/books/13"， 则会显示 book.jsp 的内容
 
+## 配置 ##
+
+* struts.freeroute.controllerPackage
+
+配置 Controller 所在的包(必须)
+
+struts.xml
+```xml
+<constant name="struts.freeroute.controllerPackage" value="com.example"/>
+```
+
+* struts.freeroute.parentPackage
+
+配置默认的父包(可选)
+
+struts.xml
+```xml
+<struts>
+    <constant name="struts.freeroute.defaultParentPackage" value="my-struts"/>
+
+    <package name="my-struts" extends="struts-default">
+    </package>
+</struts>
+```
 
 free mapping route just like Spring MVC
 
