@@ -174,7 +174,9 @@ public class ControllerPackageProvider implements PackageProvider {
             for (Method method : methods) {
                 if (method.isAnnotationPresent(Route.class)) {
                     Route route = method.getAnnotation(Route.class);
-                    log.trace("route:{}", route.value());
+                    if (log.isTraceEnabled()) {
+                        log.trace(String.format("route: %6s %s%s", route.method(), route.value(), prettyParams(route.params())));
+                    }
                     routes.add(new RouteMapping(route, controller, method));
                 }
             }
@@ -220,6 +222,31 @@ public class ControllerPackageProvider implements PackageProvider {
         }
 
         return str;
+    }
+
+
+    private static String prettyParams(String[] params) {
+        if (params == null) {
+            return "";
+        }
+
+        if (params.length == 0) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("?");
+        boolean isFirst = true;
+        for (String param : params) {
+            if (!isFirst) {
+                sb.append("&");
+            }
+            sb.append(param);
+            if (isFirst) {
+                isFirst = !isFirst;
+            }
+        }
+        return sb.toString();
     }
 
 }

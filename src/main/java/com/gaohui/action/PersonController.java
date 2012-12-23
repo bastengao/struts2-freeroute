@@ -68,13 +68,13 @@ public class PersonController {
     }
 
     @Route("/persons/{id}.xml")
-    public String showXml(){
+    public String showXml() {
         System.out.println(id);
         return "dispatcher:/my-result.html";
     }
 
     @Route("/persons/{id}.jsp")
-    public String showJsp(){
+    public String showJsp() {
         System.out.println(id);
         return "dispatcher:/my-result.jsp";
     }
@@ -84,14 +84,14 @@ public class PersonController {
         return "content";
     }
 
-    //@Route(value = "/{id}", method = MethodType.PUT)
+    @Route(value = "/persons/{id}", method = MethodType.PUT, params = {"_method"})
     public String update() {
-        return "content";
+        return "dispatcher:/my-result.jsp";
     }
 
-    //@Route(value = "/{id}", method = MethodType.DELETE)
+    @Route(value = "/persons/{id}", method = MethodType.DELETE, params = {"_method=delete", "name=foo"})
     public String delete() {
-        return "content";
+        return "dispatcher:/my-result.jsp";
     }
 
     public int getId() {
