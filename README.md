@@ -115,7 +115,7 @@ public MyController{
 
 `/users/{id}` => `http://HOST:PORT/users/1013`
 ```java
-// id将会赋{id}变量值
+// id将会赋予{id}变量值
 private int id;
 
 @Route("/users/{id}")
@@ -143,7 +143,7 @@ public String tagedUser(){
 
 #### HTTP method
 
-可以通过`@Route.method`指定特定的 HTTP method 来缩小映射条件.
+通过`@Route.method`指定 HTTP method, 匹配满足 HTTP method 的路由映射
 
 method 目前有以下类型:
 
@@ -160,10 +160,22 @@ method 目前有以下类型:
 
 只响应 POST 请求, `POST http://HOST:PORT/users`
 ```java
-@Route(value="/users", method=MethodType.POST)
+@Route(value = "/users", method = MethodType.POST)
 ```
 
 #### HTTP 参数
+
+通过`@Route.params`指定 HTTP param , 匹配满足 HTTP param 的路由映射
+
+只响应带 'order' 参数的请求, `GET http://HOST:PORT/users?order=time`
+```java
+@Route(value = "/users", params = {"order"})
+```
+
+可以有多个参数, `GET http://HOST:PORT/users?order=time&page=13`
+```java
+@Route(value = "/users", params = {"order", "page"})
+```
 
 ### 返回页面
 
@@ -176,15 +188,3 @@ method 目前有以下类型:
     * jsp
 + velocity
 + freemarker
-
-free mapping route just like Spring MVC
-
-## Use
-
-```xml
-<dependency>
-    <groupId>org.apache.struts</groupId>
-    <artifactId>struts2-freeroute-plugin</artifactId>
-    <version>${version}</version>
-</dependency>
-```
