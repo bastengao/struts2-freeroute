@@ -2,6 +2,7 @@ package org.apache.struts2.freeroute;
 
 
 import com.google.common.collect.ArrayListMultimap;
+import org.apache.struts2.components.Param;
 import org.apache.struts2.freeroute.annotation.MethodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,15 +170,14 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return 0;
         }
 
-        String[] params = routeMapping.getRoute().params();
         Set<String> paramsOfRequest = paramNames(request);
-        for (String param : params) {
-            if (!paramsOfRequest.contains(param)) {
+        for(RouteMapping.Param param :routeMapping.getParams()){
+            if(!param.match(request, paramsOfRequest)){
                 return -1;
             }
         }
 
-        return params.length;
+        return routeMapping.getParams().size();
     }
 
     /**

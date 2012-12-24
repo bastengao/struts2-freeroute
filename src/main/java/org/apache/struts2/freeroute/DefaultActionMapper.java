@@ -1,5 +1,6 @@
 package org.apache.struts2.freeroute;
 
+import com.google.common.base.Strings;
 import com.opensymphony.xwork2.config.ConfigurationManager;
 import com.opensymphony.xwork2.inject.Inject;
 import org.apache.struts2.dispatcher.mapper.ActionMapping;
@@ -32,11 +33,9 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
 
     @Override
     public ActionMapping getMapping(javax.servlet.http.HttpServletRequest request, ConfigurationManager configManager) {
-        log.debug("mapper:{}", this);
-        log.debug("getMapping:{}", request);
-        log.debug("uri:{}", request.getRequestURI());
-        log.debug("url:{}", request.getRequestURL());
-        log.debug("servletPath:{}", request.getServletPath());
+        if(log.isDebugEnabled()){
+            log.debug("{}  {}?{}", request.getMethod(), request.getServletPath(), Strings.nullToEmpty(request.getQueryString()));
+        }
 
 
         ActionMapping actionMapping0 = parseAndFindRouteMapping(request);

@@ -59,7 +59,7 @@ public class PersonController {
     }
 
     // {id} value in path will be set to this#id property.
-    @Route(value = "/persons/{id}", method = MethodType.POST, params={"_method"})
+    @Route(value = "/persons/{id}", method = MethodType.POST, params = {"_method"})
     public String show2() {
         //will render by "/pages/content.html"
         System.out.println(id);
@@ -86,11 +86,13 @@ public class PersonController {
 
     @Route(value = "/persons/{id}", method = MethodType.PUT, params = {"_method"})
     public String update() {
+        System.out.println("update");
         return "dispatcher:/my-result.jsp";
     }
 
-    @Route(value = "/persons/{id}", method = MethodType.DELETE, params = {"_method=delete", "name=foo"})
+    @Route(value = "/persons/{id}", method = MethodType.DELETE, params = {"_method=delete", "foo!=bar"})
     public String delete() {
+        System.out.println("delete");
         return "dispatcher:/my-result.jsp";
     }
 

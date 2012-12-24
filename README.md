@@ -177,6 +177,16 @@ method 目前有以下类型:
 @Route(value = "/users", params = {"order", "page"})
 ```
 
+参数存在且等于某个值, `GET http://HOST:PROT/users?name=basten`
+```java
+@Rotue(value = "/users", params = {"name=basten"})
+```
+
+参数存在但不等于某个值, `GET http://HOST:PROT/users?name=basten` 将会产生 404，如果 name 是其他值则不会
+```java
+@Rotue(value = "/users", params = {"name!=basten"})
+```
+
 ### 返回页面
 
 `Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`.
