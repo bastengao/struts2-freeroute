@@ -26,7 +26,7 @@ public @interface Route {
      *
      * @return
      */
-    MethodType method() default MethodType.NONE;
+    MethodType[] method() default {};
 
     /**
      * 指定的参数

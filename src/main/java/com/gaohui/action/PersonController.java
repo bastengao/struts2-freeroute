@@ -59,7 +59,7 @@ public class PersonController {
     }
 
     // {id} value in path will be set to this#id property.
-    @Route(value = "/persons/{id}", method = MethodType.POST, params = {"_method"})
+    @Route(value = "/persons/{id}", method = {MethodType.GET, MethodType.POST}, params = {"_method"})
     public String show2() {
         //will render by "/pages/content.html"
         System.out.println(id);

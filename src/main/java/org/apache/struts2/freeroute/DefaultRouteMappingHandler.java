@@ -140,7 +140,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @return
      */
     private static int weightOfMethod(HttpServletRequest request, RouteMapping routeMapping) {
-        if (routeMapping.getRoute().method() == MethodType.NONE) {
+        if (routeMapping.getRoute().method().length == 0) {
             return 1000;
         }
 
@@ -149,8 +149,10 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return -1;
         }
 
-        if (routeMapping.getRoute().method() == methodType) {
-            return 2000;
+        for (MethodType m : routeMapping.getRoute().method()) {
+            if (methodType == m) {
+                return 2000;
+            }
         }
 
         return -1;
@@ -171,8 +173,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         }
 
         Set<String> paramsOfRequest = paramNames(request);
-        for(RouteMapping.Param param :routeMapping.getParams()){
-            if(!param.match(request, paramsOfRequest)){
+        for (RouteMapping.Param param : routeMapping.getParams()) {
+            if (!param.match(request, paramsOfRequest)) {
                 return -1;
             }
         }
