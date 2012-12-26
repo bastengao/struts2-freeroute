@@ -156,11 +156,16 @@ method 目前有以下类型:
 * TRACE
 * NONE
 
-`@Route.method`默认为`MethodType.NONE`, 表示匹配任意一种 HTTP method.
+`@Route.method`默认表示匹配任意一种 HTTP method.
 
 只响应 POST 请求, `POST http://HOST:PORT/users`
 ```java
 @Route(value = "/users", method = MethodType.POST)
+```
+
+或者只响应 GET 和 POST 请求, `GET|POST http://HOST:PORT/users`
+```java
+@Route(value = "/users", method = {MethodType.GET, MethodType.POST})
 ```
 
 #### HTTP 参数
