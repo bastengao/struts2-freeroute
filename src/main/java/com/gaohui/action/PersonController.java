@@ -67,6 +67,16 @@ public class PersonController {
         return "freemarker:/my-result";
     }
 
+    @Route(value = "/persons/{id}", method = MethodType.GET, params = "redirect=true")
+    public String showRedirect() {
+        return "redirect:/persons/" + id + ".json";
+    }
+
+    @Route("/persons/{id}.json")
+    public String showJson() {
+        return "json:";
+    }
+
     @Route("/persons/{id}.xml")
     public String showXml() {
         System.out.println(id);

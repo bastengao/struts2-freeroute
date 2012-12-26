@@ -1,5 +1,6 @@
 package org.apache.struts2.freeroute;
 
+import com.google.common.base.Strings;
 import com.opensymphony.xwork2.*;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
@@ -26,9 +27,12 @@ public class DefaultUnknownHandler implements UnknownHandler {
     public static final Map<String, String> SUFFIXES = new HashMap<String, String>();
 
     static {
+        // TODO 鸡肋，考虑去去掉后缀补全. 要么都不要后缀要么都加后缀
         SUFFIXES.put("freemarker", ".ftl");
         SUFFIXES.put("velocity", ".vm");
         SUFFIXES.put("dispatcher", "");
+        SUFFIXES.put("json", "");
+        SUFFIXES.put("redirect", "");
     }
 
     private ObjectFactory objectFactory;
@@ -112,7 +116,9 @@ public class DefaultUnknownHandler implements UnknownHandler {
 
                 String path = resultCode.substring(type.length() + 1);
                 String suffix = SUFFIXES.get(type); //后缀
-                resultBuilder.addParam(typeConfig.getDefaultResultParam(), path + suffix);
+                if (!Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
+                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path + suffix);
+                }
                 return resultBuilder.build();
             }
         }

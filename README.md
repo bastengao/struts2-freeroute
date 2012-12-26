@@ -203,3 +203,5 @@ method 目前有以下类型:
     * jsp
 + velocity
 + freemarker
++ redirect
++ json (待完善)
