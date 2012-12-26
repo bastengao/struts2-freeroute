@@ -109,6 +109,10 @@ public class DefaultUnknownHandler implements UnknownHandler {
             //startWith("type:")
             if (resultCode.startsWith(type + ":")) {
                 ResultTypeConfig typeConfig = resultTypes.get(type);
+                if (typeConfig == null) {
+                    throw new XWorkException("未能找到对应的类型: " + type);
+                }
+
                 ResultConfig.Builder resultBuilder = new ResultConfig.Builder(resultCode, typeConfig.getClassName());
                 if (typeConfig.getParams() != null) {
                     resultBuilder.addParams(typeConfig.getParams());
