@@ -13,6 +13,7 @@
     <artifactId>struts2-freeroute-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <url>httsp://github.com/bastengao/struts2-freeroute</url>
 
     <dependencies>
         <dependency>
