@@ -32,15 +32,6 @@
             <groupId>org.apache.struts</groupId>
             <artifactId>struts2-core</artifactId>
             <version>${struts.version}</version>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-core</artifactId>
-            <version>${struts.version}</version>
-            <classifier>sources</classifier>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
