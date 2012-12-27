@@ -55,7 +55,7 @@ public class PersonController {
         //will render by "/pages/content.html"
         System.out.println(id);
         System.out.println("get");
-        return "freemarker:/my-result";
+        return "freemarker:/my-result.ftl";
     }
 
     // {id} value in path will be set to this#id property.
@@ -64,7 +64,7 @@ public class PersonController {
         //will render by "/pages/content.html"
         System.out.println(id);
         System.out.println("post");
-        return "freemarker:/my-result";
+        return "freemarker:/my-result.ftl";
     }
 
     @Route(value = "/persons/{id}", method = MethodType.GET, params = "redirect=true")

@@ -27,10 +27,11 @@ public class DefaultUnknownHandler implements UnknownHandler {
     public static final Map<String, String> SUFFIXES = new HashMap<String, String>();
 
     static {
-        // TODO 鸡肋，考虑去去掉后缀补全. 要么都不要后缀要么都加后缀
-        SUFFIXES.put("freemarker", ".ftl");
-        SUFFIXES.put("velocity", ".vm");
+        // TODO 将后缀含义改为 "可识别的类型'
+        SUFFIXES.put("freemarker", "");
+        SUFFIXES.put("velocity", "");
         SUFFIXES.put("dispatcher", "");
+        // TODO 优化：如果只返回类型信息, 则后面的冒号":" 可以省略
         SUFFIXES.put("json", "");
         SUFFIXES.put("redirect", "");
     }
@@ -119,9 +120,8 @@ public class DefaultUnknownHandler implements UnknownHandler {
                 }
 
                 String path = resultCode.substring(type.length() + 1);
-                String suffix = SUFFIXES.get(type); //后缀
                 if (!Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
-                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path + suffix);
+                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
                 }
                 return resultBuilder.build();
             }
