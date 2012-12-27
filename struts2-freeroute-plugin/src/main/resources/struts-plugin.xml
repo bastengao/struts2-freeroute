@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <bean type="com.opensymphony.xwork2.UnknownHandler"
+          name="freeRouteUnknownHandler"
+          class="org.apache.struts2.freeroute.DefaultUnknownHandler"/>
+
+    <bean type="org.apache.struts2.freeroute.RouteMappingHandler"
+          name="routeMappingHandler"
+          class="org.apache.struts2.freeroute.DefaultRouteMappingHandler"/>
+
+    <bean type="com.opensymphony.xwork2.config.PackageProvider"
+          name="controllerPackageProvider"
+          class="org.apache.struts2.freeroute.ControllerPackageProvider"/>
+
+    <bean type="org.apache.struts2.dispatcher.mapper.ActionMapper"
+          name="freeRouteMapper"
+          class="org.apache.struts2.freeroute.DefaultActionMapper"/>
+
+    <constant name="struts.mapper.class" value="freeRouteMapper"/>
+    <constant name="struts.freeroute.defaultParentPackage" value="struts-default"/>
+</struts>
