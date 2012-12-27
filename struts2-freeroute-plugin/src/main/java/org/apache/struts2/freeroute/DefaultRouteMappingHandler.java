@@ -38,17 +38,17 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
      * 默认 key 是 @Route.value 的值
      *
-     * @param flattedRoutePath
+     * @param routePath
      * @param routeMapping
      */
     @Override
-    public void put(String flattedRoutePath, RouteMapping routeMapping) {
+    public void put(String routePath, RouteMapping routeMapping) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
             dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
             dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
         } else {
-            staticRoutes.put(flattedRoutePath, routeMapping);
+            staticRoutes.put(routePath, routeMapping);
         }
     }
 

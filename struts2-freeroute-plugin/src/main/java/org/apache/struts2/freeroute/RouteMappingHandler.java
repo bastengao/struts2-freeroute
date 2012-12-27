@@ -12,10 +12,10 @@ public interface RouteMappingHandler {
     /**
      * 添加新的路由
      *
-     * @param flattedRoutePath
+     * @param routePath
      * @param routeMapping
      */
-    public void put(String flattedRoutePath, RouteMapping routeMapping);
+    public void put(String routePath, RouteMapping routeMapping);
 
     /**
      * 根据请求返回对应的路由映射, 如果没有返回 null

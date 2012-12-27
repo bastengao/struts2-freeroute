@@ -4,14 +4,14 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <constant name="struts.freeroute.controllerPackage" value="com.gaohui"/>
-    <constant name="struts.freeroute.defaultParentPackage" value="my-struts"/>
+    <constant name="struts.freeroute.defaultParentPackage" value="json-default"/>
 
     <package name="my-struts" extends="json-default">
         <action name="hello">
             <result>/hello.html</result>
         </action>
 
-        <action name="hello2" class="com.gaohui.action.HelloAction">
+        <action name="hello3" class="com.gaohui.action.HelloAction">
             <result>/hello.html</result>
         </action>
     </package>

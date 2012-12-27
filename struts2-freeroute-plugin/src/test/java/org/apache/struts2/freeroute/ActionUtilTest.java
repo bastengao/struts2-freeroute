@@ -10,35 +10,35 @@ import org.junit.Test;
 public class ActionUtilTest {
     @Test
     public void testNamespaceFromRoutePath() {
-        String namespace = ControllerPackageProvider.namespace("/persons/show");
+        String namespace = ActionUtil.namespace("/persons/show");
         Assert.assertNotNull(namespace);
         Assert.assertEquals("/persons", namespace);
 
 
-        namespace = ControllerPackageProvider.namespace("persons-show");
+        namespace = ActionUtil.namespace("persons-show");
         Assert.assertNotNull(namespace);
         Assert.assertEquals("", namespace);
     }
 
     @Test
     public void testActionNameFromRoutePath() {
-        String actionName = ControllerPackageProvider.actionName("persons-show");
+        String actionName = ActionUtil.actionName("persons-show");
         Assert.assertNotNull(actionName);
         Assert.assertEquals("persons-show", actionName);
 
-        actionName = ControllerPackageProvider.actionName("/persons/show");
+        actionName = ActionUtil.actionName("/persons/show");
         Assert.assertNotNull(actionName);
         Assert.assertEquals("show", actionName);
     }
 
     @Test
     public void testPadSlash() {
-        Assert.assertEquals("/", ControllerPackageProvider.padSlash(""));
+        Assert.assertEquals("/", ActionUtil.padSlash(""));
 
-        Assert.assertEquals("/", ControllerPackageProvider.padSlash("/"));
+        Assert.assertEquals("/", ActionUtil.padSlash("/"));
 
-        Assert.assertEquals("/abc", ControllerPackageProvider.padSlash("/abc"));
+        Assert.assertEquals("/abc", ActionUtil.padSlash("/abc"));
 
-        Assert.assertEquals("/abc", ControllerPackageProvider.padSlash("abc"));
+        Assert.assertEquals("/abc", ActionUtil.padSlash("abc"));
     }
 }

@@ -10,6 +10,7 @@ import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.freeroute.annotation.MethodType;
 import org.apache.struts2.freeroute.annotation.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,24 +82,29 @@ public class ControllerPackageProvider implements PackageProvider {
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
-                    //TODO bug: 同样的路径, 不同的 method 映射的是同一个 action
+                    // 同样的路径, 不同的 method 映射的是不同的 action
 
                     String routePath = routeMapping.getRoute().value();
                     routePath = ActionUtil.padSlash(routePath);
-                    routePath = RouteUtil.flatRoutePath(routePath);
+                    //routePath = RouteUtil.flatRoutePath(routePath);
 
                     /**
                      * 如果 routePath 中有 pathVariable,
                      * 例如 "/persons/{id}" 那么将路由转化为 "/persons/__id__"
                      * "/persons/{id}/edit" 转化为 "/persons/__id__/edit"
+                     *
+                     * TODO 将动态路由映射的 action 放到黑明单里，
+                     * 如果直接访问 "/persons/__id__/edit" 则直接拦截
                      */
 
                     //添加路由映射
                     routeMappingHandler.put(routePath, routeMapping);
 
+                    ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
+                    String namespace = actionInfo.getNamespace();
+                    String actionName = actionInfo.getActionName();
+
                     //create action config
-                    String namespace = ActionUtil.namespace(routePath);
-                    String actionName = ActionUtil.actionName(routePath);
                     PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(namespace, packages);
                     ActionConfig actionCfg = createActionConfig(packageCfgBuilder, classInfo.getName(), routeMapping.getMethod().getName(), actionName);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);
@@ -107,10 +113,6 @@ public class ControllerPackageProvider implements PackageProvider {
         } catch (IOException e) {
             throw new IllegalStateException("could not find controllers");
         }
-
-        PackageConfig.Builder packageCfgBuilder = findOrCreatePackage("", packages);
-        ActionConfig actionConfig = createActionConfig(packageCfgBuilder, "", "hello-test");
-        packageCfgBuilder.addActionConfig(actionConfig.getName(), actionConfig);
 
         return packages;
     }
@@ -176,7 +178,7 @@ public class ControllerPackageProvider implements PackageProvider {
                     Route route = method.getAnnotation(Route.class);
                     if (log.isTraceEnabled()) {
                         //TODO 更好的显示 method
-                        log.trace(String.format("route: %6s %s%s", route.method(), route.value(), prettyParams(route.params())));
+                        log.trace(String.format("route: %s %s%s", prettyMethods(route.method()), route.value(), prettyParams(route.params())));
                     }
                     routes.add(new RouteMapping(route, controller, method));
                 }
@@ -185,46 +187,6 @@ public class ControllerPackageProvider implements PackageProvider {
 
         return routes;
     }
-
-    /**
-     * 根据路由路径获取 namespace
-     *
-     * @param routePath
-     * @return
-     */
-    @VisibleForTesting
-    public static String namespace(String routePath) {
-        int index = routePath.lastIndexOf("/");
-        if (index != -1) {
-            return routePath.substring(0, index);
-        }
-        return "";
-    }
-
-    /**
-     * 根据路由路径获取 action name
-     *
-     * @param routePath
-     * @return
-     */
-    @VisibleForTesting
-    public static String actionName(String routePath) {
-        int index = routePath.lastIndexOf("/");
-        if (index == -1) {
-            return routePath;
-        }
-        return routePath.substring(index + 1);
-    }
-
-    @VisibleForTesting
-    public static String padSlash(String str) {
-        if (!str.startsWith("/")) {
-            return "/" + str;
-        }
-
-        return str;
-    }
-
 
     private static String prettyParams(String[] params) {
         if (params == null) {
@@ -243,6 +205,26 @@ public class ControllerPackageProvider implements PackageProvider {
                 sb.append("&");
             }
             sb.append(param);
+            if (isFirst) {
+                isFirst = !isFirst;
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String prettyMethods(MethodType[] types) {
+        if (types == null || types.length == 0) {
+            return MethodType.NONE.toString();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean isFirst = true;
+        for (MethodType type : types) {
+            if (!isFirst) {
+                sb.append(" | ");
+            }
+            sb.append(type.toString());
+
             if (isFirst) {
                 isFirst = !isFirst;
             }

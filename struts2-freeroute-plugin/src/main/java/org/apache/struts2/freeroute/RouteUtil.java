@@ -22,6 +22,26 @@ public class RouteUtil {
     }
 
     /**
+     * 将路由解析为 action 信息
+     *
+     * 如果是静态路由 "/persons/new" 将变成 "/persons/new#method"
+     * 如果是动态路由 "/persons/{id}" 将变成 "/persons/__id__#method"
+     *
+     * @param routeMapping
+     * @return
+     */
+    public static ActionInfo routeToAction(RouteMapping routeMapping) {
+        String routePath = routeMapping.getRoute().value();
+        routePath = ActionUtil.padSlash(routePath);
+        routePath = RouteUtil.flatRoutePath(routePath);
+
+        String namespace = ActionUtil.namespace(routePath);
+        String actionName = ActionUtil.actionName(routePath);
+        actionName = actionName + "#" + routeMapping.getMethod().getName();
+        return new ActionInfo(namespace, actionName);
+    }
+
+    /**
      * 是否有 pathVariable
      *
      * @param routePath
@@ -90,9 +110,9 @@ public class RouteUtil {
      * @return
      */
     public static MethodType valueOfMethod(String method) {
-        try{
-             return MethodType.valueOf(method.toUpperCase());
-        }catch (IllegalArgumentException e){
+        try {
+            return MethodType.valueOf(method.toUpperCase());
+        } catch (IllegalArgumentException e) {
             return MethodType.NONE;
         }
     }
