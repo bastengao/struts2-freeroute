@@ -177,7 +177,6 @@ public class ControllerPackageProvider implements PackageProvider {
                 if (method.isAnnotationPresent(Route.class)) {
                     Route route = method.getAnnotation(Route.class);
                     if (log.isTraceEnabled()) {
-                        //TODO 更好的显示 method
                         log.trace(String.format("route: %s %s%s", prettyMethods(route.method()), route.value(), prettyParams(route.params())));
                     }
                     routes.add(new RouteMapping(route, controller, method));
