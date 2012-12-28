@@ -24,16 +24,15 @@ import java.util.Map;
  */
 public class DefaultUnknownHandler implements UnknownHandler {
     private final static Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);
-    public static final Map<String, String> SUFFIXES = new HashMap<String, String>();
+    //可用的返回类型
+    public static final Map<String, String> AVAILABLE_TYPES = new HashMap<String, String>();
 
     static {
-        // TODO 将后缀含义改为 "可识别的类型'
-        SUFFIXES.put("freemarker", "");
-        SUFFIXES.put("velocity", "");
-        SUFFIXES.put("dispatcher", "");
-        // TODO 优化：如果只返回类型信息, 则后面的冒号":" 可以省略
-        SUFFIXES.put("json", "");
-        SUFFIXES.put("redirect", "");
+        AVAILABLE_TYPES.put("freemarker", "");
+        AVAILABLE_TYPES.put("velocity", "");
+        AVAILABLE_TYPES.put("dispatcher", "");
+        AVAILABLE_TYPES.put("json", "");
+        AVAILABLE_TYPES.put("redirect", "");
     }
 
     private ObjectFactory objectFactory;
@@ -98,36 +97,57 @@ public class DefaultUnknownHandler implements UnknownHandler {
     }
 
     /**
-     * 找能够处理的 resultType, 目前只支持 dispatcher, freemarker, velocity
+     * 找能够处理的 resultType, 目前只支持 dispatcher, freemarker, velocity, json, redirect
      *
      * @param resultCode
      * @param resultTypes
      * @return
      */
     private ResultConfig findResultConfig(String resultCode, Map<String, ResultTypeConfig> resultTypes) {
-        // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html
-        for (String type : SUFFIXES.keySet()) {
-            //startWith("type:")
-            if (resultCode.startsWith(type + ":")) {
+        // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
+        for (String type : AVAILABLE_TYPES.keySet()) {
+            //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
+            if (resultCode.startsWith(type)) {
                 ResultTypeConfig typeConfig = resultTypes.get(type);
-                if (typeConfig == null) {
-                    throw new XWorkException("未能找到对应的类型: " + type);
+                //如果没有默认参数
+                if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
+                    // 只有类型, 例如是 "json" 或者 "json:" 而不是 "jsonXxx"
+                    if (resultCode.length() == type.length() || resultCode.indexOf(":") == type.length()) {
+                        ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+                        return resultBuilder.build();
+                    }
                 }
+                //如果有默认参数
+                else {
+                    //  如果是 "type:" 这种形式
+                    if (resultCode.indexOf(":") == type.length()) {
+                        ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
 
-                ResultConfig.Builder resultBuilder = new ResultConfig.Builder(resultCode, typeConfig.getClassName());
-                if (typeConfig.getParams() != null) {
-                    resultBuilder.addParams(typeConfig.getParams());
+                        String path = resultCode.substring(type.length() + 1);
+                        resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
+                        return resultBuilder.build();
+                    }
                 }
-
-                String path = resultCode.substring(type.length() + 1);
-                if (!Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
-                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
-                }
-                return resultBuilder.build();
             }
         }
 
         return null;
+    }
+
+    /**
+     * 通过 ResultTypeConfig 构造 ResultConfig.Builder
+     *
+     * @param resultCode
+     * @param typeConfig
+     * @return
+     */
+    private static ResultConfig.Builder createResultConfigFromResultType(String resultCode, ResultTypeConfig typeConfig) {
+        ResultConfig.Builder resultBuilder = new ResultConfig.Builder(resultCode, typeConfig.getClassName());
+        if (typeConfig.getParams() != null) {
+            resultBuilder.addParams(typeConfig.getParams());
+        }
+
+        return resultBuilder;
     }
 
 }
