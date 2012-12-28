@@ -63,7 +63,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
         RouteMapping routeMapping = routeMappingHandler.route(actionConfig);
         log.debug("route: {}" + routeMapping);
 
-        ResultConfig resultConfig = parseResultCodeToResultConfig(actionConfig, resultCode);
+        ResultConfig resultConfig = parseResultCodeToResultConfig(actionConfig, resultCode, routeMapping);
         if (resultConfig == null) {
             return null;
         }
@@ -86,9 +86,10 @@ public class DefaultUnknownHandler implements UnknownHandler {
      *
      * @param actionConfig
      * @param resultCode
+     * @param routeMapping
      * @return
      */
-    private ResultConfig parseResultCodeToResultConfig(ActionConfig actionConfig, String resultCode) {
+    private ResultConfig parseResultCodeToResultConfig(ActionConfig actionConfig, String resultCode, RouteMapping routeMapping) {
         String packageName = actionConfig.getPackageName();
         PackageConfig packageConfig = configuration.getPackageConfig(packageName);
         Map<String, ResultTypeConfig> resultTypes = packageConfig.getAllResultTypeConfigs();
@@ -96,18 +97,19 @@ public class DefaultUnknownHandler implements UnknownHandler {
         log.debug("packageName:{}", packageName);
         log.debug("resultTypes:{}", resultTypes);
 
-        ResultConfig resultConfig = findResultConfig(resultCode, resultTypes);
+        ResultConfig resultConfig = findResultConfig(routeMapping, resultCode, resultTypes);
         return resultConfig;
     }
 
     /**
      * 找能够处理的 resultType, 目前只支持 dispatcher, freemarker, velocity, json, redirect
      *
+     * @param routeMapping
      * @param resultCode
      * @param resultTypes
      * @return
      */
-    private ResultConfig findResultConfig(String resultCode, Map<String, ResultTypeConfig> resultTypes) {
+    private ResultConfig findResultConfig(RouteMapping routeMapping, String resultCode, Map<String, ResultTypeConfig> resultTypes) {
         // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
         for (String type : AVAILABLE_TYPES.keySet()) {
             //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
@@ -128,6 +130,13 @@ public class DefaultUnknownHandler implements UnknownHandler {
                         ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
 
                         String path = resultCode.substring(type.length() + 1);
+                        //如果有 @ContentBase 配置，在 path 前追加 @ContentBase
+                        if (routeMapping.getContentBase() != null) {
+                            // TODO 区分相对路径还是绝对路径。如果是相对路径那么前追加 @ContentBase, 如果是绝对路径则不需要.
+                            // TODO 目前一律按相对路径处理
+                            // 可能中间多 slash 或者少 slash
+                            path = ActionUtil.padSlash(routeMapping.getContentBase().value()) + ActionUtil.padSlash(path);
+                        }
                         resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
                         return resultBuilder.build();
                     }

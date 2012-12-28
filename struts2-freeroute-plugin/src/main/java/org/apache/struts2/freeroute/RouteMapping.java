@@ -63,6 +63,10 @@ public class RouteMapping {
         this.contentBase = contentBase;
     }
 
+    public ContentBase getContentBase() {
+        return contentBase;
+    }
+
     public Route getRoute() {
         return route;
     }
