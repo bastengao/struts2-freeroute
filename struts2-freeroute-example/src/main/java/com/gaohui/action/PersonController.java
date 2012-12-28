@@ -74,7 +74,7 @@ public class PersonController {
 
     @Route("/persons/{id}.json")
     public String showJson() {
-        return "json:";
+        return "json";
     }
 
     @Route("/persons/{id}.xml")
