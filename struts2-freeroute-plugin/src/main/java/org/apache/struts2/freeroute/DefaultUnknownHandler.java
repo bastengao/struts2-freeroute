@@ -89,10 +89,6 @@ public class DefaultUnknownHandler implements UnknownHandler {
         log.debug("resultTypes:{}", resultTypes);
 
         ResultConfig resultConfig = findResultConfig(resultCode, resultTypes);
-        if (resultConfig == null) {
-            return null;
-        }
-
         return resultConfig;
     }
 

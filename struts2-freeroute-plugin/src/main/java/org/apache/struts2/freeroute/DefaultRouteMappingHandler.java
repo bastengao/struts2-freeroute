@@ -2,7 +2,6 @@ package org.apache.struts2.freeroute;
 
 
 import com.google.common.collect.ArrayListMultimap;
-import org.apache.struts2.components.Param;
 import org.apache.struts2.freeroute.annotation.MethodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +35,19 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     private Map<String, Pattern> dynamicRoutesPattern = new HashMap<String, Pattern>();
 
     /**
-     * 默认 key 是 @Route.value 的值
+     * 按照静态路由和动态路由分别放到两个集合中
      *
-     * @param routePath
      * @param routeMapping
      */
     @Override
-    public void put(String routePath, RouteMapping routeMapping) {
+    public void put(RouteMapping routeMapping) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
             dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
             dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
         } else {
+            String routePath = routeMapping.getRoute().value();
+            routePath = ActionUtil.padSlash(routePath);
             staticRoutes.put(routePath, routeMapping);
         }
     }

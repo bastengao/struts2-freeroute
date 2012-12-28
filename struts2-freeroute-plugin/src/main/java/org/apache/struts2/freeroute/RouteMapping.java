@@ -1,6 +1,7 @@
 package org.apache.struts2.freeroute;
 
 import com.google.common.base.Strings;
+import org.apache.struts2.freeroute.annotation.ContentBase;
 import org.apache.struts2.freeroute.annotation.Route;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,8 @@ import java.util.regex.Pattern;
  * @date 12-12-16 20:17
  */
 public class RouteMapping {
+    //可能有，可能没有
+    private ContentBase contentBase;
     //路由
     private Route route;
     // http 参数规则
@@ -53,6 +56,11 @@ public class RouteMapping {
             routePathPattern = Pattern.compile(RouteUtil.toRoutePathPattern(routePath));
             variableNames = Collections.unmodifiableList(RouteUtil.pathVariableNames(routePath));
         }
+    }
+
+    public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
+        this(route, action, method);
+        this.contentBase = contentBase;
     }
 
     public Route getRoute() {

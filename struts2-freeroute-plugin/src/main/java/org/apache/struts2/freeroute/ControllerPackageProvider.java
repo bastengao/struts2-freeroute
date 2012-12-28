@@ -10,6 +10,7 @@ import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import org.apache.struts2.freeroute.annotation.ContentBase;
 import org.apache.struts2.freeroute.annotation.MethodType;
 import org.apache.struts2.freeroute.annotation.Route;
 import org.slf4j.Logger;
@@ -82,24 +83,12 @@ public class ControllerPackageProvider implements PackageProvider {
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
-                    // 同样的路径, 不同的 method 映射的是不同的 action
-
-                    String routePath = routeMapping.getRoute().value();
-                    routePath = ActionUtil.padSlash(routePath);
-                    //routePath = RouteUtil.flatRoutePath(routePath);
-
-                    /**
-                     * 如果 routePath 中有 pathVariable,
-                     * 例如 "/persons/{id}" 那么将路由转化为 "/persons/__id__"
-                     * "/persons/{id}/edit" 转化为 "/persons/__id__/edit"
-                     *
-                     * TODO 将动态路由映射的 action 放到黑明单里，
-                     * 如果直接访问 "/persons/__id__/edit" 则直接拦截
-                     */
 
                     //添加路由映射
-                    routeMappingHandler.put(routePath, routeMapping);
+                    routeMappingHandler.put(routeMapping);
 
+                    //TODO 以下两步放到 createActionConfig 方法中
+                    // 同样的路径, 不同的 method 映射的是不同的 action
                     ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
                     String namespace = actionInfo.getNamespace();
                     String actionName = actionInfo.getActionName();
@@ -168,18 +157,32 @@ public class ControllerPackageProvider implements PackageProvider {
         return controllers;
     }
 
+    /**
+     * 解析 Controller 并返回路由信息
+     *
+     * @param controller
+     * @return
+     */
     @VisibleForTesting
     public static List<RouteMapping> parseController(Class controller) {
+        ContentBase contentBase = null;
+        if (controller.isAnnotationPresent(ContentBase.class)) {
+            contentBase = (ContentBase) controller.getAnnotation(ContentBase.class);
+        }
+
         List<RouteMapping> routes = new ArrayList<RouteMapping>();
+        //遍历 Controller 的所有方法
         Method[] methods = controller.getMethods();
         if (methods != null) {
             for (Method method : methods) {
+                //查看是否有 @Route 注解, 如果有则加到路由列表中
                 if (method.isAnnotationPresent(Route.class)) {
                     Route route = method.getAnnotation(Route.class);
+                    routes.add(new RouteMapping(contentBase, route, controller, method));
+
                     if (log.isTraceEnabled()) {
                         log.trace(String.format("route: %s %s%s", prettyMethods(route.method()), route.value(), prettyParams(route.params())));
                     }
-                    routes.add(new RouteMapping(route, controller, method));
                 }
             }
         }

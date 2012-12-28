@@ -12,10 +12,9 @@ public interface RouteMappingHandler {
     /**
      * 添加新的路由
      *
-     * @param routePath
      * @param routeMapping
      */
-    public void put(String routePath, RouteMapping routeMapping);
+    public void put(RouteMapping routeMapping);
 
     /**
      * 根据请求返回对应的路由映射, 如果没有返回 null
