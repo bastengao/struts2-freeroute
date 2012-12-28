@@ -83,9 +83,6 @@ public class ControllerPackageProvider implements PackageProvider {
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
-                    //添加路由映射
-                    routeMappingHandler.put(routeMapping);
-
                     //将路由转换为 action
                     ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
                     String namespace = actionInfo.getNamespace();
@@ -94,6 +91,9 @@ public class ControllerPackageProvider implements PackageProvider {
                     PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(namespace, packages);
                     ActionConfig actionCfg = createActionConfig(packageCfgBuilder, actionInfo, routeMapping);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);
+
+                    //添加路由映射
+                    routeMappingHandler.put(routeMapping, actionCfg);
                 }
             }
         } catch (IOException e) {
@@ -112,6 +112,13 @@ public class ControllerPackageProvider implements PackageProvider {
         return configuration.getPackageConfig(defaultParentPackage);
     }
 
+    /**
+     * 查找或者创建 Package
+     *
+     * @param namespace
+     * @param packages
+     * @return
+     */
     private PackageConfig.Builder findOrCreatePackage(String namespace, Map<String, PackageConfig.Builder> packages) {
         String packageName = "freeroute-default#" + namespace;
         PackageConfig.Builder packageCfgBuilder = packages.get(packageName);

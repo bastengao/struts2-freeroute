@@ -2,6 +2,7 @@ package org.apache.struts2.freeroute;
 
 
 import com.google.common.collect.ArrayListMultimap;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
 import org.apache.struts2.freeroute.annotation.MethodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,26 +31,45 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
      * routePath 中包括 pathVariable 中的路由映射
      */
-    //private Map<String, RouteMapping> dynamicRoutes = new LinkedHashMap<String, RouteMapping>();
     private ArrayListMultimap<String, RouteMapping> dynamicRoutes = ArrayListMultimap.create();
     private Map<String, Pattern> dynamicRoutesPattern = new HashMap<String, Pattern>();
+
+
+    /**
+     * action 信息映射到对应的路由
+     *
+     * "{packageName}{actionName}" => RouteMapping
+     */
+    private Map<String, RouteMapping> actionConfig2RouteMapping = new HashMap<String, RouteMapping>();
 
     /**
      * 按照静态路由和动态路由分别放到两个集合中
      *
      * @param routeMapping
+     * @param actionCfg
      */
     @Override
-    public void put(RouteMapping routeMapping) {
+    public void put(RouteMapping routeMapping, ActionConfig actionCfg) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
             dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
             dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
         } else {
+            // path => 路由
             String routePath = routeMapping.getRoute().value();
             routePath = ActionUtil.padSlash(routePath);
             staticRoutes.put(routePath, routeMapping);
         }
+
+
+        String key = actionCfg.getPackageName() + actionCfg.getName();
+        actionConfig2RouteMapping.put(key, routeMapping);
+    }
+
+    @Override
+    public RouteMapping route(ActionConfig actionConfig) {
+        String key = actionConfig.getPackageName() + actionConfig.getName();
+        return actionConfig2RouteMapping.get(key);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.apache.struts2.freeroute;
 
+import com.opensymphony.xwork2.config.entities.ActionConfig;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -13,8 +15,9 @@ public interface RouteMappingHandler {
      * 添加新的路由
      *
      * @param routeMapping
+     * @param actionCfg
      */
-    public void put(RouteMapping routeMapping);
+    public void put(RouteMapping routeMapping, ActionConfig actionCfg);
 
     /**
      * 根据请求返回对应的路由映射, 如果没有返回 null
@@ -23,4 +26,13 @@ public interface RouteMappingHandler {
      * @return
      */
     public RouteMapping route(HttpServletRequest request);
+
+
+    /**
+     * 根据 action 信息返回对应的路由
+     *
+     * @param actionConfig
+     * @return
+     */
+    public RouteMapping route(ActionConfig actionConfig);
 }

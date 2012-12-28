@@ -37,6 +37,12 @@ public class DefaultUnknownHandler implements UnknownHandler {
 
     private ObjectFactory objectFactory;
     private Configuration configuration;
+    private RouteMappingHandler routeMappingHandler;
+
+    @Inject("routeMappingHandler")
+    private void setRouteMappingHandler(RouteMappingHandler routeMappingHandler) {
+        this.routeMappingHandler = routeMappingHandler;
+    }
 
     @Inject
     public DefaultUnknownHandler(ObjectFactory objectFactory, Configuration configuration) {
@@ -54,6 +60,8 @@ public class DefaultUnknownHandler implements UnknownHandler {
     public Result handleUnknownResult(ActionContext actionContext, String actionName, ActionConfig actionConfig, String resultCode) throws XWorkException {
         //这是我的菜, 更擅长处理未知的 result
         log.debug("catch result[{}] of action[{}]", resultCode, actionName);
+        RouteMapping routeMapping = routeMappingHandler.route(actionConfig);
+        log.debug("route: {}" + routeMapping);
 
         ResultConfig resultConfig = parseResultCodeToResultConfig(actionConfig, resultCode);
         if (resultConfig == null) {
