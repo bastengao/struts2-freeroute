@@ -83,19 +83,16 @@ public class ControllerPackageProvider implements PackageProvider {
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
-
                     //添加路由映射
                     routeMappingHandler.put(routeMapping);
 
-                    //TODO 以下两步放到 createActionConfig 方法中
-                    // 同样的路径, 不同的 method 映射的是不同的 action
+                    //将路由转换为 action
                     ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
                     String namespace = actionInfo.getNamespace();
-                    String actionName = actionInfo.getActionName();
 
                     //create action config
                     PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(namespace, packages);
-                    ActionConfig actionCfg = createActionConfig(packageCfgBuilder, classInfo.getName(), routeMapping.getMethod().getName(), actionName);
+                    ActionConfig actionCfg = createActionConfig(packageCfgBuilder, actionInfo, routeMapping);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);
                 }
             }
@@ -116,7 +113,7 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
     private PackageConfig.Builder findOrCreatePackage(String namespace, Map<String, PackageConfig.Builder> packages) {
-        String packageName = "mapping-default#" + namespace;
+        String packageName = "freeroute-default#" + namespace;
         PackageConfig.Builder packageCfgBuilder = packages.get(packageName);
         if (packageCfgBuilder == null) {
             PackageConfig defaultParent = this.defaultParentPackage();
@@ -126,6 +123,15 @@ public class ControllerPackageProvider implements PackageProvider {
             packages.put(packageName, packageCfgBuilder);
         }
         return packageCfgBuilder;
+    }
+
+    private ActionConfig createActionConfig(PackageConfig.Builder packageCfgBuilder, ActionInfo actionInfo, RouteMapping routeMapping) {
+        String actionName = actionInfo.getActionName();
+
+        //create action config
+        String actionClass = routeMapping.getAction().getName();
+        String actionMethodName = routeMapping.getMethod().getName();
+        return createActionConfig(packageCfgBuilder, actionClass, actionMethodName, actionName);
     }
 
     private ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String actionName) {

@@ -24,6 +24,8 @@ public class RouteUtil {
     /**
      * 将路由解析为 action 信息
      *
+     * 同样的路径, 不同的 method 映射的是不同的 action
+     *
      * 如果是静态路由 "/persons/new" 将变成 "/persons/new#method"
      * 如果是动态路由 "/persons/{id}" 将变成 "/persons/__id__#method"
      *
