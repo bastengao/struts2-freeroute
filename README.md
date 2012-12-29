@@ -1,8 +1,9 @@
-# struts2-freeroute-plugin
+struts2-freeroute-plugin
+===========
 
 自由的映射路由，像 Spring MVC 那样
 
-## 引用
+# 引用
 
 ```xml
 <dependency>
@@ -12,7 +13,7 @@
 </dependency>
 ```
 
-## 例子
+# 例子
 
 struts.xml
 ```xml
@@ -52,7 +53,7 @@ webapp/book.jsp
 
 访问 "/books/13"， 则会显示 book.jsp 的内容
 
-## 配置
+# 配置
 
 * struts.freeroute.controllerPackage
 
@@ -77,12 +78,12 @@ struts.xml
 </struts>
 ```
 
-## 说明
+# 说明
 
 配置`struts.freeroute.controllerPackage`后, 会在此包中搜索以`Controller`结尾的类做为 Controller,
 并在其中查找所有`@Route` 注解的方法做为路由映射.
 
-### 路由映射
+## 路由映射
 
 在`Controller`任意方法上加`@Route`注解则表示一条路由.
 
@@ -95,7 +96,7 @@ public MyController{
     }
 }
 ```
-#### 路径
+### 路径
 
 * 简单路径映射
 
@@ -141,7 +142,7 @@ public String tagedUser(){
 // setter, getter
 ```
 
-#### HTTP method
+### HTTP method
 
 通过`@Route.method`指定 HTTP method, 匹配满足 HTTP method 的路由映射
 
@@ -168,7 +169,7 @@ method 目前有以下类型:
 @Route(value = "/users", method = {MethodType.GET, MethodType.POST})
 ```
 
-#### HTTP 参数
+### HTTP 参数
 
 通过`@Route.params`指定 HTTP param , 匹配满足 HTTP param 的路由映射
 
@@ -192,7 +193,7 @@ method 目前有以下类型:
 @Rotue(value = "/users", params = {"name!=basten"})
 ```
 
-### 返回页面
+## 返回页面
 
 `Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`, 类型为 `dispatcher`, 页面路径为 `/example.html`.
 
@@ -206,7 +207,7 @@ method 目前有以下类型:
 + redirect
 + json (待完善)
 
-#### 绝对路径
+### 绝对路径
 
 页面路径以 "/" 开始
 ```java
@@ -216,12 +217,12 @@ public String show(){
 }
 
 @Route("/anothor-very-long-page-path")
-public String show(){
+public String show2(){
     return "dispatcher:/very/long/page/path/example2.html";
 }
 ```
 
-#### 相对路径
+### 相对路径
 
 页面路径不是以 "/" 开始，其地址相对于 @ContentBase 的路径
 ```java
@@ -233,7 +234,7 @@ public class ExampleController{
     }
 
     @Route("/anothor-very-long-page-path")
-    public String show(){
+    public String show2(){
         return "dispatcher:example2.html";
     }
 }
