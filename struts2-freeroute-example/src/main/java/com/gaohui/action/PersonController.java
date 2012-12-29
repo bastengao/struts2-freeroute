@@ -89,9 +89,9 @@ public class PersonController {
         return "dispatcher:/my-result.jsp";
     }
 
-    //@Route("/{id}/edit")
+    @Route("/{id}/edit")
     public String edit() {
-        return "content";
+        return "dispatcher:content.html";
     }
 
     @Route(value = "/persons/{id}", method = MethodType.PUT, params = {"_method"})
