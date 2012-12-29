@@ -194,7 +194,7 @@ method 目前有以下类型:
 
 ### 返回页面
 
-`Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`.
+`Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`, 类型为 `dispatcher`, 页面路径为 `/example.html`.
 
 目前支持三种类型:
 
@@ -205,3 +205,36 @@ method 目前有以下类型:
 + freemarker
 + redirect
 + json (待完善)
+
+#### 绝对路径
+
+页面路径以 "/" 开始
+```java
+@Route("/very-long-page-path")
+public String show(){
+    return "dispatcher:/very/long/page/path/example.html";
+}
+
+@Route("/anothor-very-long-page-path")
+public String show(){
+    return "dispatcher:/very/long/page/path/example2.html";
+}
+```
+
+#### 相对路径
+
+页面路径不是以 "/" 开始，其地址相对于 @ContentBase 的路径
+```java
+@ContentBase("/very/long/page")
+public class ExampleController{
+    @Route("/very-long-page-path")
+    public String show(){
+        return "dispatcher:example.html";
+    }
+
+    @Route("/anothor-very-long-page-path")
+    public String show(){
+        return "dispatcher:example2.html";
+    }
+}
+```

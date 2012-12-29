@@ -97,8 +97,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
         log.debug("packageName:{}", packageName);
         log.debug("resultTypes:{}", resultTypes);
 
-        ResultConfig resultConfig = findResultConfig(routeMapping, resultCode, resultTypes);
-        return resultConfig;
+        return findResultConfig(routeMapping, resultCode, resultTypes);
     }
 
     /**
@@ -113,33 +112,29 @@ public class DefaultUnknownHandler implements UnknownHandler {
         // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
         for (String type : AVAILABLE_TYPES.keySet()) {
             //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
-            if (resultCode.startsWith(type)) {
-                ResultTypeConfig typeConfig = resultTypes.get(type);
-                //如果没有默认参数
-                if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
-                    // 只有类型, 例如是 "json" 或者 "json:" 而不是 "jsonXxx"
-                    if (resultCode.length() == type.length() || resultCode.indexOf(":") == type.length()) {
-                        ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
-                        return resultBuilder.build();
-                    }
-                }
-                //如果有默认参数
-                else {
-                    //  如果是 "type:" 这种形式
-                    if (resultCode.indexOf(":") == type.length()) {
-                        ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+            if (!resultCode.startsWith(type)) {
+                continue; //如果不是，则下一个
+            }
 
-                        String path = resultCode.substring(type.length() + 1);
-                        //如果有 @ContentBase 配置，在 path 前追加 @ContentBase
-                        if (routeMapping.getContentBase() != null) {
-                            // TODO 区分相对路径还是绝对路径。如果是相对路径那么前追加 @ContentBase, 如果是绝对路径则不需要.
-                            // TODO 目前一律按相对路径处理
-                            // 可能中间多 slash 或者少 slash
-                            path = ActionUtil.padSlash(routeMapping.getContentBase().value()) + ActionUtil.padSlash(path);
-                        }
-                        resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
-                        return resultBuilder.build();
-                    }
+            ResultTypeConfig typeConfig = resultTypes.get(type);
+            //如果没有默认参数
+            if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
+                // 只有类型, 例如是 "json" 或者 "json:" 而不是 "jsonXxx"
+                if (resultCode.length() == type.length() || resultCode.indexOf(":") == type.length()) {
+                    ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+                    return resultBuilder.build();
+                }
+            }
+            //如果有默认参数
+            else {
+                //  如果是 "type:" 这种形式
+                if (resultCode.indexOf(":") == type.length()) {
+                    ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+
+                    String path = resultCode.substring(type.length() + 1);
+                    path = parsePath(routeMapping, path);
+                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
+                    return resultBuilder.build();
                 }
             }
         }
@@ -161,6 +156,34 @@ public class DefaultUnknownHandler implements UnknownHandler {
         }
 
         return resultBuilder;
+    }
+
+
+    /**
+     * 解析路径
+     * 区分相对路径还是绝对路径。如果是相对路径那么前追加 @ContentBase, 如果是绝对路径则不需要.
+     *
+     * @param routeMapping
+     * @param originPath
+     * @return
+     */
+    private static String parsePath(RouteMapping routeMapping, String originPath) {
+        //如果是绝对路径
+        if (originPath.startsWith("/")) {
+            // 啥也不干
+            return originPath;
+        }
+        //如果是相对路径
+        else {
+            //如果有 @ContentBase 配置，在 path 前追加 @ContentBase. 如果没有则将路径转换为绝对路径进行尝试
+            if (routeMapping.getContentBase() == null) {
+                originPath = ActionUtil.padSlash(originPath);
+            } else {
+                originPath = ActionUtil.padSlash(routeMapping.getContentBase().value()) + ActionUtil.padSlash(originPath);
+            }
+        }
+
+        return originPath;
     }
 
 }
