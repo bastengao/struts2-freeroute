@@ -25,11 +25,20 @@ public class RouteUtilTest {
 
     @Test
     public void test() {
-        String routePath = "/persons/{id}";
+        String routePath = "/persons/";
+        Assert.assertEquals("/persons/", RouteUtil.flatRoutePath(routePath));
+
+        routePath = "/persons/{";
+        Assert.assertEquals("/persons/{", RouteUtil.flatRoutePath(routePath));
+
+        routePath = "/persons/{id}";
         Assert.assertEquals("/persons/__id__", RouteUtil.flatRoutePath(routePath));
 
         routePath = "/persons/{id}/edit";
         Assert.assertEquals("/persons/__id__/edit", RouteUtil.flatRoutePath(routePath));
+
+        routePath = "/persons/{id}/edit/{name}";
+        Assert.assertEquals("/persons/__id__/edit/__name__", RouteUtil.flatRoutePath(routePath));
     }
 
     @Test

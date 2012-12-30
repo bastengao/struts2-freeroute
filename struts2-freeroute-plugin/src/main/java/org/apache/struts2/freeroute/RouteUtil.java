@@ -1,5 +1,6 @@
 package org.apache.struts2.freeroute;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.struts2.freeroute.annotation.MethodType;
 
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public class RouteUtil {
 
     /**
      * 将路由解析为 action 信息
-     *
+     * <p/>
      * 同样的路径, 不同的 method 映射的是不同的 action
-     *
+     * <p/>
      * 如果是静态路由 "/persons/new" 将变成 "/persons/new#method"
      * 如果是动态路由 "/persons/{id}" 将变成 "/persons/__id__#method"
      *
@@ -68,6 +69,7 @@ public class RouteUtil {
     public static String toRoutePathPattern(String routePath) {
         List<String> variableNames = pathVariableNames(routePath);
         String result = routePath;
+        // TODO 优化: 可以一次替换完
         for (String variableName : variableNames) {
             result = PATH_VARIABLE_PATTERN.matcher(result).replaceFirst("/([a-zA-Z0-9]+)");
         }
@@ -82,6 +84,7 @@ public class RouteUtil {
      */
     public static List<String> pathVariableNames(String routePath) {
         Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
+        //TODO 优化: 变量名不能相同, 未做判断
         List<String> variableNames = new ArrayList<String>();
         while (matcher.find()) {
             variableNames.add(matcher.group(1));
@@ -97,11 +100,25 @@ public class RouteUtil {
      * @param routePath
      * @return
      */
+    @VisibleForTesting
     public static String flatRoutePath(String routePath) {
-        //TODO 这里用一种比较简单的办法
-        routePath = routePath.replaceAll("\\{", "__");
-        routePath = routePath.replaceAll("}", "__");
-        return routePath;
+        StringBuilder flatRoutePath = new StringBuilder();
+        //下一次匹配的开始
+        int nextStart = 0;
+        Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
+        while (matcher.find()) {
+            String variableName = matcher.group(1);
+            int matchStart = matcher.start(); //此次匹配的开始
+            int matchEnd = matcher.end(); //引次匹配的结束
+
+            flatRoutePath.append(routePath.substring(nextStart, matchStart));
+            flatRoutePath.append("/__").append(variableName).append("__");
+
+            nextStart = matchEnd;
+        }
+        flatRoutePath.append(routePath.substring(nextStart));
+
+        return flatRoutePath.toString();
     }
 
     /**
