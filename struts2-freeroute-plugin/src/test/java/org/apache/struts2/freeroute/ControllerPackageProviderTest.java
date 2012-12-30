@@ -1,6 +1,6 @@
 package org.apache.struts2.freeroute;
 
-import com.gaohui.action.BookController;
+import com.example.action.BookController;
 import com.google.common.reflect.ClassPath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,14 +16,14 @@ import java.util.Set;
 public class ControllerPackageProviderTest {
     @Test
     public void testFindController() throws IOException {
-        Set<ClassPath.ClassInfo> controllerClassInfos = ControllerPackageProvider.findControllers("com.gaohui");
+        Set<ClassPath.ClassInfo> controllerClassInfos = ControllerPackageProvider.findControllers("com.example");
         Assert.assertNotNull(controllerClassInfos);
         Assert.assertFalse(controllerClassInfos.isEmpty());
     }
 
     @Test
     public void testParseController() throws IOException {
-        for (ClassPath.ClassInfo classInfo : ControllerPackageProvider.findControllers("com.gaohui")) {
+        for (ClassPath.ClassInfo classInfo : ControllerPackageProvider.findControllers("com.example")) {
             ControllerPackageProvider.parseController(classInfo.load());
         }
     }
