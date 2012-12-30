@@ -1,4 +1,4 @@
-package com.gaohui.action;
+package com.example.action;
 
 import com.opensymphony.xwork2.Action;
 

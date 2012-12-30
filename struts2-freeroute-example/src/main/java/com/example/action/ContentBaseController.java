@@ -1,4 +1,4 @@
-package com.gaohui.action;
+package com.example.action;
 
 import java.lang.String;
 import org.apache.struts2.freeroute.annotation.ContentBase;
