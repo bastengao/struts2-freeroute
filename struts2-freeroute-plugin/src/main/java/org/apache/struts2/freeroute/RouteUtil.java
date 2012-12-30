@@ -67,13 +67,7 @@ public class RouteUtil {
      * @return
      */
     public static String toRoutePathPattern(String routePath) {
-        List<String> variableNames = pathVariableNames(routePath);
-        String result = routePath;
-        // TODO 优化: 可以一次替换完
-        for (String variableName : variableNames) {
-            result = PATH_VARIABLE_PATTERN.matcher(result).replaceFirst("/([a-zA-Z0-9]+)");
-        }
-        return result;
+        return PATH_VARIABLE_PATTERN.matcher(routePath).replaceAll("/([a-zA-Z0-9]+)");
     }
 
     /**
