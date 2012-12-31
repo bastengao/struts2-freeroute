@@ -9,9 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>freeroute example</name>
     <artifactId>struts2-freeroute-example</artifactId>
     <packaging>war</packaging>
+    <name>Struts2 Freeroute Example</name>
+    <description>Struts2 Freeroute Exmaple project</description>
+    <url>httsp://github.com/bastengao/struts2-freeroute</url>
+
+    <scm>
+        <url>https://github.com/bastengao/struts2-freeroute/tree/master/struts2-freeroute-example</url>
+        <connection>scm:git:https://github.com/bastengao/struts2-freeroute.git</connection>
+    </scm>
 
 
     <dependencies>
