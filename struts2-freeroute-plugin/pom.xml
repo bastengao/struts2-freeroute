@@ -13,8 +13,8 @@
     <artifactId>struts2-freeroute-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Struts2 Freeroute</name>
-    <description>Struts2 Freeroute parent project</description>
+    <name>Struts2 Freeroute Plugin</name>
+    <description>Struts2 Freeroute Plugin project</description>
     <url>httsp://github.com/bastengao/struts2-freeroute</url>
 
     <scm>
