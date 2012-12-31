@@ -12,8 +12,17 @@
     <description>Struts2 Freeroute parent project</description>
     <url>httsp://github.com/bastengao/struts2-freeroute</url>
 
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <scm>
-        <url>https://github.com/bastengao/struts2-freeroute.git</url>
+        <url>https://github.com/bastengao/struts2-freeroute</url>
+        <connection>scm:git:https://github.com/bastengao/struts2-freeroute.git</connection>
     </scm>
 
     <developers>
