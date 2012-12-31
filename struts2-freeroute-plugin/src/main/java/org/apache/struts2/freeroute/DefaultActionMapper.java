@@ -47,6 +47,12 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         return super.getMapping(request, configManager);
     }
 
+    /**
+     * 解析并查找对应的路由, 同时返回 ActionMapping
+     *
+     * @param request
+     * @return
+     */
     private ActionMapping parseAndFindRouteMapping(HttpServletRequest request) {
         RouteMapping routeMapping = routeMappingHandler.route(request);
 
