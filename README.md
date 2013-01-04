@@ -11,7 +11,7 @@ struts2-freeroute-plugin
 <repository>
     <id>freeroute-snapshot</id>
     <name>Freeroute Snapshot Repository</name>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     <snapshots>
         <enabled>true</enabled>
     </snapshots>
@@ -22,7 +22,7 @@ struts2-freeroute-plugin
 
 ```xml
 <dependency>
-    <groupId>org.apache.struts</groupId>
+    <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
     <version>${version}</version>
 </dependency>
