@@ -5,6 +5,21 @@ struts2-freeroute-plugin
 
 # 引用
 
+当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.0-SNAPSHOT)。
+
+```xml
+<repository>
+    <id>freeroute-snapshot</id>
+    <name>Freeroute Snapshot Repository</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+</repository>
+```
+
+当前最新版本 1.0-SNAPSHOT
+
 ```xml
 <dependency>
     <groupId>org.apache.struts</groupId>
