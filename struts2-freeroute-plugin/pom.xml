@@ -20,6 +20,7 @@
     <scm>
         <url>https://github.com/bastengao/struts2-freeroute/tree/master/struts2-freeroute-plugin</url>
         <connection>scm:git:https://github.com/bastengao/struts2-freeroute.git</connection>
+        <developerConnection>scm:git:https://github.com/bastengao/struts2-freeroute.git</developerConnection>
     </scm>
 
     <dependencies>
