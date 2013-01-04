@@ -1,6 +1,6 @@
 package com.example.action;
 
-import org.apache.struts2.freeroute.annotation.Route;
+import com.bastengao.struts2.freeroute.annotation.Route;
 
 /**
  * @author bastengao

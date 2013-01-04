@@ -3,7 +3,7 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <constant name="struts.freeroute.controllerPackage" value="com.example"/>
+    <constant name="struts.freeroute.controllerPackage" value="org.example"/>
     <constant name="struts.freeroute.defaultParentPackage" value="json-default"/>
 
     <package name="my-struts" extends="json-default">
@@ -11,7 +11,7 @@
             <result>/hello.html</result>
         </action>
 
-        <action name="hello3" class="com.example.action.HelloAction">
+        <action name="hello3" class="org.example.action.HelloAction">
             <result>/hello.html</result>
         </action>
     </package>
