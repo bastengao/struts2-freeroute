@@ -2,6 +2,7 @@ package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class RouteUtilTest {
     @Test
     public void testToRoutePathPattern() {
         String patternStr = RouteUtil.toRoutePathPattern("/persons/{id}");
-        Assert.assertEquals("/persons/([a-zA-Z0-9]+)", patternStr);
+        Assert.assertEquals("/persons/([0-9a-zA-Z\\u4e00-\\u9fa5]+)", patternStr);
     }
 
     @Test
@@ -85,6 +86,9 @@ public class RouteUtilTest {
         String patternStr2 = RouteUtil.toRoutePathPattern("/persons/{id}/edit/{name}");
         Matcher matcher2 = Pattern.compile(patternStr2).matcher("/persons/123/edit/basten");
         Assert.assertTrue(matcher2.matches());
+
+        Matcher matcher3 = Pattern.compile(patternStr2).matcher("/persons/123/edit/中文");
+        Assert.assertTrue(matcher3.matches());
     }
 
     @Test

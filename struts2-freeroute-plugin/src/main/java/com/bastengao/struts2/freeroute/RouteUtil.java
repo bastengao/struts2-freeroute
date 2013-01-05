@@ -57,17 +57,19 @@ public class RouteUtil {
 
     /**
      * 将路由路径转化为能够匹配此路径请求的正则表达式
-     * 如：
-     * "/persons/{id}" => "/persons/([a-zA-Z0-9]+)"
-     * "/persons/{id}/edit/{name}" => "/persons/([a-zA-Z0-9]+)/edit/([a-zA-Z0-9]+)"
      * <p/>
-     * TODO 目前只匹配字母和数字
+     * TODO 目前只匹配字母,数字和中文
+     * TODO 比较粗狂的解决办法就是排除掉 "/" 和 http 协议冲突的字符就可以了
      *
      * @param routePath
      * @return
      */
     public static String toRoutePathPattern(String routePath) {
-        return PATH_VARIABLE_PATTERN.matcher(routePath).replaceAll("/([a-zA-Z0-9]+)");
+        // 数字, 英文, 中文
+        // 0-9, a-zA-Z, \u4e00-\u9fa5
+        // (为什么是 \\\\ ，因为在正则表达式里要表示 \ 需要转义为 \\,
+        // 但在 java 里表示 \\, 也需要转义就变成了 \\\\)
+        return PATH_VARIABLE_PATTERN.matcher(routePath).replaceAll("/([0-9a-zA-Z\\\\u4e00-\\\\u9fa5]+)");
     }
 
     /**
