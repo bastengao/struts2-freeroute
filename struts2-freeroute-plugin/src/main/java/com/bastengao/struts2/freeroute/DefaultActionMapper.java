@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 /**
+ * 重写 struts 对新来的请求到 ActionMapping 的处理， 前置加入 freeroute 的逻辑，
+ * 处理不了的交给父类处理(不影响 struts 本身之前的逻辑).
+ *
  * 针对当前访问的 request 解析为合适的 ActionMapping
  *
  * @author bastengao
@@ -33,8 +36,12 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
 
     @Override
     public ActionMapping getMapping(javax.servlet.http.HttpServletRequest request, ConfigurationManager configManager) {
-        if(log.isDebugEnabled()){
-            log.debug("{}  {}?{}", request.getMethod(), request.getServletPath(), Strings.nullToEmpty(request.getQueryString()));
+        if (log.isDebugEnabled()) {
+            String requestInfo = request.getMethod() + "    " + request.getServletPath();
+            if (!Strings.isNullOrEmpty(request.getQueryString())) {
+                requestInfo += "?" + request.getQueryString();
+            }
+            log.debug(requestInfo);
         }
 
 
@@ -77,22 +84,30 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         return actionMapping;
     }
 
+    /**
+     * 设置路径变量的值到 action 的 params 中, 然后 struts 会将 params 应用到对应的 action 的属性上(setter)
+     *
+     * @param actionMapping
+     * @param routeMapping
+     * @param request
+     */
     private void setParams(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
         if (routeMapping.hasPathVariables()) {
             Map<String, Object> params = new HashMap<String, Object>();
             String servletPath = request.getServletPath();
             Matcher matcher = routeMapping.getRoutePathPattern().matcher(servletPath);
-            List<String> values = new ArrayList<String>();
+            //路径变量, 顺序与路径一致
+            List<String> pathValues = new ArrayList<String>();
             //只匹配一次,  完成匹配
             if (matcher.find()) {
                 int groupCount = matcher.groupCount();
                 for (int c = 1; c <= groupCount; c++) {
-                    values.add(matcher.group(c));
+                    pathValues.add(matcher.group(c));
                 }
             }
             List<String> names = routeMapping.getVariableNames();
             for (int i = 0; i < names.size(); i++) {
-                params.put(names.get(i), values.get(i));
+                params.put(names.get(i), pathValues.get(i));
             }
             actionMapping.setParams(params);
         }
