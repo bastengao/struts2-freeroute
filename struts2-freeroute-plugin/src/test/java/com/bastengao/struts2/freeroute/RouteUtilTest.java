@@ -74,21 +74,32 @@ public class RouteUtilTest {
     @Test
     public void testToRoutePathPattern() {
         String patternStr = RouteUtil.toRoutePathPattern("/persons/{id}");
-        Assert.assertEquals("/persons/([0-9a-zA-Z\\u4e00-\\u9fa5]+)", patternStr);
-    }
-
-    @Test
-    public void testToRoutePathPattern2() {
-        String patternStr = RouteUtil.toRoutePathPattern("/persons/{id}");
-        Matcher matcher = Pattern.compile(patternStr).matcher("/persons/123");
-        Assert.assertTrue(matcher.matches());
+        Assert.assertTrue(Pattern.compile(patternStr).matcher("/persons/123").matches());
 
         String patternStr2 = RouteUtil.toRoutePathPattern("/persons/{id}/edit/{name}");
-        Matcher matcher2 = Pattern.compile(patternStr2).matcher("/persons/123/edit/basten");
-        Assert.assertTrue(matcher2.matches());
+        Pattern pattern2 = Pattern.compile(patternStr2);
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten").matches());
 
-        Matcher matcher3 = Pattern.compile(patternStr2).matcher("/persons/123/edit/中文");
-        Assert.assertTrue(matcher3.matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten.gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten<gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten>gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten^gao").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten-gao").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten_gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten`gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten}gao").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten~gao").matches());
+        //Assert.assertTrue(pattern2.matcher("/persons/123/edit/basten\"gao").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/中文").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/中.文").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/中-文").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/中_文").matches());
+        Assert.assertTrue(pattern2.matcher("/persons/123/edit/中~文").matches());
+
+        Assert.assertFalse(pattern2.matcher("/persons/123/edit/中文?").matches());
+        Assert.assertFalse(pattern2.matcher("/persons/123/edit/中文#").matches());
+        Assert.assertFalse(pattern2.matcher("/persons/123/edit/中文;").matches());
+        Assert.assertFalse(pattern2.matcher("/persons/123/edit/中文,").matches());
     }
 
     @Test

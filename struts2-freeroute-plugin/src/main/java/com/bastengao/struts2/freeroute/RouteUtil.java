@@ -58,18 +58,30 @@ public class RouteUtil {
     /**
      * 将路由路径转化为能够匹配此路径请求的正则表达式
      * <p/>
-     * TODO 目前只匹配字母,数字和中文
-     * TODO 比较粗狂的解决办法就是排除掉 "/" 和 http 协议冲突的字符就可以了
      *
      * @param routePath
      * @return
      */
     public static String toRoutePathPattern(String routePath) {
-        // 数字, 英文, 中文
-        // 0-9, a-zA-Z, \u4e00-\u9fa5
+        //1. 数字，英文
+        // "/([0-9a-zA-Z]+)"
+
+        //2. 数字, 英文, 中文
+        // 0-9, a-zA-Z, \u4e00-\u9fa5 => "/([0-9a-zA-Z\\\\u4e00-\\\\u9fa5]+)"
         // (为什么是 \\\\ ，因为在正则表达式里要表示 \ 需要转义为 \\,
         // 但在 java 里表示 \\, 也需要转义就变成了 \\\\)
-        return PATH_VARIABLE_PATTERN.matcher(routePath).replaceAll("/([0-9a-zA-Z\\\\u4e00-\\\\u9fa5]+)");
+
+        //3. 之前两种方案是白名单，可考虑黑名单方案. 排除掉保留字的都可匹配,
+        // 关键字有:
+        // ! * ' ( ) ; : @ & = + $ , / ? % # [ ]
+        //参考 http://en.wikipedia.org/wiki/Uniform_resource_locator#List_of_allowed_URL_characters
+        //
+        // \p{Punct} =>
+        // ! * ' ( ) ; : @ & = + $ , / ? % # [ ] - .  < > \ ^ _ ` { | } ~ "
+        // "[\-\.<>\\\^_`\{\}\|~"[^\p{Punct}]]+"
+
+        // 目前排除所有的标点符号的字符，但只保留了 "."  "_"  "~"  "-"
+        return PATH_VARIABLE_PATTERN.matcher(routePath).replaceAll("/([\\._~\\-[^\\\\p{Punct}]]+)");
     }
 
     /**
