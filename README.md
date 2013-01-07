@@ -159,6 +159,8 @@ public String tagedUser(){
 // setter, getter
 ```
 
+注意：路径变量比参数的优先级高, 上面的例子中请求如果是 `http://HOST:PORT/users/1013/tags/free?name=never` , controller 中的 name 属性值将会是 `free` 而不是 `never`。
+
 ### HTTP method
 
 通过`@Route.method`指定 HTTP method, 匹配满足 HTTP method 的路由映射
