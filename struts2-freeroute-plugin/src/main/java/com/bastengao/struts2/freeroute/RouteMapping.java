@@ -42,25 +42,37 @@ public class RouteMapping {
         this.action = action;
         this.method = method;
 
+        initParams();
+        initPathVariables();
+    }
+
+    public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
+        this(route, action, method);
+        this.contentBase = contentBase;
+    }
+
+    /**
+     * 初始化 params
+     */
+    private void initParams() {
         ArrayList<Param> params = new ArrayList<Param>();
         for (String param : route.params()) {
             params.add(new Param(param));
         }
         params.trimToSize(); // 减少空间
         this.params = Collections.unmodifiableList(params);
+    }
 
-
+    /**
+     * 初始化 pathVariables
+     */
+    private void initPathVariables() {
         String routePath = route.value();
         this.hasPathVariables = RouteUtil.hasPathVariables(routePath);
         if (hasPathVariables) {
             routePathPattern = Pattern.compile(RouteUtil.toRoutePathPattern(routePath));
             variableNames = Collections.unmodifiableList(RouteUtil.pathVariableNames(routePath));
         }
-    }
-
-    public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
-        this(route, action, method);
-        this.contentBase = contentBase;
     }
 
     public ContentBase getContentBase() {
@@ -95,6 +107,9 @@ public class RouteMapping {
         return routePathPattern;
     }
 
+    /**
+     * 表示一个 http param 表达式
+     */
     static class Param {
         private String paramName;
 
