@@ -1,15 +1,14 @@
 package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
+import com.bastengao.struts2.freeroute.annotation.CookieValue;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.base.Strings;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -37,6 +36,11 @@ public class RouteMapping {
     //匹配请求是否适合此路由的正则
     private Pattern routePathPattern;
 
+
+    // 被 @CookieValue 注解的 field
+    private Map<CookieValue, Field> cookieValues;
+
+
     public RouteMapping(Route route, Class action, Method method) {
         this.route = route;
         this.action = action;
@@ -44,6 +48,7 @@ public class RouteMapping {
 
         initParams();
         initPathVariables();
+        initCookieValues();
     }
 
     public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
@@ -75,6 +80,21 @@ public class RouteMapping {
         }
     }
 
+    /**
+     * 初始化 cookie
+     */
+    private void initCookieValues() {
+        cookieValues = new HashMap<CookieValue, Field>();
+        for (Field field : action.getDeclaredFields()) {
+            if (ReflectUtil.isAnnotationPresentOfField(field, CookieValue.class)) {
+                CookieValue cookieValue = ReflectUtil.getAnnotationOfField(field, CookieValue.class);
+                cookieValues.put(cookieValue, field);
+            }
+        }
+        cookieValues = Collections.unmodifiableMap(cookieValues);
+    }
+
+
     public ContentBase getContentBase() {
         return contentBase;
     }
@@ -105,6 +125,10 @@ public class RouteMapping {
 
     public Pattern getRoutePathPattern() {
         return routePathPattern;
+    }
+
+    public Map<CookieValue, Field> getCookieValues() {
+        return cookieValues;
     }
 
     /**

@@ -17,7 +17,7 @@ public class ContentBaseController {
         return "dispatcher:content.html";
     }
 
-    @Route("/anthor-absolute-path")
+    @Route("/another-absolute-path")
     public String view2() {
         // "/" 开始将使用绝对路径, 如果则使用相对路径
         return "dispatcher:/pages/content.html";
