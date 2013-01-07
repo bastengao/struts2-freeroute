@@ -33,11 +33,11 @@ struts2-freeroute-plugin
 struts.xml
 ```xml
 <struts>
-    <constant name="struts.freeroute.controllerPackage" value="com.example"/>
+    <constant name="struts.freeroute.controllerPackage" value="org.example"/>
 </struts>
 ```
 
-com.example.BookController.java
+org.example.BookController.java
 ```java
 public class BookController{
     private int id;
@@ -128,6 +128,8 @@ public MyController{
 ```
 
 * 路径中包含变量(pathVariable)
+
+变量可以是英文，数字，中文和 "-"  "_"  "~"  "." 这四个标点符号(其他标点符号都不支持，参考[List_of_allowed_URL_characters](http://en.wikipedia.org/wiki/Uniform_resource_locator#List_of_allowed_URL_characters))。
 
 `/users/{id}` => `http://HOST:PORT/users/1013`
 ```java
