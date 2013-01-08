@@ -3,14 +3,6 @@
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <bean type="com.opensymphony.xwork2.UnknownHandler"
-          name="freeRouteUnknownHandler"
-          class="com.bastengao.struts2.freeroute.DefaultUnknownHandler"/>
-
-    <bean type="com.bastengao.struts2.freeroute.RouteMappingHandler"
-          name="routeMappingHandler"
-          class="com.bastengao.struts2.freeroute.DefaultRouteMappingHandler"/>
-
     <bean type="com.opensymphony.xwork2.config.PackageProvider"
           name="controllerPackageProvider"
           class="com.bastengao.struts2.freeroute.ControllerPackageProvider"/>
@@ -19,6 +11,18 @@
           name="freeRouteMapper"
           class="com.bastengao.struts2.freeroute.DefaultActionMapper"/>
 
+    <bean type="com.opensymphony.xwork2.UnknownHandler"
+          name="freeRouteUnknownHandler"
+          class="com.bastengao.struts2.freeroute.DefaultUnknownHandler"/>
+
+    <bean type="com.bastengao.struts2.freeroute.RouteMappingHandler"
+          name="routeMappingHandler"
+          class="com.bastengao.struts2.freeroute.DefaultRouteMappingHandler"/>
+
     <constant name="struts.mapper.class" value="freeRouteMapper"/>
+
+    <!-- 默认父包 -->
     <constant name="struts.freeroute.defaultParentPackage" value="struts-default"/>
+    <!-- controller 的后缀 -->
+    <constant name="struts.freeroute.controllerSuffix" value="Controller"/>
 </struts>

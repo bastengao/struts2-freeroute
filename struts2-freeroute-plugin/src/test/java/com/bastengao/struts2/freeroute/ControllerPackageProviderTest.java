@@ -16,14 +16,14 @@ import java.util.Set;
 public class ControllerPackageProviderTest {
     @Test
     public void testFindController() throws IOException {
-        Set<ClassPath.ClassInfo> controllerClassInfos = ControllerPackageProvider.findControllers("com.example");
+        Set<ClassPath.ClassInfo> controllerClassInfos = ControllerPackageProvider.findControllers("com.example", "Controller");
         Assert.assertNotNull(controllerClassInfos);
         Assert.assertFalse(controllerClassInfos.isEmpty());
     }
 
     @Test
     public void testParseController() throws IOException {
-        for (ClassPath.ClassInfo classInfo : ControllerPackageProvider.findControllers("com.example")) {
+        for (ClassPath.ClassInfo classInfo : ControllerPackageProvider.findControllers("com.example", "Controller")) {
             ControllerPackageProvider.parseController(classInfo.load());
         }
     }

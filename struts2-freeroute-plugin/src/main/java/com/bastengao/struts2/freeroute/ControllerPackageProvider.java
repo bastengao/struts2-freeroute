@@ -34,6 +34,8 @@ public class ControllerPackageProvider implements PackageProvider {
     private RouteMappingHandler routeMappingHandler;
     // controller 所在的包
     private String controllerPackage;
+    // controller 后缀
+    private String controllerSuffix;
     // 默认父包 (如果没有配置，默认为 "struts-default")
     private String defaultParentPackage;
 
@@ -46,6 +48,11 @@ public class ControllerPackageProvider implements PackageProvider {
     @Inject(value = "struts.freeroute.controllerPackage", required = true)
     private void setControllerPackage(String controllerPackage) {
         this.controllerPackage = controllerPackage;
+    }
+
+    @Inject(value = "struts.freeroute.controllerSuffix", required = true)
+    private void setControllerSuffix(String controllerSuffix) {
+        this.controllerSuffix = controllerSuffix;
     }
 
     @Inject(value = "struts.freeroute.defaultParentPackage", required = true)
@@ -80,7 +87,7 @@ public class ControllerPackageProvider implements PackageProvider {
 
         try {
             //分析所有的 "Controller"
-            for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage)) {
+            for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage, controllerSuffix)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
                     //将路由转换为 action
@@ -152,7 +159,7 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
     @VisibleForTesting
-    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage) throws IOException {
+    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage, final String controllerSuffix) throws IOException {
         ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
 
         Set<ClassPath.ClassInfo> allClasses = classPath.getTopLevelClassesRecursive(controllerPackage);
@@ -160,7 +167,7 @@ public class ControllerPackageProvider implements PackageProvider {
             @Override
             public boolean apply(ClassPath.ClassInfo classInfo) {
                 //类一定要是 "Controller" 结束
-                if (classInfo.getSimpleName().endsWith("Controller")) {
+                if (classInfo.getSimpleName().endsWith(controllerSuffix)) {
                     log.trace("controller:{}", classInfo.getName());
                     return true;
                 }
