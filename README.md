@@ -73,16 +73,28 @@ webapp/book.jsp
 
 * struts.freeroute.controllerPackage
 
-配置 Controller 所在的包(必须)
+配置 Controller 所在的包(必须), 插件会在此包下查找相应的 Controller，包括子包。
 
 struts.xml
 ```xml
-<constant name="struts.freeroute.controllerPackage" value="com.example"/>
+<constant name="struts.freeroute.controllerPackage" value="org.example"/>
+```
+
+* struts.freeroute.controllerSuffix
+
+配置 Controller 的后缀(可选)，默认`Controller`。只解析 controllerPackage 下所有以 `Controller` 结尾的类。
+
+struts.xml
+```xml
+<struts>
+<!-- 将默认 Controller 改为 Action -->
+<constant name="struts.freeroute.controolerSuffix" value="Action"/>
+</struts>
 ```
 
 * struts.freeroute.defaultParentPackage
 
-配置默认的父包(可选)
+配置默认的父包(可选), 默认 `struts-defualt`
 
 struts.xml
 ```xml
@@ -96,7 +108,7 @@ struts.xml
 
 # 说明
 
-配置`struts.freeroute.controllerPackage`后, 会在此包中搜索以`Controller`结尾的类做为 Controller,
+配置`struts.freeroute.controllerPackage`后, 会在此包中默认搜索以`Controller`结尾的类做为 Controller,
 并在其中查找所有`@Route` 注解的方法做为路由映射.
 
 ## 路由映射
