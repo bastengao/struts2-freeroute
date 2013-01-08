@@ -2,11 +2,9 @@ package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -57,18 +55,9 @@ public class RouteUtilTest {
         Assert.assertTrue(pattern.matcher("/persons/{id}/edit").find());
 
         Assert.assertTrue(pattern.matcher("/persons/{id}/edit/{name}").find());
-        groups(pattern.matcher("/persons/{id}/edit/{name}"));
 
         Assert.assertFalse(pattern.matcher("{id}").find());
         Assert.assertFalse(pattern.matcher("/persons/{}").find());
-    }
-
-    private void groups(Matcher matcher) {
-        while (matcher.find()) {
-            System.out.println(matcher.group(0));
-            System.out.println(matcher.group(1));
-            System.out.println(matcher.group());
-        }
     }
 
     @Test
