@@ -11,10 +11,13 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 import com.opensymphony.xwork2.config.entities.ResultTypeConfig;
 import com.opensymphony.xwork2.inject.Inject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -113,6 +116,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
      */
     private ResultConfig findResultConfig(RouteMapping routeMapping, String resultCode, Map<String, ResultTypeConfig> resultTypes) {
         // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
+        // TODO 去掉类型限制
         for (String type : AVAILABLE_TYPES.keySet()) {
             //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
             if (!resultCode.startsWith(type)) {
@@ -122,9 +126,15 @@ public class DefaultUnknownHandler implements UnknownHandler {
             ResultTypeConfig typeConfig = resultTypes.get(type);
             //如果没有默认参数
             if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
-                // 只有类型, 例如是 "json" 或者 "json:" 而不是 "jsonXxx"
-                if (resultCode.length() == type.length() || resultCode.indexOf(":") == type.length()) {
-                    ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+                ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+                // resultValue 有两种可能: 一种直接是默认参数(比如路径 dispatcher:/xxx.html), 另一种是 json 参数
+                // 只有类型, 例如是 "json"
+                if (resultCode.length() == type.length()) {
+                    return resultBuilder.build();
+                }
+                if (resultCode.indexOf(":") == type.length()) {
+                    String resultParam = resultCode.substring(type.length() + 1);
+                    addParamByJSON(resultBuilder, resultParam);
                     return resultBuilder.build();
                 }
             }
@@ -134,10 +144,20 @@ public class DefaultUnknownHandler implements UnknownHandler {
                 if (resultCode.indexOf(":") == type.length()) {
                     ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
 
-                    String path = resultCode.substring(type.length() + 1);
-                    path = parsePath(routeMapping, path);
-                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
-                    return resultBuilder.build();
+                    // resultValue 有两种可能:
+                    // 1.一种直接是默认参数(比如路径 dispatcher:/xxx.html)
+                    // 2.另一种是 json 参数
+                    String resultParam = resultCode.substring(type.length() + 1);
+                    if (isJSONObject(resultParam)) {
+                        addParamByJSON(resultBuilder, resultParam);
+                        return resultBuilder.build();
+
+                    } else {
+                        String path = resultParam;
+                        path = parsePath(routeMapping, path);
+                        resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
+                        return resultBuilder.build();
+                    }
                 }
             }
         }
@@ -189,4 +209,30 @@ public class DefaultUnknownHandler implements UnknownHandler {
         return originPath;
     }
 
+    /**
+     * 测试是否是 json 参数
+     *
+     * @param param
+     * @return
+     */
+    private static boolean isJSONObject(String param) {
+        try {
+            new JSONObject(param);
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
+    }
+
+    private static void addParamByJSON(ResultConfig.Builder resultBuilder, String resultParam) {
+        try {
+            JSONObject jsonObject = new JSONObject(resultParam);
+            for (Iterator it = jsonObject.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+                resultBuilder.addParam(key, jsonObject.getString(key));
+            }
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("could not parse result param", e);
+        }
+    }
 }

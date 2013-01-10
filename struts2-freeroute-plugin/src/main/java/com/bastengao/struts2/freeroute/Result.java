@@ -12,50 +12,6 @@ import java.util.Map;
  * @date 13-1-9 22:22
  */
 public class Result {
-    public static String html(String location) {
-        return dispatcher(location);
-    }
-
-    public static String jsp(String location) {
-        return dispatcher(location);
-    }
-
-    public static String dispatcher(String location) {
-        return "dispatcher:" + location;
-    }
-
-    public static String ftl(String location) {
-        return freemarker(location);
-    }
-
-    public static String freemarker(String location) {
-        return "freemarker:" + location;
-    }
-
-    /**
-     * alias #velocity
-     * @param location
-     * @return
-     */
-    public static String vm(String location) {
-        return velocity(location);
-    }
-
-    public static String velocity(String location) {
-        return "velocity:" + location;
-    }
-
-    public static String redirect(String location) {
-        return result("redirect", location);
-    }
-
-    public static String result(String resultType) {
-        return resultType;
-    }
-
-    public static String result(String resultType, String location) {
-        return resultType + ":" + location;
-    }
 
     public static Result create() {
         return new Result();
@@ -65,13 +21,13 @@ public class Result {
         return new Result(resultType);
     }
 
-    private Map<String, String> params = new HashMap<String, String>();
-    private String resultType = "dispatcher";
+    protected Map<String, String> params = new HashMap<String, String>();
+    protected String resultType = "dispatcher";
 
-    private Result() {
+    protected Result() {
     }
 
-    private Result(String resultType) {
+    protected Result(String resultType) {
         this.resultType = resultType;
     }
 
