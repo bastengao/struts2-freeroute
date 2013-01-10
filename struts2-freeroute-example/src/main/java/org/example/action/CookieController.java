@@ -1,5 +1,6 @@
 package org.example.action;
 
+import com.bastengao.struts2.freeroute.Results;
 import com.bastengao.struts2.freeroute.annotation.CookieValue;
 import com.bastengao.struts2.freeroute.annotation.Route;
 
@@ -16,7 +17,7 @@ public class CookieController {
     @Route("/cookie/{name}")
     public String show() {
         System.out.printf("id: %d, name: %s%n", id, name);
-        return "dispatcher:/my-result.html";
+        return Results.html("/my-result.html");
     }
 
     public int getId() {

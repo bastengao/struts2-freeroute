@@ -1,5 +1,6 @@
 package org.example.action;
 
+import com.bastengao.struts2.freeroute.Results;
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
@@ -19,7 +20,8 @@ public class PersonController {
     @Route("/persons/create")
     public String toCreate() {
         log.debug("toCreate:{}", id);
-        return "dispatcher:/my-result.html";
+        // "dispatcher:/my-result.html";
+        return Results.html("/my-result.html");
     }
 
     @Route("/create")

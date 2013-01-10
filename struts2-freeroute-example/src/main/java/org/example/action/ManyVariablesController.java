@@ -1,5 +1,6 @@
 package org.example.action;
 
+import com.bastengao.struts2.freeroute.Results;
 import com.bastengao.struts2.freeroute.annotation.Route;
 
 /**
@@ -15,7 +16,8 @@ public class ManyVariablesController {
     public String execute() {
         System.out.printf("id:%s, name:%s, title:%s%n", id, name, title);
         // 如果没有 @ContentBase 注解页面路径将自动转化为 "/my-result.jsp"
-        return "dispatcher:my-result.jsp";
+        // "dispatcher:my-result.jsp";
+        return Results.jsp("my-result.jsp");
     }
 
     public int getId() {
