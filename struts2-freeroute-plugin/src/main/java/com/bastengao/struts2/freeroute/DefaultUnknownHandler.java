@@ -1,7 +1,10 @@
 package com.bastengao.struts2.freeroute;
 
 import com.google.common.base.Strings;
-import com.opensymphony.xwork2.*;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ObjectFactory;
+import com.opensymphony.xwork2.UnknownHandler;
+import com.opensymphony.xwork2.XWorkException;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
@@ -57,7 +60,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
     }
 
     @Override
-    public Result handleUnknownResult(ActionContext actionContext, String actionName, ActionConfig actionConfig, String resultCode) throws XWorkException {
+    public com.opensymphony.xwork2.Result handleUnknownResult(ActionContext actionContext, String actionName, ActionConfig actionConfig, String resultCode) throws XWorkException {
         //这是我的菜, 更擅长处理未知的 result
         log.debug("catch result[{}] of action[{}]", resultCode, actionName);
         RouteMapping routeMapping = routeMappingHandler.route(actionConfig);

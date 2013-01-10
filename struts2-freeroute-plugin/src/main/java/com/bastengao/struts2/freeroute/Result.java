@@ -1,6 +1,5 @@
 package com.bastengao.struts2.freeroute;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Map;
  * @author bastengao
  * @date 13-1-9 22:22
  */
-public class Results {
+public class Result {
     public static String html(String location) {
         return dispatcher(location);
     }
@@ -33,6 +32,11 @@ public class Results {
         return "freemarker:" + location;
     }
 
+    /**
+     * alias #velocity
+     * @param location
+     * @return
+     */
     public static String vm(String location) {
         return velocity(location);
     }
@@ -53,30 +57,30 @@ public class Results {
         return resultType + ":" + location;
     }
 
-    public static Results create() {
-        return new Results();
+    public static Result create() {
+        return new Result();
     }
 
-    public static Results create(String resultType) {
-        return new Results(resultType);
+    public static Result create(String resultType) {
+        return new Result(resultType);
     }
 
     private Map<String, String> params = new HashMap<String, String>();
     private String resultType = "dispatcher";
 
-    private Results() {
+    private Result() {
     }
 
-    private Results(String resultType) {
+    private Result(String resultType) {
         this.resultType = resultType;
     }
 
-    public Results param(String name, String value) {
+    public Result param(String name, String value) {
         this.params.put(name, value);
         return this;
     }
 
-    public Results location(String value) {
+    public Result location(String value) {
         this.params.put("location", value);
         return this;
     }

@@ -8,16 +8,16 @@ import org.junit.Test;
  * @author bastengao
  * @date 13-1-9 22:41
  */
-public class ResultsTest {
+public class ResultTest {
     @Test
     public void testResult() {
-        String value = Results.create().param("location", "value.jsp").done();
+        String value = Result.create().param("location", "value.jsp").done();
         System.out.println(value);
 
-        value = Results.create("freemarker").location("value.jsp").done();
+        value = Result.create("freemarker").location("value.jsp").done();
         System.out.println(value);
 
-        value = Results.create("chain").param("name1", "value1").param("name2", "value2").done();
+        value = Result.create("chain").param("name1", "value1").param("name2", "value2").done();
         System.out.println(value);
     }
 
