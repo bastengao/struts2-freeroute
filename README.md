@@ -252,6 +252,7 @@ method 目前有以下类型:
 
     例如 `dispatcher:/example.html`，这种方式只要返回 `type:location` 或者直接返回 `type`
 
+
 - 使用 DSL 方式
 
     通过 `Results` 和 `Result` 等 DSL 方式的 api 构造返回结果。`Results` 能够满足常用返回结果。例如：
