@@ -242,9 +242,32 @@ method 目前有以下类型:
 @Rotue(value = "/users", params = {"name!=basten"})
 ```
 
-## 返回页面
+## 返回结果
 
 `Controller.routeMethod` 方法的返回值将决定返回的结果类型和页面路径, 如`dispatcher:/example.html`, 类型为 `dispatcher`, 页面路径为 `/example.html`.
+
+两种方式：
+
+- 直接返回字面值
+
+    例如 `dispatcher:/example.html`，这种方式只要返回 `type:location` 或者直接返回 `type`
+
+- 使用 DSL 方式
+
+    通过 `Results` 和 `Result` 等 DSL 方式的 api 构造返回结果。`Results` 能够满足常用返回结果。例如：
+
+    * `Results.html("/example.html")`
+    * `Results.jsp("/exmaple.jsp")`
+    * `Results.json().includeProperties("value1, value2").done()`
+
+    不过有时候 `Results` 未覆盖的情况，也可以通过 `Result` 来组织返回结果。例如：
+
+    ```java
+    Result.create("json")
+        .param("includeProperties", "value1, value2")
+        .done();
+    ```
+
 
 目前支持三种类型:
 
@@ -254,7 +277,7 @@ method 目前有以下类型:
 + velocity
 + freemarker
 + redirect
-+ json (待完善)
++ json
 
 ### 绝对路径
 
