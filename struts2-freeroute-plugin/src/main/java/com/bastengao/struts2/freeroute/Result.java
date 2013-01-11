@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 产生 action  result
+ * action  result
  *
  * @author bastengao
  * @date 13-1-9 22:22
@@ -22,6 +22,7 @@ public class Result {
     }
 
     protected Map<String, String> params = new HashMap<String, String>();
+    // 默认类型
     protected String resultType = "dispatcher";
 
     protected Result() {
@@ -42,6 +43,10 @@ public class Result {
     }
 
     public String done() {
+        if(params.isEmpty()){
+            return resultType;
+        }
+
         // resultType: params.toJSON()
         JSONObject jsonObject = new JSONObject(params);
 

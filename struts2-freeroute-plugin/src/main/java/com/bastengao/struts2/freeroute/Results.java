@@ -3,6 +3,7 @@ package com.bastengao.struts2.freeroute;
 /**
  * @author bastengao
  * @date 13-1-10 21:19
+ * @since 1.0
  */
 public class Results {
 
@@ -37,6 +38,7 @@ public class Results {
      *
      * @param location
      * @return
+     * @since 1.0
      */
     public static String vm(String location) {
         return velocity(location);
@@ -58,7 +60,43 @@ public class Results {
         return resultType + ":" + location;
     }
 
+    /**
+     * json result
+     *
+     * @return
+     * @since 1.0
+     */
     public static JsonResult json() {
         return new JsonResult();
+    }
+
+    /**
+     * chain result
+     *
+     * @return
+     * @since 1.0
+     */
+    public static ChainResult chain() {
+        return new ChainResult();
+    }
+
+    /**
+     * stream result
+     *
+     * @return
+     * @since 1.0
+     */
+    public static StreamResult stream() {
+        return new StreamResult();
+    }
+
+    /**
+     * http header result
+     *
+     * @return
+     * @since 1.0
+     */
+    public static HttpHeaderResult httpHeader() {
+        return new HttpHeaderResult();
     }
 }

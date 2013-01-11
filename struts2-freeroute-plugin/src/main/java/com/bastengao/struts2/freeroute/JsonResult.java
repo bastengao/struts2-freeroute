@@ -11,7 +11,7 @@ package com.bastengao.struts2.freeroute;
  */
 public class JsonResult extends Result {
     protected JsonResult() {
-        this.resultType = "json";
+        super("json");
     }
 
     public JsonResult root(String root) {
