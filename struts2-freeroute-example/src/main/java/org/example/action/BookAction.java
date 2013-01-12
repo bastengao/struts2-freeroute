@@ -10,6 +10,6 @@ import com.bastengao.struts2.freeroute.annotation.Route;
 public class BookAction {
     @Route("/books")
     public String execute() {
-        return Results.html("/my-result");
+        return Results.html("content");
     }
 }
