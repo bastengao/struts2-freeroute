@@ -166,17 +166,20 @@ public class DefaultUnknownHandler implements UnknownHandler {
                     // 1.一种直接是默认参数(比如路径 dispatcher:/xxx.html)
                     // 2.另一种是 json 参数
                     String resultParam = resultCode.substring(type.length() + 1);
+                    String location = null; // 通常是 defaultParam
                     if (isJSONObject(resultParam)) {
-                        addParamByJSON(resultBuilder, resultParam);
-                        // TODO BUG: 如果是 json 形式的返回类型，如果有 location ，没有进行路径相对路径或绝对路径转换
-                        return resultBuilder.build();
-
+                        Map<String, String> params = addParamByJSON(resultBuilder, resultParam);
+                        /**
+                         * 如果是 json 形式传递 param(并非 struts json 插件)的返回结果，
+                         * 如果有 location ，也需要进行路径相对路径或绝对路径转换
+                         */
+                        location = params.get(typeConfig.getDefaultResultParam());
                     } else {
-                        String path = resultParam;
-                        path = parsePath(contentBase, routeMapping, path);
-                        resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
-                        return resultBuilder.build();
+                        location = resultParam;
                     }
+                    location = parsePath(contentBase, routeMapping, location);
+                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), location);
+                    return resultBuilder.build();
                 }
             }
         }
@@ -203,7 +206,10 @@ public class DefaultUnknownHandler implements UnknownHandler {
 
     /**
      * 解析路径
-     * 区分相对路径还是绝对路径。如果是相对路径那么前追加 @ContentBase, 如果是绝对路径则不需要.
+     * 区分相对路径还是绝对路径。如果是绝对路径则不需要转换。
+     * <p/>
+     * 如果是相对路径那么则将其转化为绝对路径。转化时优先使用 @ContentBase，然后 contentBase，
+     * 如果前两个都不满足则直接转换为绝对路径
      *
      * @param globalContentBase
      * @param routeMapping
@@ -253,13 +259,16 @@ public class DefaultUnknownHandler implements UnknownHandler {
         }
     }
 
-    private static void addParamByJSON(ResultConfig.Builder resultBuilder, String resultParam) {
+    private static Map<String, String> addParamByJSON(ResultConfig.Builder resultBuilder, String resultParam) {
         try {
+            Map<String, String> params = new HashMap<String, String>();
             JSONObject jsonObject = new JSONObject(resultParam);
             for (Iterator it = jsonObject.keys(); it.hasNext(); ) {
                 String key = (String) it.next();
                 resultBuilder.addParam(key, jsonObject.getString(key));
+                params.put(key, jsonObject.getString(key));
             }
+            return params;
         } catch (JSONException e) {
             throw new IllegalArgumentException("could not parse result param", e);
         }
