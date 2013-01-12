@@ -32,8 +32,12 @@ import java.util.Map;
 public class DefaultUnknownHandler implements UnknownHandler {
     private final static Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);
 
-    // TODO 删除以下属性
-    //可用的返回类型
+    /**
+     * TODO 删除以下属性
+     * 可用的返回类型
+     *
+     * @deprecated
+     */
     public static final Map<String, String> AVAILABLE_TYPES = new HashMap<String, String>();
 
     static {
@@ -47,6 +51,14 @@ public class DefaultUnknownHandler implements UnknownHandler {
     private ObjectFactory objectFactory;
     private Configuration configuration;
     private RouteMappingHandler routeMappingHandler;
+
+    // 全局内容基路径(可选)
+    private String contentBase;
+
+    @Inject(value = "struts.freeroute.contentBase", required = false)
+    private void setContentBase(String contentBase) {
+        this.contentBase = ActionUtil.padSlash(contentBase);
+    }
 
     @Inject("routeMappingHandler")
     private void setRouteMappingHandler(RouteMappingHandler routeMappingHandler) {
@@ -122,9 +134,6 @@ public class DefaultUnknownHandler implements UnknownHandler {
     private ResultConfig findResultConfig(RouteMapping routeMapping, String resultCode, Map<String, ResultTypeConfig> resultTypes) {
         // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
 
-        // TODO 去掉类型限制
-        //for (String type : AVAILABLE_TYPES.keySet()) {
-
         // TODO 优化: 可以先解析出类型，然后再去 resultTypes 查找是否存在
         for (String type : resultTypes.keySet()) {
             //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
@@ -159,11 +168,12 @@ public class DefaultUnknownHandler implements UnknownHandler {
                     String resultParam = resultCode.substring(type.length() + 1);
                     if (isJSONObject(resultParam)) {
                         addParamByJSON(resultBuilder, resultParam);
+                        // TODO BUG: 如果是 json 形式的返回类型，如果有 location ，没有进行路径相对路径或绝对路径转换
                         return resultBuilder.build();
 
                     } else {
                         String path = resultParam;
-                        path = parsePath(routeMapping, path);
+                        path = parsePath(contentBase, routeMapping, path);
                         resultBuilder.addParam(typeConfig.getDefaultResultParam(), path);
                         return resultBuilder.build();
                     }
@@ -195,25 +205,35 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * 解析路径
      * 区分相对路径还是绝对路径。如果是相对路径那么前追加 @ContentBase, 如果是绝对路径则不需要.
      *
+     * @param globalContentBase
      * @param routeMapping
      * @param originPath
      * @return
      */
-    private static String parsePath(RouteMapping routeMapping, String originPath) {
+    private static String parsePath(String globalContentBase, RouteMapping routeMapping, String originPath) {
         //如果是绝对路径
         if (originPath.startsWith("/")) {
             // 啥也不干
             return originPath;
         }
+
         //如果是相对路径
-        else {
-            //如果有 @ContentBase 配置，在 path 前追加 @ContentBase. 如果没有则将路径转换为绝对路径进行尝试
-            if (routeMapping.getContentBase() == null) {
-                originPath = ActionUtil.padSlash(originPath);
-            } else {
-                originPath = ActionUtil.padSlash(routeMapping.getContentBase().value()) + ActionUtil.padSlash(originPath);
-            }
+
+        //如果有 @ContentBase 配置，在 path 前追加 @ContentBase.
+        if (routeMapping.getContentBase() != null) {
+            String contentBase = ActionUtil.padSlash(routeMapping.getContentBase().value());
+            originPath = contentBase + ActionUtil.padSlash(originPath);
+            return originPath;
         }
+
+        //如果全局内容基存在，则在 path 前追加
+        if (!Strings.isNullOrEmpty(globalContentBase)) {
+            originPath = globalContentBase + ActionUtil.padSlash(originPath);
+            return originPath;
+        }
+
+        // 如果没有则将路径转换为绝对路径进行尝试
+        originPath = ActionUtil.padSlash(originPath);
 
         return originPath;
     }
