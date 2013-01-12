@@ -36,4 +36,34 @@ public class ResultsTest {
         Assert.assertNotNull(result3);
         Assert.assertEquals("dispatcher:/test.jsp", result3);
     }
+
+    @Test
+    public void testPadEnd() {
+        String result = Results.padEnd("test.html", ".html");
+        Assert.assertEquals("test.html", result);
+
+        result = Results.padEnd("test", ".html");
+        Assert.assertEquals("test.html", result);
+    }
+
+    @Test
+    public void testAutoCompleteSuffix() {
+        Assert.assertEquals("dispatcher:/test.html", Results.html("/test.html"));
+        Assert.assertEquals("dispatcher:/test.html", Results.html("/test"));
+
+        Assert.assertEquals("dispatcher:/test.jsp", Results.jsp("/test.jsp"));
+        Assert.assertEquals("dispatcher:/test.jsp", Results.jsp("/test"));
+
+        Assert.assertEquals("freemarker:/test.ftl", Results.ftl("/test.ftl"));
+        Assert.assertEquals("freemarker:/test.ftl", Results.freemarker("/test.ftl"));
+
+        Assert.assertEquals("freemarker:/test.ftl", Results.ftl("/test"));
+        Assert.assertEquals("freemarker:/test.ftl", Results.freemarker("/test"));
+
+        Assert.assertEquals("velocity:/test.vm", Results.vm("/test.vm"));
+        Assert.assertEquals("velocity:/test.vm", Results.velocity("/test.vm"));
+
+        Assert.assertEquals("velocity:/test.vm", Results.vm("/test"));
+        Assert.assertEquals("velocity:/test.vm", Results.velocity("/test"));
+    }
 }

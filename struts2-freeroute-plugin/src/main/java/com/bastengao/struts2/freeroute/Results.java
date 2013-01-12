@@ -1,5 +1,10 @@
 package com.bastengao.struts2.freeroute;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
+import com.google.common.base.Strings;
+
 /**
  * 生成各种常用返回结果
  *
@@ -10,25 +15,28 @@ package com.bastengao.struts2.freeroute;
 public class Results {
 
     /**
-     * html result. 返回类型是 "dispatcher"
-     * TODO 优化：可自动补全后缀
+     * html result. 返回类型是 "dispatcher", 可自动补全后缀 ".html"
      *
      * @param location 页面路径
      * @return
      * @since 1.0
      */
     public static String html(String location) {
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(location));
+        location = padEnd(location, ".html");
+
         return dispatcher(location);
     }
 
     /**
-     * jsp result. 返回类型是 "dispatcher"
+     * jsp result. 返回类型是 "dispatcher", 可自动补全后缀
      *
      * @param location 页面路径
      * @return
      * @since 1.0
      */
     public static String jsp(String location) {
+        location = padEnd(location, ".jsp");
         return dispatcher(location);
     }
 
@@ -55,13 +63,14 @@ public class Results {
     }
 
     /**
-     * freemarker result
+     * freemarker result, 可自动补全后缀
      *
      * @param location 页面路径
      * @return
      * @since 1.0
      */
     public static String freemarker(String location) {
+        location = padEnd(location, ".ftl");
         return "freemarker:" + location;
     }
 
@@ -77,13 +86,14 @@ public class Results {
     }
 
     /**
-     * velocity result
+     * velocity result, 可自动补全后缀
      *
      * @param location 页面路径
      * @return
      * @since 1.0
      */
     public static String velocity(String location) {
+        location = padEnd(location, ".vm");
         return "velocity:" + location;
     }
 
@@ -119,6 +129,22 @@ public class Results {
      */
     public static String result(String resultType, String location) {
         return resultType + ":" + location;
+    }
+
+    /**
+     * 自动补全后缀. 如果存在后缀则直接返回，如果不存在则补全
+     *
+     * @param source
+     * @param suffix
+     * @return
+     */
+    @VisibleForTesting
+    public static String padEnd(String source, String suffix) {
+        if (!source.endsWith(suffix)) {
+            return source + suffix;
+        }
+
+        return source;
     }
 
     /**
