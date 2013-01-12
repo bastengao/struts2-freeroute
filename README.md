@@ -316,7 +316,7 @@ public String show2(){
 
 页面路径不是以 "/" 开始，其地址相对于 @ContentBase 的路径
 ```java
-@ContentBase("/very/long/page")
+@ContentBase("/very/long/page/path")
 public class ExampleController{
     @Route("/very-long-page-path")
     public String show(){
