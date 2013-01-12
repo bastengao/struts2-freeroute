@@ -16,6 +16,7 @@
     <name>Struts2 Freeroute</name>
     <description>Struts2 Freeroute parent project</description>
     <url>httsp://github.com/bastengao/struts2-freeroute</url>
+    <organization><name>bastengao</name></organization>
 
     <licenses>
         <license>
