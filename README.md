@@ -289,9 +289,12 @@ method 目前有以下类型:
 - dispatcher
     * html
     * jsp
+- redirect
+- chain
+- httpHeader
+- stream
 - velocity
 - freemarker
-- redirect
 - json
 
 ### 绝对路径
