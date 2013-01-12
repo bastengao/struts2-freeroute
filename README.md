@@ -4,18 +4,21 @@ struts2-freeroute-plugin
 自由的映射路由，像 Spring MVC 那样。
 [![Build Status](https://travis-ci.org/bastengao/struts2-freeroute.png?branch=master)](https://travis-ci.org/bastengao/struts2-freeroute)
 
+- [API doc](http://bastengao.github.com/struts2-freeroute/1.0-SNAPSHOT/apidocs/)
 - [引用](#引用)
 - [例子](#例子)
-- 配置
-- 说明
-    - 路由映射
+- [配置](#配置)
+- [说明](#说明)
+    - [路由映射](#路由映射)
         - 路径
-        - 绑定 cookie
-        - HTTP method
-        - HTTTP 参数
-    - 返回结果
+        - [绑定 cookie](#绑定 cookie)
+        - [HTTP method](#HTTP method)
+        - [HTTTP 参数](#HTTP 参数)
+    - [返回结果](#返回结果)
         - 方式
         - 路径
+            * [相对路径](#相对路径)
+            * [绝对路径](#绝对路径)
 
 # 引用
 
