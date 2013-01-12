@@ -11,9 +11,9 @@ struts2-freeroute-plugin
 - [说明](#说明)
     - [路由映射](#路由映射)
         - [路径](#路径)
-        - [绑定 cookie](#绑定 cookie)
-        - [HTTP method](#http method)
-        - [HTTP 参数](#http 参数)
+        - [绑定 cookie](#绑定-cookie)
+        - [HTTP method](#http-method)
+        - [HTTP 参数](#http-参数)
     - [返回结果](#返回结果)
         - 方式
         - 路径
