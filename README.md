@@ -103,7 +103,7 @@ struts.xml
 ```xml
 <struts>
 <!-- 将默认 Controller 改为 Action -->
-<constant name="struts.freeroute.controolerSuffix" value="Action"/>
+<constant name="struts.freeroute.controllerSuffix" value="Action"/>
 </struts>
 ```
 
