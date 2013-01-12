@@ -13,7 +13,7 @@ struts2-freeroute-plugin
         - [路径](#路径)
         - [绑定 cookie](#绑定 cookie)
         - [HTTP method](#http method)
-        - [HTTTP 参数](#http 参数)
+        - [HTTP 参数](#http 参数)
     - [返回结果](#返回结果)
         - 方式
         - 路径
@@ -190,7 +190,7 @@ public String tagedUser(){
 
 注意：路径变量比参数的优先级高, 上面的例子中请求如果是 `http://HOST:PORT/users/1013/tags/free?name=never` , controller 中的 name 属性值将会是 `free` 而不是 `never`。
 
-### 绑定cookie
+### 绑定 cookie
 
 通过在属性上加 `@CookieValue` 注解绑定某个 cookie 的值
 
@@ -207,7 +207,7 @@ public String show(){
 // setter, getter
 ```
 
-### HTTP方法
+### HTTP method
 
 通过`@Route.method`指定 HTTP method, 匹配满足 HTTP method 的路由映射
 
@@ -234,7 +234,7 @@ method 目前有以下类型:
 @Route(value = "/users", method = {MethodType.GET, MethodType.POST})
 ```
 
-### HTTP参数
+### HTTP 参数
 
 通过`@Route.params`指定 HTTP param , 匹配满足 HTTP param 的路由映射
 
