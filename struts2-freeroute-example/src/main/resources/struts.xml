@@ -4,6 +4,7 @@
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <constant name="struts.freeroute.controllerPackage" value="org.example"/>
+    <constant name="struts.freeroute.controllerSuffixes" value="Controller, Action"/>
     <constant name="struts.freeroute.defaultParentPackage" value="json-default"/>
 
     <package name="my-struts" extends="json-default">
