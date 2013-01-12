@@ -10,10 +10,10 @@ struts2-freeroute-plugin
 - [配置](#配置)
 - [说明](#说明)
     - [路由映射](#路由映射)
-        - 路径
-        - [绑定 cookie](#binding-cookie)
-        - [HTTP method](#http-method)
-        - [HTTTP 参数](#http-param)
+        - [路径](#路径)
+        - [绑定cookie](#绑定cookie)
+        - [HTTP方法](#HTTP方法)
+        - [HTTTP参数](#HTTP参数)
     - [返回结果](#返回结果)
         - 方式
         - 路径
