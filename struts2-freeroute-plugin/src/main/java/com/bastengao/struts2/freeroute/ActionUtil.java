@@ -3,8 +3,11 @@ package com.bastengao.struts2.freeroute;
 import com.google.common.annotations.VisibleForTesting;
 
 /**
+ * 提供处理 action 相关工具方法
+ *
  * @author bastengao
  * @date 12-12-17 23:04
+ * @since 1.0
  */
 @VisibleForTesting
 public class ActionUtil {

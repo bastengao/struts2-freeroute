@@ -1,7 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 /**
- * http header result
+ * http header result.
  * 参考: http://struts.apache.org/2.3.8/docs/httpheader-result.html
  *
  * @author bastengao

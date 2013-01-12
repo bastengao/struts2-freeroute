@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
  *
  * @author bastengao
  * @date 12-12-16 00:11
+ * @since 1.0
  */
 public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.DefaultActionMapper {
     private static final Logger log = LoggerFactory.getLogger(DefaultActionMapper.class);

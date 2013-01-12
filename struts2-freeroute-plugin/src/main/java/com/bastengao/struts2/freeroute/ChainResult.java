@@ -1,7 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 /**
- * chain result
+ * chain result.
  * 参考: http://struts.apache.org/2.3.8/docs/chain-result.html
  *
  * @author bastengao

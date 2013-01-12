@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author bastengao
  * @date 12-12-16 22:57
+ * @since 1.0
  */
 public interface RouteMappingHandler {
     /**

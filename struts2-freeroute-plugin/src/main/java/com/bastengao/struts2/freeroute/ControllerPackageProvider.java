@@ -1,6 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
+import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
@@ -12,7 +13,6 @@ import com.opensymphony.xwork2.config.PackageProvider;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import com.opensymphony.xwork2.config.entities.PackageConfig;
 import com.opensymphony.xwork2.inject.Inject;
-import com.bastengao.struts2.freeroute.annotation.MethodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +26,7 @@ import java.util.*;
  *
  * @author bastengao
  * @date 12-12-16 13:56
+ * @since 1.0
  */
 public class ControllerPackageProvider implements PackageProvider {
     private static final Logger log = LoggerFactory.getLogger(ControllerPackageProvider.class);

@@ -1,7 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 /**
- * stream result
+ * stream result.
  * 参考: http://struts.apache.org/2.3.8/docs/stream-result.html
  *
  * @author bastengao

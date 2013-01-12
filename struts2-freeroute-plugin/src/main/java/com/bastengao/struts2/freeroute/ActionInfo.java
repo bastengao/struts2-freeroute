@@ -4,6 +4,7 @@ package com.bastengao.struts2.freeroute;
  * 表示 action 信息
  * @author bastengao
  * @date 12-12-27 23:14
+ * @since 1.0
  */
 class ActionInfo {
 

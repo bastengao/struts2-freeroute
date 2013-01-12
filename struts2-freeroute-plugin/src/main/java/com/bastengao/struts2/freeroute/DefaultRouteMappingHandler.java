@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author bastengao
  * @date 12-12-16 22:58
+ * @since 1.0
  */
 public class DefaultRouteMappingHandler implements RouteMappingHandler {
     private static final Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);

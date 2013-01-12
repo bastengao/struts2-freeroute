@@ -1,8 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 /**
- * json result of JSON plugin
- * <p/>
+ * json result of JSON plugin.
  * 参考 http://struts.apache.org/2.3.8/docs/json-plugin.html
  *
  * @author bastengao

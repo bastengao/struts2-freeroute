@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  *
  * @author bastengao
  * @date 12-12-16 15:15
+ * @since 1.0
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -18,6 +19,7 @@ public @interface Route {
      * 映射的路径
      *
      * @return
+     * @since 1.0
      */
     String value() default "";
 
@@ -25,6 +27,7 @@ public @interface Route {
      * 映射的 http method, 默认不限制
      *
      * @return
+     * @since 1.0
      */
     MethodType[] method() default {};
 
@@ -32,6 +35,7 @@ public @interface Route {
      * 指定的参数
      *
      * @return
+     * @since 1.0
      */
-    String [] params() default {};
+    String[] params() default {};
 }
