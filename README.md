@@ -98,12 +98,13 @@ struts.xml
 * struts.freeroute.controllerSuffix
 
 配置 Controller 的后缀(可选)，默认`Controller`。只解析 controllerPackage 下所有以 `Controller` 结尾的类。
+可指定多个后缀，中间用逗号隔开。
 
 struts.xml
 ```xml
 <struts>
-<!-- 将默认 Controller 改为 Action -->
-<constant name="struts.freeroute.controllerSuffix" value="Action"/>
+<!-- 将默认 Controller 改为 Action 和 Controller -->
+<constant name="struts.freeroute.controllerSuffixes" value="Action, Controller"/>
 </struts>
 ```
 

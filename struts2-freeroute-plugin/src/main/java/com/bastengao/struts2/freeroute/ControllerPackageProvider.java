@@ -5,6 +5,7 @@ import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.ClassPath;
 import com.opensymphony.xwork2.config.Configuration;
@@ -33,10 +34,13 @@ public class ControllerPackageProvider implements PackageProvider {
 
     private Configuration configuration;
     private RouteMappingHandler routeMappingHandler;
+
     // controller 所在的包
     private String controllerPackage;
-    // controller 后缀. TODO 优化: 可以是集合
-    private String controllerSuffix;
+
+    // controller 后缀
+    private Set<String> controllerSuffixes;
+
     // 默认父包 (如果没有配置，默认为 "struts-default")
     private String defaultParentPackage;
 
@@ -51,9 +55,11 @@ public class ControllerPackageProvider implements PackageProvider {
         this.controllerPackage = controllerPackage;
     }
 
-    @Inject(value = "struts.freeroute.controllerSuffix", required = true)
-    private void setControllerSuffix(String controllerSuffix) {
-        this.controllerSuffix = controllerSuffix;
+    @Inject(value = "struts.freeroute.controllerSuffixes", required = true)
+    private void setControllerSuffixes(String controllerSuffixes) {
+
+        Splitter splitter = Splitter.on(",").trimResults().omitEmptyStrings();
+        this.controllerSuffixes = Sets.newHashSet(splitter.split(controllerSuffixes));
     }
 
     @Inject(value = "struts.freeroute.defaultParentPackage", required = true)
@@ -88,7 +94,7 @@ public class ControllerPackageProvider implements PackageProvider {
 
         try {
             //分析所有的 "Controller"
-            for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage, controllerSuffix)) {
+            for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage, controllerSuffixes)) {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
                     //将路由转换为 action
@@ -160,17 +166,19 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
     @VisibleForTesting
-    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage, final String controllerSuffix) throws IOException {
+    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage, final Set<String> controllerSuffixes) throws IOException {
         ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
 
         Set<ClassPath.ClassInfo> allClasses = classPath.getTopLevelClassesRecursive(controllerPackage);
         Set<ClassPath.ClassInfo> controllers = Sets.filter(allClasses, new Predicate<ClassPath.ClassInfo>() {
             @Override
             public boolean apply(ClassPath.ClassInfo classInfo) {
-                //类一定要是 "Controller" 结束
-                if (classInfo.getSimpleName().endsWith(controllerSuffix)) {
-                    log.trace("controller:{}", classInfo.getName());
-                    return true;
+                for (String controllerSuffix : controllerSuffixes) {
+                    // 判断是否是指定后缀结束
+                    if (classInfo.getSimpleName().endsWith(controllerSuffix)) {
+                        log.trace("controller:{}", classInfo.getName());
+                        return true;
+                    }
                 }
                 return false;
             }
