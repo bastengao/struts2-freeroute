@@ -17,7 +17,7 @@ public class CookieController {
     @Route("/cookie/{name}")
     public String show() {
         System.out.printf("id: %d, name: %s%n", id, name);
-        return Results.html("/my-result.html");
+        return Results.html("/my-result");
     }
 
     public int getId() {
