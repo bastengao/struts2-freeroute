@@ -122,6 +122,11 @@ struts.xml
 </struts>
 ```
 
+* struts.freeroute.contentBase
+
+配置全局的内容基路径，类型于 `@ContentBase`。如果返回结果中路径是相对地址，则通过内容基路径将其转换为绝对路径。
+如果 controller 类上有 `@ContentBase` 注解则优先使用。
+
 # 说明
 
 配置`struts.freeroute.controllerPackage`后, 会在此包中默认搜索以`Controller`结尾的类做为 Controller,
