@@ -10,15 +10,14 @@ struts2-freeroute-plugin
 - [配置](#配置)
 - [说明](#说明)
     - [路由映射](#路由映射)
-        - [路径](#路径)
-        - [绑定 cookie](#绑定-cookie)
-        - [HTTP method](#http-method)
-        - [HTTP 参数](#http-参数)
+        * [路径](#路径)
+        * [绑定 cookie](#绑定-cookie)
+        * [HTTP method](#http-method)
+        * [HTTP 参数](#http-参数)
     - [返回结果](#返回结果)
-        - 方式
-        - 路径
-            * [绝对路径](#绝对路径)
-            * [相对路径](#相对路径)
+        * 方式
+        * [绝对路径](#绝对路径)
+        * [相对路径](#相对路径)
 
 # 引用
 
@@ -264,12 +263,11 @@ method 目前有以下类型:
 
 两种方式：
 
-- 直接返回字面值
+- 字面值
 
-    例如 `dispatcher:/example.html`，这种方式只要返回 `type:location` 或者直接返回 `type`
+    例如 `dispatcher:/example.html`，这种方式只要返回 `type:location` 或者直接返回 `type`。
 
-
-- 使用 DSL 方式
+- DSL
 
     通过 `Results` 和 `Result` 等 DSL 方式的 api 构造返回结果。`Results` 能够满足常用返回结果。例如：
 
@@ -286,15 +284,15 @@ method 目前有以下类型:
     ```
 
 
-目前支持三种类型:
+目前支持以下类型:
 
-+ dispatcher
+- dispatcher
     * html
     * jsp
-+ velocity
-+ freemarker
-+ redirect
-+ json
+- velocity
+- freemarker
+- redirect
+- json
 
 ### 绝对路径
 
