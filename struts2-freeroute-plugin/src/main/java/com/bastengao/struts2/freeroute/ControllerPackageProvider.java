@@ -35,7 +35,7 @@ public class ControllerPackageProvider implements PackageProvider {
     private RouteMappingHandler routeMappingHandler;
     // controller 所在的包
     private String controllerPackage;
-    // controller 后缀
+    // controller 后缀. TODO 优化: 可以是集合
     private String controllerSuffix;
     // 默认父包 (如果没有配置，默认为 "struts-default")
     private String defaultParentPackage;

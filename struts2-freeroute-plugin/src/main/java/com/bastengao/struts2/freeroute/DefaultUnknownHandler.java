@@ -31,6 +31,8 @@ import java.util.Map;
  */
 public class DefaultUnknownHandler implements UnknownHandler {
     private final static Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);
+
+    // TODO 删除以下属性
     //可用的返回类型
     public static final Map<String, String> AVAILABLE_TYPES = new HashMap<String, String>();
 
@@ -101,8 +103,10 @@ public class DefaultUnknownHandler implements UnknownHandler {
         PackageConfig packageConfig = configuration.getPackageConfig(packageName);
         Map<String, ResultTypeConfig> resultTypes = packageConfig.getAllResultTypeConfigs();
 
-        log.debug("packageName:{}", packageName);
-        log.debug("resultTypes:{}", resultTypes);
+        if (log.isDebugEnabled()) {
+            log.debug("packageName:{}", packageName);
+            log.debug("resultTypes:{}", resultTypes);
+        }
 
         return findResultConfig(routeMapping, resultCode, resultTypes);
     }
@@ -117,8 +121,12 @@ public class DefaultUnknownHandler implements UnknownHandler {
      */
     private ResultConfig findResultConfig(RouteMapping routeMapping, String resultCode, Map<String, ResultTypeConfig> resultTypes) {
         // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
+
         // TODO 去掉类型限制
-        for (String type : AVAILABLE_TYPES.keySet()) {
+        //for (String type : AVAILABLE_TYPES.keySet()) {
+
+        // TODO 优化: 可以先解析出类型，然后再去 resultTypes 查找是否存在
+        for (String type : resultTypes.keySet()) {
             //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
             if (!resultCode.startsWith(type)) {
                 continue; //如果不是，则下一个
