@@ -95,7 +95,7 @@ struts.xml
 <constant name="struts.freeroute.controllerPackage" value="org.example"/>
 ```
 
-* struts.freeroute.controllerSuffix
+* struts.freeroute.controllerSuffixes
 
 配置 Controller 的后缀(可选)，默认`Controller`。只解析 controllerPackage 下所有以 `Controller` 结尾的类。
 可指定多个后缀，中间用逗号隔开。
