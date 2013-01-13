@@ -28,6 +28,9 @@ struts2-freeroute-plugin
     <id>freeroute-snapshot</id>
     <name>Freeroute Snapshot Repository</name>
     <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    <releases>
+        <enabled>false</enabled>
+    </releases>
     <snapshots>
         <enabled>true</enabled>
     </snapshots>
@@ -40,6 +43,15 @@ struts2-freeroute-plugin
 <dependency>
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
+    <version>${version}</version>
+</dependency>
+```
+
+如果你需要与 struts2-spring-plugin 结合使用，只需要以下依赖
+```xml
+<dependency>
+    <groupId>com.bastengao.freeroute</groupId>
+    <artifactId>struts2-freeroute4spring</artifactId>
     <version>${version}</version>
 </dependency>
 ```
