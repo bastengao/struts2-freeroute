@@ -86,47 +86,6 @@ webapp/book.jsp
 
 # 配置
 
-* struts.freeroute.controllerPackage
-
-配置 Controller 所在的包(必须), 插件会在此包下查找相应的 Controller，包括子包。
-
-struts.xml
-```xml
-<constant name="struts.freeroute.controllerPackage" value="org.example"/>
-```
-
-* struts.freeroute.controllerSuffixes
-
-配置 Controller 的后缀(可选)，默认`Controller`。只解析 controllerPackage 下所有以 `Controller` 结尾的类。
-可指定多个后缀，中间用逗号隔开。
-
-struts.xml
-```xml
-<struts>
-<!-- 将默认 Controller 改为 Action 和 Controller -->
-<constant name="struts.freeroute.controllerSuffixes" value="Action, Controller"/>
-</struts>
-```
-
-* struts.freeroute.defaultParentPackage
-
-配置默认的父包(可选), 默认 `struts-defualt`
-
-struts.xml
-```xml
-<struts>
-    <constant name="struts.freeroute.defaultParentPackage" value="my-struts"/>
-
-    <package name="my-struts" extends="struts-default">
-    </package>
-</struts>
-```
-
-* struts.freeroute.contentBase
-
-配置全局的内容基路径(可选)，类似于 `@ContentBase`。如果返回结果中路径是相对地址，则通过内容基路径将其转换为绝对路径。
-如果 controller 类上有 `@ContentBase` 注解则优先使用。
-
 <table cellspacing="0">
 <thead>
 <th>属性</th>
@@ -160,7 +119,9 @@ struts.xml
 <tr>
 <td>struts.freeroute.contentBase</td>
 <td>可选</td>
-<td>配置全局的内容基路径</td>
+<td>配置全局的内容基路径,类似于 @ContentBase。
+如果返回结果中路径是相对地址，则通过内容基路径将其转换为绝对路径。
+如果 controller 类上有 @ContentBase 注解则优先使用。</td>
 <td>无</td>
 </tr>
 </tboy>
