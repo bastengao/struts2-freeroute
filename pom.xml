@@ -45,7 +45,9 @@
     </properties>
 
     <modules>
+        <module>struts2-freeroute-core</module>
         <module>struts2-freeroute-plugin</module>
+        <module>struts2-freeroute4spring</module>
         <module>struts2-freeroute-example</module>
     </modules>
 
