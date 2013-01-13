@@ -25,4 +25,7 @@
     <constant name="struts.freeroute.defaultParentPackage" value="struts-default"/>
     <!-- controller 的后缀 -->
     <constant name="struts.freeroute.controllerSuffixes" value="Controller"/>
+
+    <!-- 没实际作用，只是一个标志. 可以辅助其他插件检测 freeroute 插件是否被加载 -->
+    <constant name="struts.freeroute" value="true"/>
 </struts>
