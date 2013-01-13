@@ -1,5 +1,18 @@
-Apache Struts
-Copyright 2000-2012 The Apache Software Foundation
+The Freeroute Project
+Copyright 2013 bastengao
 
 This product includes software developed by
 The Apache Software Foundation (http://www.apache.org/).
+Struts (http://struts.apache.org).
+
+
+This product includes SLF4j:
+SLF4j (http://www.slf4j.or).
+
+
+This product includes JSON-java:
+JSON-java (http://www.json.org/java/index.html).
+
+
+This product includes guava-libraries:
+guava-libraries (https://code.google.com/p/guava-libraries/).
