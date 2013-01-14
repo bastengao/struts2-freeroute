@@ -46,11 +46,15 @@ public class SpringPackageProvider extends ControllerPackageProvider {
             // 将 action class name 转换为 spring bean name, 如果可以转
             Class actionClass = objectFactory.getClassInstance(className);
             String[] beanNames = appContext.getBeanNamesForType(actionClass);
-            // TODO 一个 action 如果有多个 bean name 暂时没有考虑
-            // 目前使用最后了个 bean name
-            for (String beanName : beanNames) {
-                className = beanName;
-                log.trace("bean name: {}", beanName);
+            if (beanNames.length > 1) {
+                log.warn("too many bean names to choose {} for action class {}", beanNames, actionClass.getName());
+            }
+
+            // TODO 一个 action 如果有多个 bean name 暂时取第一个
+            // 目前使用第一个 bean name
+            if (beanNames.length > 0) {
+                className = beanNames[0];
+                log.trace("bean name[{}] for action {}", beanNames[0], actionClass.getName());
             }
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
