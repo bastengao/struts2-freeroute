@@ -1,5 +1,6 @@
 package com.bastengao.struts2.freeroute;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ObjectFactory;
@@ -124,7 +125,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
     }
 
     /**
-     * 找能够处理的 resultType, 目前只支持 dispatcher, freemarker, velocity, json, redirect
+     * 找能够处理的 resultType
      *
      * @param routeMapping
      * @param resultCode
@@ -132,55 +133,55 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * @return
      */
     private ResultConfig findResultConfig(RouteMapping routeMapping, String resultCode, Map<String, ResultTypeConfig> resultTypes) {
-        // 动态处理内容的路径，目前只支持 velocity, freemarker, jsp, html, json, redirect
+        // 先解析出返回类型，然后再去 resultTypes 查找是否存在
+        String resultType = parseResultType(resultCode);
+        //如果不存在此返回类型, 直接返回
+        if (!resultTypes.containsKey(resultType)) {
+            return null;
+        }
 
-        // TODO 优化: 可以先解析出类型，然后再去 resultTypes 查找是否存在
-        for (String type : resultTypes.keySet()) {
-            //如果是某种返回类型开始,如 "json" 或者 "dispatcher:/content.html"
-            if (!resultCode.startsWith(type)) {
-                continue; //如果不是，则下一个
+        // resultValue 有两种可能:
+        // 1.一种直接是字面量(比如 dispatcher:/xxx.html)
+        // 2.另一种是 json 参数(比如 dispatcher:{'location': '/xxx.html'} )
+
+        ResultTypeConfig typeConfig = resultTypes.get(resultType);
+        //如果没有默认参数
+        if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
+            ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
+            // 只有返回类型, 例如是 "json"
+            if (resultCode.length() == resultType.length()) {
+                return resultBuilder.build();
             }
-
-            ResultTypeConfig typeConfig = resultTypes.get(type);
-            //如果没有默认参数
-            if (Strings.isNullOrEmpty(typeConfig.getDefaultResultParam())) {
+            //或者 ":" 后面有 json 参数
+            if (resultCode.indexOf(":") == resultType.length()) {
+                String resultParam = resultCode.substring(resultType.length() + 1);
+                addParamByJSON(resultBuilder, resultParam);
+                return resultBuilder.build();
+            }
+        }
+        //如果有默认参数
+        else {
+            //  如果是 "type:" 这种形式
+            if (resultCode.indexOf(":") == resultType.length()) {
                 ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
-                // resultValue 有两种可能: 一种直接是默认参数(比如路径 dispatcher:/xxx.html), 另一种是 json 参数
-                // 只有类型, 例如是 "json"
-                if (resultCode.length() == type.length()) {
-                    return resultBuilder.build();
-                }
-                if (resultCode.indexOf(":") == type.length()) {
-                    String resultParam = resultCode.substring(type.length() + 1);
-                    addParamByJSON(resultBuilder, resultParam);
-                    return resultBuilder.build();
-                }
-            }
-            //如果有默认参数
-            else {
-                //  如果是 "type:" 这种形式
-                if (resultCode.indexOf(":") == type.length()) {
-                    ResultConfig.Builder resultBuilder = createResultConfigFromResultType(resultCode, typeConfig);
 
-                    // resultValue 有两种可能:
-                    // 1.一种直接是默认参数(比如路径 dispatcher:/xxx.html)
-                    // 2.另一种是 json 参数
-                    String resultParam = resultCode.substring(type.length() + 1);
-                    String location = null; // 通常是 defaultParam
-                    if (isJSONObject(resultParam)) {
-                        Map<String, String> params = addParamByJSON(resultBuilder, resultParam);
-                        /**
-                         * 如果是 json 形式传递 param(并非 struts json 插件)的返回结果，
-                         * 如果有 location ，也需要进行路径相对路径或绝对路径转换
-                         */
-                        location = params.get(typeConfig.getDefaultResultParam());
-                    } else {
-                        location = resultParam;
-                    }
-                    location = parsePath(contentBase, routeMapping, location);
-                    resultBuilder.addParam(typeConfig.getDefaultResultParam(), location);
-                    return resultBuilder.build();
+                // 拿到参数部分(":" 后面的部分)
+                String resultParam = resultCode.substring(resultType.length() + 1);
+                String location = null; // 通常是 defaultParam
+                if (isJSONObject(resultParam)) { //判断是否是 json 格式
+                    /**
+                     * 如果是 json 形式传递 param(并非 struts json 插件)的返回结果，
+                     * 如果有 location ，也需要进行路径相对路径或绝对路径转换
+                     */
+                    Map<String, String> params = addParamByJSON(resultBuilder, resultParam);
+                    location = params.get(typeConfig.getDefaultResultParam());
+                } else {
+                    location = resultParam;
                 }
+                // 动态处理内容的路径
+                location = parsePath(contentBase, routeMapping, location);
+                resultBuilder.addParam(typeConfig.getDefaultResultParam(), location);
+                return resultBuilder.build();
             }
         }
 
@@ -201,6 +202,22 @@ public class DefaultUnknownHandler implements UnknownHandler {
         }
 
         return resultBuilder;
+    }
+
+    /**
+     * 解析返回类型。如果没有 ":" 则返回全部; 如果有 ":" 则返回 ":"  前面部分。
+     *
+     * @param resultCode
+     * @return
+     */
+    @VisibleForTesting
+    public static String parseResultType(String resultCode) {
+        int index = resultCode.indexOf(":");
+        if (index == -1) {
+            return resultCode;
+        }
+
+        return resultCode.substring(0, index);
     }
 
 
