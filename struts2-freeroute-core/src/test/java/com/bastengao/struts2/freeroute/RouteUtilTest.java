@@ -103,6 +103,11 @@ public class RouteUtilTest {
         Assert.assertEquals("name", names2.get(1));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testVariableNames2() {
+        RouteUtil.pathVariableNames("/persons/{id}/id/{id}");
+    }
+
     @Test
     public void testValueOf() {
         Assert.assertSame(MethodType.GET, RouteUtil.valueOfMethod("GET"));

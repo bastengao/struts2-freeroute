@@ -4,7 +4,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,10 +95,17 @@ public class RouteUtil {
      */
     public static List<String> pathVariableNames(String routePath) {
         Matcher matcher = PATH_VARIABLE_PATTERN.matcher(routePath);
-        //TODO 优化: 变量名不能相同, 未做判断
         List<String> variableNames = new ArrayList<String>();
         while (matcher.find()) {
             variableNames.add(matcher.group(1));
+        }
+
+        // 判断变量名不能相同
+        Set<String> checkVariableNames = new HashSet<String>();
+        for (String name : variableNames) {
+            if (!checkVariableNames.add(name)) {
+                throw new IllegalArgumentException(String.format("same path variable name [%s] at [%s]", name, routePath));
+            }
         }
         return variableNames;
     }
