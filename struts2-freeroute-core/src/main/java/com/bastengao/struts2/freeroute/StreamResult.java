@@ -33,8 +33,8 @@ public class StreamResult extends Result {
         return this._param("bufferSize", value);
     }
 
-    public StreamResult allowCaching(String value) {
-        return this._param("allowCaching", value);
+    public StreamResult allowCaching(boolean value) {
+        return this._param("allowCaching", String.valueOf(value));
     }
 
     public StreamResult contentCharSet(String value) {

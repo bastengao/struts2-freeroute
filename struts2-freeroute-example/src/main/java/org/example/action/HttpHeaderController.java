@@ -13,6 +13,7 @@ public class HttpHeaderController {
         return Results.httpHeader()
                 .status("204")
                 .headers("Xname", "bastengao")
+                .parse(true)
                 .done();
     }
 }

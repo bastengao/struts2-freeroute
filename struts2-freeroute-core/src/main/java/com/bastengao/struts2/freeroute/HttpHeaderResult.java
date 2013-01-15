@@ -17,8 +17,8 @@ public class HttpHeaderResult extends Result {
         return this._param("status", value);
     }
 
-    public HttpHeaderResult parse(String value) {
-        return this._param("parse", value);
+    public HttpHeaderResult parse(boolean value) {
+        return this._param("parse", String.valueOf(value));
     }
 
     public HttpHeaderResult headers(String name, String value) {
