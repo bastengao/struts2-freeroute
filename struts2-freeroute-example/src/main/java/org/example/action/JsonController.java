@@ -16,7 +16,7 @@ public class JsonController {
     @Route("/json-result")
     public String show() {
         values.put("name", "bastengao");
-        return Results.json().root("values").done();
+        return Results.json().root("values").noCache(true).done();
     }
 
     public Map<String, Object> getValues() {

@@ -6,6 +6,9 @@
 </head>
 <body>
 <h1>我的页面</h1>
+
+<h2>${id}</h2>
+
 ${.now?time}
 </body>
 </html>

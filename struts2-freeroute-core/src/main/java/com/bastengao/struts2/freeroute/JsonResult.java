@@ -37,26 +37,24 @@ public class JsonResult extends Result {
         return this._param("prefix", value);
     }
 
-    public JsonResult ignoreHierarchy(String value) {
-        //TODO 将 value 改为 boolean 类型
-        return this._param("ignoreHierarchy", value);
+    public JsonResult ignoreHierarchy(boolean value) {
+        return this._param("ignoreHierarchy", String.valueOf(value));
     }
 
-    public JsonResult enumAsBean(String value) {
-        //TODO 将 value 改为 boolean 类型
-        return this._param("enumAsBean", value);
+    public JsonResult enumAsBean(boolean value) {
+        return this._param("enumAsBean", String.valueOf(value));
     }
 
-    public JsonResult enableGZIP(String value) {
-        return this._param("enableGZIP", value);
+    public JsonResult enableGZIP(boolean value) {
+        return this._param("enableGZIP", String.valueOf(value));
     }
 
-    public JsonResult noCache(String value) {
-        return this._param("noCache", value);
+    public JsonResult noCache(boolean value) {
+        return this._param("noCache", String.valueOf(value));
     }
 
-    public JsonResult excludeNullProperties(String value) {
-        return this._param("excludeNullProperties", value);
+    public JsonResult excludeNullProperties(boolean value) {
+        return this._param("excludeNullProperties", String.valueOf(value));
     }
 
     public JsonResult statusCode(String value) {
