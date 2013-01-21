@@ -33,22 +33,6 @@ import java.util.Map;
 public class DefaultUnknownHandler implements UnknownHandler {
     private final static Logger log = LoggerFactory.getLogger(DefaultUnknownHandler.class);
 
-    /**
-     * TODO 删除以下属性
-     * 可用的返回类型
-     *
-     * @deprecated
-     */
-    public static final Map<String, String> AVAILABLE_TYPES = new HashMap<String, String>();
-
-    static {
-        AVAILABLE_TYPES.put("freemarker", "");
-        AVAILABLE_TYPES.put("velocity", "");
-        AVAILABLE_TYPES.put("dispatcher", "");
-        AVAILABLE_TYPES.put("json", "");
-        AVAILABLE_TYPES.put("redirect", "");
-    }
-
     private ObjectFactory objectFactory;
     private Configuration configuration;
     private RouteMappingHandler routeMappingHandler;
