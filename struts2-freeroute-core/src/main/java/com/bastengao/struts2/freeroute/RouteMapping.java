@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class RouteMapping {
     //可能有，可能没有
     private ContentBase contentBase;
-    //路由 TODO 弱化 @Route 作用
+    //路由
     private Route route;
     // route path. 原始路由路径
     private String routePath;
@@ -110,16 +110,6 @@ public class RouteMapping {
 
     public ContentBase getContentBase() {
         return contentBase;
-    }
-
-    /**
-     * TODO 弱化 @Route 作用
-     *
-     * @return
-     * @deprecated
-     */
-    public Route getRoute() {
-        return route;
     }
 
     public String getRoutePath(){
