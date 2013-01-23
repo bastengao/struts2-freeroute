@@ -41,4 +41,13 @@ public class ActionUtilTest {
 
         Assert.assertEquals("/abc", ActionUtil.padSlash("abc"));
     }
+
+    @Test
+    public void testShrinkEndSlash() {
+        Assert.assertEquals("/abc", ActionUtil.shrinkEndSlash("/abc/"));
+        Assert.assertEquals("/abc", ActionUtil.shrinkEndSlash("/abc"));
+
+        Assert.assertEquals("", ActionUtil.shrinkEndSlash("/"));
+        Assert.assertEquals("", ActionUtil.shrinkEndSlash(""));
+    }
 }

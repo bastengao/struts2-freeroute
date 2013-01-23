@@ -41,10 +41,23 @@ public class ActionUtil {
         return routePath.substring(index + 1);
     }
 
-    @VisibleForTesting
     public static String padSlash(String str) {
         if (!str.startsWith("/")) {
             return "/" + str;
+        }
+
+        return str;
+    }
+
+    /**
+     * 去掉尾部的 "/", 如果有
+     *
+     * @param str
+     * @return
+     */
+    public static String shrinkEndSlash(String str) {
+        if (str.endsWith("/")) {
+            return str.substring(0, str.length() - 1);
         }
 
         return str;
