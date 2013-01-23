@@ -57,7 +57,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
         } else {
             // path => 路由
-            String routePath = routeMapping.getRoute().value();
+            String routePath = routeMapping.getRoutePath();
             routePath = ActionUtil.padSlash(routePath);
             staticRoutes.put(routePath, routeMapping);
         }
@@ -161,7 +161,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @return
      */
     private static int weightOfMethod(HttpServletRequest request, RouteMapping routeMapping) {
-        if (routeMapping.getRoute().method().length == 0) {
+        if (routeMapping.getHttpMethods().length == 0) {
             return 1000;
         }
 
@@ -170,7 +170,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return -1;
         }
 
-        for (MethodType m : routeMapping.getRoute().method()) {
+        for (MethodType m : routeMapping.getHttpMethods()) {
             if (methodType == m) {
                 return 2000;
             }
@@ -189,7 +189,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      */
     private static int weightOfParams(HttpServletRequest request, RouteMapping routeMapping) {
         // 如果没有 params 参数, 则直接返回 0
-        if (routeMapping.getRoute().params().length == 0) {
+        if (routeMapping.getHttpParams().length == 0) {
             return 0;
         }
 

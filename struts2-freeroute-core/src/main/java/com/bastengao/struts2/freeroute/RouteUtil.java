@@ -37,7 +37,7 @@ public class RouteUtil {
      * @return
      */
     public static ActionInfo routeToAction(RouteMapping routeMapping) {
-        String routePath = routeMapping.getRoute().value();
+        String routePath = routeMapping.getRoutePath();
         routePath = ActionUtil.padSlash(routePath);
         routePath = RouteUtil.flatRoutePath(routePath);
 

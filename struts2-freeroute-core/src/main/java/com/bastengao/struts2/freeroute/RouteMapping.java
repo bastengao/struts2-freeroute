@@ -2,6 +2,7 @@ package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
 import com.bastengao.struts2.freeroute.annotation.CookieValue;
+import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.base.Strings;
 
@@ -21,8 +22,15 @@ import java.util.regex.Pattern;
 public class RouteMapping {
     //可能有，可能没有
     private ContentBase contentBase;
-    //路由
+    //路由 TODO 弱化 @Route 作用
     private Route route;
+    // route path. 原始路由路径
+    private String routePath;
+    // http methods
+    private MethodType[] httpMethods;
+    // http params
+    private String[] httpParams;
+
     // http 参数规则
     List<Param> params;
     //controller
@@ -46,6 +54,10 @@ public class RouteMapping {
         this.route = route;
         this.action = action;
         this.method = method;
+
+        this.routePath = route.value();
+        this.httpMethods = route.method();
+        this.httpParams = route.params();
 
         initParams();
         initPathVariables();
@@ -100,8 +112,36 @@ public class RouteMapping {
         return contentBase;
     }
 
+    /**
+     * TODO 弱化 @Route 作用
+     *
+     * @return
+     * @deprecated
+     */
     public Route getRoute() {
         return route;
+    }
+
+    public String getRoutePath(){
+        return routePath;
+    }
+
+    /**
+     * TODO clone value
+     *
+     * @return
+     */
+    public String[] getHttpParams() {
+        return httpParams;
+    }
+
+    /**
+     * TODO clone value
+     *
+     * @return
+     */
+    public MethodType[] getHttpMethods() {
+        return httpMethods;
     }
 
     public List<Param> getParams() {

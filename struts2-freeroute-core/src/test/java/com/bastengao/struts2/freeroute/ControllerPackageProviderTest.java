@@ -35,7 +35,7 @@ public class ControllerPackageProviderTest {
         Assert.assertEquals(1, routings.size());
 
         RouteMapping routeMapping = routings.get(0);
-        Assert.assertEquals("/books/show", routeMapping.getRoute().value());
+        Assert.assertEquals("/books/show", routeMapping.getRoutePath());
         Assert.assertEquals("execute", routeMapping.getMethod().getName());
     }
 }
