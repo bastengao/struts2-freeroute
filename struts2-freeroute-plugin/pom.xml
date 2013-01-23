@@ -6,12 +6,11 @@
     <parent>
         <groupId>com.bastengao.freeroute</groupId>
         <artifactId>struts2-freeroute</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Struts2 Freeroute Plugin</name>
     <description>Struts2 Freeroute Plugin project</description>
