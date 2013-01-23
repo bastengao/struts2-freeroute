@@ -218,24 +218,24 @@ public class ControllerPackageProvider implements PackageProvider {
      */
     @VisibleForTesting
     public static List<RouteMapping> parseController(Class controller) {
-        ContentBase contentBase = null;
-        if (controller.isAnnotationPresent(ContentBase.class)) {
-            contentBase = (ContentBase) controller.getAnnotation(ContentBase.class);
-        }
-
         List<RouteMapping> routes = new ArrayList<RouteMapping>();
         //遍历 Controller 的所有方法
         Method[] methods = controller.getMethods();
-        if (methods != null) {
-            for (Method method : methods) {
-                //查看是否有 @Route 注解, 如果有则加到路由列表中
-                if (method.isAnnotationPresent(Route.class)) {
-                    Route route = method.getAnnotation(Route.class);
-                    routes.add(new RouteMapping(contentBase, route, controller, method));
+        if (methods == null) {
+            return routes;
+        }
 
-                    if (log.isTraceEnabled()) {
-                        log.trace(String.format("route: %s %s%s", prettyMethods(route.method()), route.value(), prettyParams(route.params())));
-                    }
+        ContentBase contentBase = ReflectUtil.getAnnotation(controller, ContentBase.class);
+        Route controllerRoute = ReflectUtil.getAnnotation(controller, Route.class);
+        for (Method method : methods) {
+            //查看是否有 @Route 注解, 如果有则加到路由列表中
+            if (method.isAnnotationPresent(Route.class)) {
+                Route methodRoute = method.getAnnotation(Route.class);
+                RouteMapping routeMapping = new RouteMapping(contentBase, controllerRoute, methodRoute, controller, method);
+                routes.add(routeMapping);
+
+                if (log.isTraceEnabled()) {
+                    log.trace(String.format("route: %s %s%s", prettyMethods(methodRoute.method()), routeMapping.getRoutePath(), prettyParams(methodRoute.params())));
                 }
             }
         }

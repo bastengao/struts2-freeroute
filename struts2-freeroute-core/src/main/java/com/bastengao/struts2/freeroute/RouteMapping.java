@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class RouteMapping {
     //可能有，可能没有
     private ContentBase contentBase;
-    //路由
+    // 方法上的 @Route (methodRoute)
     private Route route;
     // route path. 原始路由路径
     private String routePath;
@@ -51,11 +51,26 @@ public class RouteMapping {
 
 
     public RouteMapping(Route route, Class action, Method method) {
-        this.route = route;
+        this(null, null, route, action, method);
+    }
+
+    public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
+        this(contentBase, null, route, action, method);
+    }
+
+    public RouteMapping(Route controllerRoute, Route methodRoute, Class action, Method method) {
+        this(null, controllerRoute, methodRoute, action, method);
+    }
+
+    public RouteMapping(ContentBase contentBase, Route controllerRoute, Route methodRoute, Class action, Method method) {
+        // TODO
+
+        this.contentBase = contentBase;
+        this.route = methodRoute;
         this.action = action;
         this.method = method;
 
-        this.routePath = route.value();
+        this.routePath = parseRoutePath(controllerRoute, methodRoute);
         this.httpMethods = route.method();
         this.httpParams = route.params();
 
@@ -64,9 +79,19 @@ public class RouteMapping {
         initCookieValues();
     }
 
-    public RouteMapping(ContentBase contentBase, Route route, Class action, Method method) {
-        this(route, action, method);
-        this.contentBase = contentBase;
+    private String parseRoutePath(Route controllerRoute, Route methodRoute) {
+        // 如果 controllerRoute 为空直接返回 methodRoute.value
+        if (controllerRoute == null) {
+            return methodRoute.value();
+        }
+
+        // 如果 methodRoute.value 为空直接返回 controllerRoute.value
+        if (Strings.isNullOrEmpty(methodRoute.value())) {
+            return controllerRoute.value();
+        }
+
+        // 去掉controllerRoute 的尾, 加上 methodRoute 的头
+        return ActionUtil.shrinkEndSlash(controllerRoute.value()) + ActionUtil.padSlash(methodRoute.value());
     }
 
     /**
@@ -85,7 +110,6 @@ public class RouteMapping {
      * 初始化 pathVariables
      */
     private void initPathVariables() {
-        String routePath = route.value();
         this.hasPathVariables = RouteUtil.hasPathVariables(routePath);
         if (hasPathVariables) {
             routePathPattern = Pattern.compile(RouteUtil.toRoutePathPattern(routePath));
@@ -112,7 +136,7 @@ public class RouteMapping {
         return contentBase;
     }
 
-    public String getRoutePath(){
+    public String getRoutePath() {
         return routePath;
     }
 

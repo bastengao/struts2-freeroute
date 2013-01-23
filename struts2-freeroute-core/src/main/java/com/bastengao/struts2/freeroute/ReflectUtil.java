@@ -47,4 +47,21 @@ public class ReflectUtil {
 
         return null;
     }
+
+    /**
+     * 返回作用在类上的注解. 如果不存在返回 null
+     *
+     * @param clazz
+     * @param annotation
+     * @param <T>
+     * @return
+     */
+    public static <T extends Annotation> T getAnnotation(Class clazz, Class<T> annotation){
+        if(clazz.isAnnotationPresent(annotation)){
+            Annotation value = clazz.getAnnotation(annotation);
+            return annotation.cast(value);
+        }
+
+        return null;
+    }
 }
