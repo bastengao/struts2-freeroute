@@ -103,7 +103,7 @@ webapp/book.jsp
 <th>属性</th>
 <th width="30">可选</th>
 <th>描述</th>
-<th width="40">默认</th>
+<th width="60">默认</th>
 </thead>
 <tbody>
 <tr>
