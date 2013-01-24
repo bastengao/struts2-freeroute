@@ -21,7 +21,7 @@ struts2-freeroute-plugin
 
 # 引用
 
-当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.0-SNAPSHOT)。
+当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.1-SNAPSHOT)。
 
 ```xml
 <repository>
@@ -37,7 +37,7 @@ struts2-freeroute-plugin
 </repository>
 ```
 
-当前最新版本 1.0-SNAPSHOT
+当前最新版本 1.1-SNAPSHOT
 
 ```xml
 <dependency>
@@ -180,13 +180,6 @@ public MyController{
 @Route("/helloworld")
 ```
 
-* 嵌套路径映射
-
-`/nested/path/mapping` => `http://HOST:PORT/nested/path/mapping`
-```java
-@Route("/nested/path/mapping")
-```
-
 * 路径中包含变量(pathVariable)
 
 变量可以是英文，数字，中文和 ` - _ ~ . ` 这四个标点符号(其他标点符号都不支持，参考[List_of_allowed_URL_characters](http://en.wikipedia.org/wiki/Uniform_resource_locator#List_of_allowed_URL_characters))。
@@ -220,6 +213,20 @@ public String tagedUser(){
 ```
 
 注意：路径变量比参数的优先级高, 上面的例子中请求如果是 `http://HOST:PORT/users/1013/tags/free?name=never` , controller 中的 name 属性值将会是 `free` 而不是 `never`。
+
+* 嵌套路径映射
+
+`/nested/path/mapping` => `http://HOST:PORT/nested/path/mapping`
+```java
+@Route("/nested")
+public class ExampleController{
+
+    @Route("/path/mapping")
+    public String show(){
+        //...
+    }
+}
+```
 
 ### 绑定 cookie
 
