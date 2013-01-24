@@ -12,7 +12,7 @@
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
     <packaging>jar</packaging>
-    <name>Struts2 Freeroute Plugin</name>
+    <name>Freeroute Plugin</name>
     <description>Struts2 Freeroute Plugin project</description>
     <url>httsp://github.com/bastengao/struts2-freeroute</url>
 

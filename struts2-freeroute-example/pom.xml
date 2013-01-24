@@ -12,7 +12,7 @@
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-example</artifactId>
     <packaging>war</packaging>
-    <name>Struts2 Freeroute Example</name>
+    <name>Freeroute Example</name>
     <description>Struts2 Freeroute Exmaple project</description>
     <url>httsp://github.com/bastengao/struts2-freeroute</url>
 
