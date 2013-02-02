@@ -15,3 +15,23 @@ struts2-freeroute 实现说明
 # UnknowHandler <- DefaultUnknowHandler
 
 动态处理 action 方法执行完后的 result, 分析返回类型, 通常映射到页面路径。
+
+# RouteMappingHandler <- DefaultRouteMappingHandler
+
+最核心的类，将前三个类联系起来。顾名思义路由映射处理哭，路由的映射统一由他来处理。
+
+他有三个方法
+```java
+public void put(RouteMapping routeMapping, ActionConfig actionCfg);
+
+public RouteMapping route(HttpServletRequest request);
+
+public RouteMapping route(ActionConfig actionConfig);
+```
+
+其中 `ControllerPackageProvider` 将解析的路由交给(put) `RouteMappingHandler`,
+`ControllerPackageProvider` 即为路由`RouteMapping` 的生产者。
+
+`ActionMapper` 与 `UnknownHandler` 都是 `RouteMapping` 的消费都。
+而 `ActionMapper` 则使用 `route(request)` 解析请求对应的 `RouteMapping`。
+同样 `UnknownHandler` 使用 `rotue(actionConfig)` 得到对应的 `RouteMapping`。
