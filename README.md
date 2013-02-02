@@ -21,7 +21,7 @@ struts2-freeroute-plugin
 
 # 引用
 
-当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.1-SNAPSHOT)。
+当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.0-SNAPSHOT)。
 
 ```xml
 <repository>
@@ -37,7 +37,7 @@ struts2-freeroute-plugin
 </repository>
 ```
 
-当前最新版本 1.1-SNAPSHOT
+当前最新版本 1.0-SNAPSHOT
 
 ```xml
 <dependency>
