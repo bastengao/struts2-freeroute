@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * 路由映射
- *
+ * <p/>
  * 此类为不变类(一但构造后，不会改变)
  *
  * @author bastengao
@@ -73,8 +73,8 @@ public class RouteMapping {
         this.method = method;
 
         this.routePath = parseRoutePath(controllerRoute, methodRoute);
-        this.httpMethods =  Collections.unmodifiableList(Arrays.asList(route.method()));
-        this.httpParams =  Collections.unmodifiableList(Arrays.asList(route.params()));
+        this.httpMethods = Collections.unmodifiableList(Arrays.asList(route.method()));
+        this.httpParams = Collections.unmodifiableList(Arrays.asList(route.params()));
 
         initParams();
         initPathVariables();
@@ -144,6 +144,7 @@ public class RouteMapping {
 
     /**
      * unmodified list
+     *
      * @return
      */
     public List<String> getHttpParams() {
@@ -152,6 +153,7 @@ public class RouteMapping {
 
     /**
      * unmodified list
+     *
      * @return
      */
     public List<MethodType> getHttpMethods() {
@@ -189,7 +191,7 @@ public class RouteMapping {
     /**
      * 表示一个 http param 表达式
      */
-    static class Param {
+    public static class Param {
         private String paramName;
 
         /**
