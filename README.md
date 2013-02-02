@@ -1,8 +1,7 @@
-struts2-freeroute-plugin
+struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts2-freeroute.png?branch=master)](https://travis-ci.org/bastengao/struts2-freeroute)
 ===========
 
 自由的映射路由，像 Spring MVC 那样。
-[![Build Status](https://travis-ci.org/bastengao/struts2-freeroute.png?branch=master)](https://travis-ci.org/bastengao/struts2-freeroute)
 
 - [API doc](http://bastengao.github.com/struts2-freeroute/1.0-SNAPSHOT/apidocs/)
 - [引用](#引用)
