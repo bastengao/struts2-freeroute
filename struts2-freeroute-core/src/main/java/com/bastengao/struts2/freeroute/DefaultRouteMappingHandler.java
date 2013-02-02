@@ -89,6 +89,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return findMaxWeight(request, matchPathRouteMapping);
         }
 
+        // TODO 应该在匹配 servletPath 的所有路由中，寻找权重最大的，而不是第一个匹配的
         // 在动态路由中查找
         for (Map.Entry<String, Pattern> patternEntry : dynamicRoutesPattern.entrySet()) {
             if (patternEntry.getValue().matcher(servletPath).matches()) {
@@ -161,7 +162,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @return
      */
     private static int weightOfMethod(HttpServletRequest request, RouteMapping routeMapping) {
-        if (routeMapping.getHttpMethods().length == 0) {
+        if (routeMapping.getHttpMethods().size() == 0) {
             return 1000;
         }
 
@@ -189,7 +190,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      */
     private static int weightOfParams(HttpServletRequest request, RouteMapping routeMapping) {
         // 如果没有 params 参数, 则直接返回 0
-        if (routeMapping.getHttpParams().length == 0) {
+        if (routeMapping.getHttpParams().size() == 0) {
             return 0;
         }
 

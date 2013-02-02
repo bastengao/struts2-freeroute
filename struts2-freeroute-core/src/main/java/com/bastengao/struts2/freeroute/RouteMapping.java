@@ -5,6 +5,7 @@ import com.bastengao.struts2.freeroute.annotation.CookieValue;
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.base.Strings;
+import com.google.common.collect.Collections2;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -15,28 +16,30 @@ import java.util.regex.Pattern;
 /**
  * 路由映射
  *
+ * 此类为不变类(一但构造后，不会改变)
+ *
  * @author bastengao
  * @date 12-12-16 20:17
  * @since 1.0
  */
 public class RouteMapping {
-    //可能有，可能没有
-    private ContentBase contentBase;
-    // 方法上的 @Route (methodRoute)
-    private Route route;
+    //可选配置(可能有，可能没有)
+    private final ContentBase contentBase;
+    // 方法上的 @Route (methodRoute) . TODO change name to routeOnMethod
+    private final Route route;
     // route path. 原始路由路径
-    private String routePath;
-    // http methods
-    private MethodType[] httpMethods;
-    // http params
-    private String[] httpParams;
+    private final String routePath;
+    // http methods.  unmodified list
+    private final List<MethodType> httpMethods;
+    // http params.  unmodified list
+    private final List<String> httpParams;
 
     // http 参数规则
-    List<Param> params;
+    private List<Param> params;
     //controller
-    private Class action;
+    private final Class action;
     //被 @Route 注解的方法
-    private Method method;
+    private final Method method;
 
     // routePath 上是否有 pathVariable
     private boolean hasPathVariables;
@@ -63,7 +66,6 @@ public class RouteMapping {
     }
 
     public RouteMapping(ContentBase contentBase, Route controllerRoute, Route methodRoute, Class action, Method method) {
-        // TODO
 
         this.contentBase = contentBase;
         this.route = methodRoute;
@@ -71,8 +73,8 @@ public class RouteMapping {
         this.method = method;
 
         this.routePath = parseRoutePath(controllerRoute, methodRoute);
-        this.httpMethods = route.method();
-        this.httpParams = route.params();
+        this.httpMethods =  Collections.unmodifiableList(Arrays.asList(route.method()));
+        this.httpParams =  Collections.unmodifiableList(Arrays.asList(route.params()));
 
         initParams();
         initPathVariables();
@@ -141,20 +143,18 @@ public class RouteMapping {
     }
 
     /**
-     * TODO clone value
-     *
+     * unmodified list
      * @return
      */
-    public String[] getHttpParams() {
+    public List<String> getHttpParams() {
         return httpParams;
     }
 
     /**
-     * TODO clone value
-     *
+     * unmodified list
      * @return
      */
-    public MethodType[] getHttpMethods() {
+    public List<MethodType> getHttpMethods() {
         return httpMethods;
     }
 
