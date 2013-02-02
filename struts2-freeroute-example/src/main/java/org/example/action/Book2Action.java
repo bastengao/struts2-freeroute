@@ -1,8 +1,8 @@
 package org.example.action;
 
 import com.bastengao.struts2.freeroute.Result;
+import com.bastengao.struts2.freeroute.Results;
 import com.bastengao.struts2.freeroute.annotation.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +14,13 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class Book2Action {
 
-    @Autowired
-    private BookAction bookAction;
-
     @Route("/books2")
     public String execute() {
-        System.out.println(bookAction);
         return Result.create().location("content.html").done();
+    }
+
+    @Route(value = "/books/{id}", params = "any")
+    public String show() {
+        return Results.html("content");
     }
 }

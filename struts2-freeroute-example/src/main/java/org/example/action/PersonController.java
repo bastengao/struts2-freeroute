@@ -19,19 +19,12 @@ public class PersonController {
 
     @Route("/persons/create")
     public String toCreate() {
-        log.debug("toCreate:{}", id);
         // "dispatcher:/my-result.html";
         return Results.html("/my-result.html");
     }
 
-    @Route("/create")
-    public String toCreate1() {
-        return "dispatcher:/my-result.html";
-    }
-
     @Route("/persons/create2")
     public String toCreate2() {
-        System.out.println("create2");
         return "dispatcher:/my-result2.html";
     }
 
@@ -43,12 +36,8 @@ public class PersonController {
 
     @Route("/persons/nested/create3")
     public String toCreate3() {
-        return null;
-    }
-
-    @Route(value = "new", method = MethodType.POST)
-    public String create() {
-        return "content";
+        // "/my-result.jsp"
+        return Results.jsp("/my-result");
     }
 
     // {id} value in path will be set to this#id property.
@@ -56,7 +45,6 @@ public class PersonController {
     public String show() {
         //will render by "/pages/content.html"
         System.out.println(id);
-        System.out.println("get");
         return "freemarker:/my-result.ftl";
     }
 
@@ -76,7 +64,7 @@ public class PersonController {
 
     @Route("/persons/{id}.json")
     public String showJson() {
-        return "json";
+        return Results.json().done();
     }
 
     @Route("/persons/{id}.xml")

@@ -1,6 +1,7 @@
 package org.example.action;
 
 import com.bastengao.struts2.freeroute.Result;
+import com.bastengao.struts2.freeroute.Results;
 import com.bastengao.struts2.freeroute.annotation.Route;
 
 /**
@@ -11,5 +12,10 @@ public class BookAction {
     @Route("/books")
     public String execute() {
         return Result.create().location("content.html").done();
+    }
+
+    @Route("/books/{id}")
+    public String show(){
+        return Results.html("content");
     }
 }
