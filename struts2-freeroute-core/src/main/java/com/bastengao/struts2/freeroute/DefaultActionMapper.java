@@ -49,6 +49,7 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         }
 
 
+        // 解析请求，并寻找合适的路由，如果没有则接给父类处理
         ActionMapping actionMapping = parseAndFindRouteMapping(request);
         if (actionMapping != null) {
             return actionMapping;

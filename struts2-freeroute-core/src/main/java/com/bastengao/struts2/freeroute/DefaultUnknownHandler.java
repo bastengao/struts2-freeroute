@@ -62,6 +62,18 @@ public class DefaultUnknownHandler implements UnknownHandler {
         return null;
     }
 
+    /**
+     * 因为 actionConfig 只配置了 action name 与 method, 没有配置 result,
+     * 所以任何一个 freeroute 的 action 执行完返回 的 resultCode 都是 unknown result,
+     * 都会执行以下方法.
+     *
+     * @param actionContext
+     * @param actionName
+     * @param actionConfig
+     * @param resultCode
+     * @return
+     * @throws XWorkException
+     */
     @Override
     public com.opensymphony.xwork2.Result handleUnknownResult(ActionContext actionContext, String actionName, ActionConfig actionConfig, String resultCode) throws XWorkException {
         //这是我的菜, 更擅长处理未知的 result
