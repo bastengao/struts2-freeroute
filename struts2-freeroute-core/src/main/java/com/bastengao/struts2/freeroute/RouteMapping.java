@@ -189,11 +189,67 @@ public class RouteMapping {
     }
 
     public String prettyPath() {
-        return String.format("%s %s%s",
-                ControllerPackageProvider.prettyMethods(route.method()),
-                routePath,
-                ControllerPackageProvider.prettyParams(route.params())
-        );
+        return prettyMethods(route.method()) + " " +
+                routePath +
+                prettyParams(route.params());
+    }
+
+    /**
+     * 打印 @Route.params
+     *
+     * @param params
+     * @return
+     */
+    public static String prettyParams(String[] params) {
+        if (params == null) {
+            return "";
+        }
+
+        if (params.length == 0) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("?");
+        boolean isFirst = true;
+        for (String param : params) {
+            if (!isFirst) {
+                sb.append("&");
+            }
+            sb.append(param);
+            if (isFirst) {
+                isFirst = !isFirst;
+            }
+        }
+        return sb.toString();
+    }
+
+
+
+    /**
+     * 打印 @Route.method.
+     *
+     * @param types
+     * @return
+     */
+    public static String prettyMethods(MethodType[] types) {
+        if (types == null || types.length == 0) {
+            return "NONE";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean isFirst = true;
+        for (MethodType type : types) {
+            if (!isFirst) {
+                sb.append(" | ");
+            }
+            sb.append(type.toString());
+
+            if (isFirst) {
+                isFirst = !isFirst;
+            }
+        }
+        return sb.toString();
     }
 
     /**
