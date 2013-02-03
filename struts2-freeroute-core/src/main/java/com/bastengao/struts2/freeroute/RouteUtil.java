@@ -156,7 +156,7 @@ public class RouteUtil {
         try {
             return MethodType.valueOf(method.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return MethodType.NONE;
+            return null;
         }
     }
 }

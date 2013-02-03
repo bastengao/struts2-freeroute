@@ -127,7 +127,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * 返回请求与匹配的路由的权重. 如果不匹配返回小于 0 的值，如果匹配返回权重值。
      * 其中 method 的权重比 param 权重高
      * weight = method(GET, POST, PUT, DELETE) * 2000  +  param * 1
-     * weight = method(                  NONE) * 1000  +  param * 1
+     * weight = method(          NONE        ) * 1000  +  param * 1
      *
      * @param request
      * @param routeMapping
@@ -155,7 +155,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
     /**
      * 返回 method 的权重，如果不匹配返回 -1
-     * MethodType.NONE 权重为 1000, 其他为 2000
+     * 如果没有指定则为 1000, 其他为 2000
      *
      * @param request
      * @param routeMapping

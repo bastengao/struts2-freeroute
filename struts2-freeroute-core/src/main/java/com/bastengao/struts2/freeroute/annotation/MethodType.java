@@ -18,6 +18,7 @@ public enum MethodType {
 
     /**
      * any method
+     * @deprecated Route method 默认为空数组，不需要此枚举了
      */
     NONE;
 }

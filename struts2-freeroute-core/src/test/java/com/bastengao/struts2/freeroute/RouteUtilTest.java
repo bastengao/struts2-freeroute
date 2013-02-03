@@ -114,6 +114,6 @@ public class RouteUtilTest {
 
         Assert.assertSame(MethodType.GET, RouteUtil.valueOfMethod("get"));
 
-        Assert.assertSame(MethodType.NONE, RouteUtil.valueOfMethod("notExists"));
+        Assert.assertNull(RouteUtil.valueOfMethod("notExists"));
     }
 }
