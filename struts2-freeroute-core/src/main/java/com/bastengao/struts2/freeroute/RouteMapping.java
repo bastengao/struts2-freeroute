@@ -188,6 +188,14 @@ public class RouteMapping {
         return cookieValues;
     }
 
+    public String prettyPath() {
+        return String.format("%s %s%s",
+                ControllerPackageProvider.prettyMethods(route.method()),
+                routePath,
+                ControllerPackageProvider.prettyParams(route.params())
+        );
+    }
+
     /**
      * 表示一个 http param 表达式
      */

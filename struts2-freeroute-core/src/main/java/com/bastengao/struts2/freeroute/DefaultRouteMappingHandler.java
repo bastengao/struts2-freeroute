@@ -1,9 +1,9 @@
 package com.bastengao.struts2.freeroute;
 
 
+import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.google.common.collect.ArrayListMultimap;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
-import com.bastengao.struts2.freeroute.annotation.MethodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
     /**
      * action 信息映射到对应的路由
-     *
+     * <p/>
      * "{packageName}{actionName}" => RouteMapping
      */
     private Map<String, RouteMapping> actionConfig2RouteMapping = new HashMap<String, RouteMapping>();
@@ -89,20 +89,44 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             return findMaxWeight(request, matchPathRouteMapping);
         }
 
-        // TODO 应该在匹配 servletPath 的所有路由中，寻找权重最大的，而不是第一个匹配的
         // 在动态路由中查找
+        // 应该在匹配 servletPath 的所有路由中，寻找权重最大的
+        List<RouteMapping> matchPathAllRouteMappings = new LinkedList<RouteMapping>();
         for (Map.Entry<String, Pattern> patternEntry : dynamicRoutesPattern.entrySet()) {
             if (patternEntry.getValue().matcher(servletPath).matches()) {
-                // 匹配 servletPath 的路由中返回权重最大的路由
                 List<RouteMapping> matchPathRouteMappings = dynamicRoutes.get(patternEntry.getKey());
-                return findMaxWeight(request, matchPathRouteMappings);
+                matchPathAllRouteMappings.addAll(matchPathRouteMappings);
             }
         }
-        return null;
+        // 匹配 servletPath 的路由中返回权重最大的路由
+        return findDynamicMaxWeight(request, matchPathAllRouteMappings);
     }
 
     /**
-     * 根据已经匹配 servletPath 的路由集合找出最匹配的路由
+     * 找出路径变量最少的，然后再比较权重
+     *
+     * @param request
+     * @param routeMappings
+     * @return
+     */
+    private RouteMapping findDynamicMaxWeight(HttpServletRequest request, List<RouteMapping> routeMappings) {
+        int minVariableSize = Integer.MAX_VALUE;
+        List<RouteMapping> minVariableNameSizeRouteMappings = new LinkedList<RouteMapping>();
+        for (RouteMapping routeMapping : routeMappings) {
+            int variableSize = routeMapping.getVariableNames().size();
+            if (variableSize < minVariableSize) {
+                minVariableSize = variableSize;
+                minVariableNameSizeRouteMappings.clear();
+                minVariableNameSizeRouteMappings.add(routeMapping);
+            } else if (variableSize == minVariableSize) {
+                minVariableNameSizeRouteMappings.add(routeMapping);
+            }
+        }
+        return findMaxWeight(request, minVariableNameSizeRouteMappings);
+    }
+
+    /**
+     * 根据已经匹配 servletPath 的路由集合找出最匹配的路由, 如果没有返回 null
      *
      * @param request
      * @param routeMappings
@@ -118,6 +142,12 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
                     maxWeight = weight;
                     maxWeightRoute = routeMapping;
                 }
+            }
+        }
+
+        if (log.isTraceEnabled()) {
+            if (maxWeightRoute != null) {
+                log.trace("max weight: {}", maxWeightRoute.prettyPath());
             }
         }
         return maxWeightRoute;
@@ -148,6 +178,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
         // 计算总权重
         if (log.isTraceEnabled()) {
+            log.trace("route: {}", routeMapping.prettyPath());
             log.trace("weight: {}", methodWeight + weightOfParams);
         }
         return methodWeight + weightOfParams;

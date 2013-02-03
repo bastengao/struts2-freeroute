@@ -15,7 +15,22 @@ public class BookAction {
     }
 
     @Route("/books/{id}")
-    public String show(){
+    public String show() {
+        return Results.html("content");
+    }
+
+    @Route("/books/{id}/{method}")
+    public String showByMethod() {
+        return Results.html("content");
+    }
+
+    @Route("/books/123/{method}")
+    public String showStatic() {
+        return Results.html("content");
+    }
+
+    @Route(value = "/books/123/{method}", params = "any")
+    public String showStatic2() {
         return Results.html("content");
     }
 }

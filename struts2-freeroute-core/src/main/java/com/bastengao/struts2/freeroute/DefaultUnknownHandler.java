@@ -79,7 +79,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
         //这是我的菜, 更擅长处理未知的 result
         log.debug("catch result[{}] of action[{}]", resultCode, actionName);
         RouteMapping routeMapping = routeMappingHandler.route(actionConfig);
-        log.debug("route: {}" + routeMapping);
+        log.debug("route: {}", routeMapping);
 
         ResultConfig resultConfig = parseResultCodeToResultConfig(actionConfig, resultCode, routeMapping);
         if (resultConfig == null) {
