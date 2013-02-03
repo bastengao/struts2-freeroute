@@ -252,7 +252,7 @@ public class ControllerPackageProvider implements PackageProvider {
      * @param params
      * @return
      */
-    private static String prettyParams(String[] params) {
+    public static String prettyParams(String[] params) {
         if (params == null) {
             return "";
         }
@@ -282,9 +282,9 @@ public class ControllerPackageProvider implements PackageProvider {
      * @param types
      * @return
      */
-    private static String prettyMethods(MethodType[] types) {
+    public static String prettyMethods(MethodType[] types) {
         if (types == null || types.length == 0) {
-            return MethodType.NONE.toString();
+            return "NONE";
         }
 
         StringBuilder sb = new StringBuilder();
