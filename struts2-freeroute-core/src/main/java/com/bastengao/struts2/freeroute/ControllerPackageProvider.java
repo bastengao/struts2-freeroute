@@ -32,6 +32,8 @@ import java.util.*;
  */
 public class ControllerPackageProvider implements PackageProvider {
     private static final Logger log = LoggerFactory.getLogger(ControllerPackageProvider.class);
+    // package name prefix
+    public static final String FREEROUTE_DEFAULT = "freeroute-default#";
 
     private Configuration configuration;
     private RouteMappingHandler routeMappingHandler;
@@ -106,6 +108,7 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
     private Map<String, PackageConfig.Builder> createPackageConfig() {
+        // packageName => PackageConfig.Builder
         Map<String, PackageConfig.Builder> packages = new HashMap<String, PackageConfig.Builder>();
 
         try {
@@ -143,14 +146,14 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
     /**
-     * 查找或者创建 Package
+     * 查找 Package，如果不存在则创建
      *
      * @param namespace
      * @param packages
      * @return
      */
     private PackageConfig.Builder findOrCreatePackage(String namespace, Map<String, PackageConfig.Builder> packages) {
-        String packageName = "freeroute-default#" + namespace;
+        String packageName = FREEROUTE_DEFAULT + namespace;
         PackageConfig.Builder packageCfgBuilder = packages.get(packageName);
         if (packageCfgBuilder == null) {
             PackageConfig defaultParent = this.defaultParentPackage();
@@ -243,6 +246,12 @@ public class ControllerPackageProvider implements PackageProvider {
         return routes;
     }
 
+    /**
+     * 打印 @Route.params
+     *
+     * @param params
+     * @return
+     */
     private static String prettyParams(String[] params) {
         if (params == null) {
             return "";
@@ -267,6 +276,12 @@ public class ControllerPackageProvider implements PackageProvider {
         return sb.toString();
     }
 
+    /**
+     * 打印 @Route.method.
+     *
+     * @param types
+     * @return
+     */
     private static String prettyMethods(MethodType[] types) {
         if (types == null || types.length == 0) {
             return MethodType.NONE.toString();
