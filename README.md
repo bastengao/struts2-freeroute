@@ -213,19 +213,6 @@ public String tagedUser(){
 
 注意：路径变量比参数的优先级高, 上面的例子中请求如果是 `http://HOST:PORT/users/1013/tags/free?name=never` , controller 中的 name 属性值将会是 `free` 而不是 `never`。
 
-* 嵌套路径映射
-
-`/nested/path/mapping` => `http://HOST:PORT/nested/path/mapping`
-```java
-@Route("/nested")
-public class ExampleController{
-
-    @Route("/path/mapping")
-    public String show(){
-        //...
-    }
-}
-```
 
 ### 绑定 cookie
 
@@ -257,7 +244,6 @@ method 目前有以下类型:
 * POST
 * PUT
 * TRACE
-* NONE
 
 `@Route.method`默认表示匹配任意一种 HTTP method.
 
@@ -309,7 +295,7 @@ method 目前有以下类型:
 
     通过 `Results` 和 `Result` 等 DSL 方式的 api 构造返回结果。`Results` 能够满足常用返回结果。例如：
 
-    * `Results.html("/example.html")`
+    * `Results.html("/example.html")` 或者 `Results.html("/example")` 后缀自动补全(包括 html, jsp, freemarker(ftl), velocity(vm))
     * `Results.jsp("/exmaple.jsp")`
     * `Results.json().includeProperties("value1, value2").done()`
 
