@@ -230,15 +230,17 @@ public class RouteMapping {
                 if (param.contains("!=")) {
                     //不相等
                     equalOrNot = false;
-                    paramName = param.split("\\!\\=")[0];
-                    paramValue = param.split("\\!\\=")[1];
+                    String[] paramPair = param.split("\\!\\=");
+                    paramName = paramPair[0];
+                    paramValue = paramPair[1];
                 }
                 //相等表达示
                 else if (param.contains("=")) {
                     //相等
                     equalOrNot = true;
-                    paramName = param.split("=")[0];
-                    paramValue = param.split("=")[1];
+                    String[] paramPair = param.split("=");
+                    paramName = paramPair[0];
+                    paramValue = paramPair[1];
                 }
             } else {
                 this.needForExistingCheck = true;
