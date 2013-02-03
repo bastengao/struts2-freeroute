@@ -20,10 +20,10 @@ public class ActionUtil {
     @VisibleForTesting
     public static String namespace(String routePath) {
         int index = routePath.lastIndexOf("/");
-        if (index != -1) {
-            return routePath.substring(0, index);
+        if (index == -1) {
+            return "";
         }
-        return "";
+        return routePath.substring(0, index);
     }
 
     /**

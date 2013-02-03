@@ -76,30 +76,33 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         // 这里的的处理步骤与 ControllerPackageProvider 处理一致
         ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
         String namespace = actionInfo.getNamespace();
-        // 有可能 namespace 为 "", 所以将次变成 "/"
+        // 有可能 namespace 为 "", 所以将其变成 "/"
         namespace = ActionUtil.padSlash(namespace);
         String actionName = actionInfo.getActionName();
 
+        return createActionMapping(namespace, actionName,routeMapping, request);
+    }
+
+    /**
+     * 创建对应的 ActionMapping, 并初始化 ActionMapping.params
+     *
+     * @param namespace
+     * @param actionName
+     * @param routeMapping
+     * @param request
+     * @return
+     */
+    private static ActionMapping createActionMapping(String namespace, String actionName, RouteMapping routeMapping, HttpServletRequest request) {
         ActionMapping actionMapping = new ActionMapping();
         actionMapping.setNamespace(namespace);
         actionMapping.setName(actionName);
         // 设置 controller 的调用方法
         actionMapping.setMethod(routeMapping.getMethod().getName());
-        setParams(actionMapping, routeMapping, request);
-        return actionMapping;
-    }
 
-    /**
-     * 设置 action 的 params, 然后 struts 会将 params 应用到对应的 action 的属性上(setter)
-     *
-     * @param actionMapping
-     * @param routeMapping
-     * @param request
-     */
-    private void setParams(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
         setParamsByCookieValues(actionMapping, routeMapping, request);
-
         setParamsByPathVariables(actionMapping, routeMapping, request);
+
+        return actionMapping;
     }
 
     /**
@@ -109,7 +112,7 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
      * @param routeMapping
      * @param request
      */
-    private void setParamsByCookieValues(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
+    private static void setParamsByCookieValues(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return;
@@ -142,7 +145,7 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
      * @param routeMapping
      * @param request
      */
-    private void setParamsByPathVariables(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
+    private static void setParamsByPathVariables(ActionMapping actionMapping, RouteMapping routeMapping, HttpServletRequest request) {
         if (routeMapping.hasPathVariables()) {
             Map<String, Object> params = new HashMap<String, Object>();
             String servletPath = request.getServletPath();
