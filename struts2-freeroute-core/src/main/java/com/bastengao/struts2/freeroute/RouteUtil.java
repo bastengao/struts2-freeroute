@@ -33,6 +33,7 @@ public class RouteUtil {
      *
      * @param routeMapping
      * @return
+     * @deprecated 此方法已经转移到 RouteMapping
      */
     public static ActionInfo routeToAction(RouteMapping routeMapping) {
         // TODO 优化：RouteMapping 可缓存 ActionInfo, 因为规则一致每次的结果都一样

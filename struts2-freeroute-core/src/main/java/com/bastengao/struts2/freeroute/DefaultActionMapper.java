@@ -74,7 +74,7 @@ public class DefaultActionMapper extends org.apache.struts2.dispatcher.mapper.De
         log.debug("routeMapping:{}", routeMapping);
 
         // 这里的的处理步骤与 ControllerPackageProvider 处理一致
-        ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
+        ActionInfo actionInfo = routeMapping.toAction();
         String namespace = actionInfo.getNamespace();
         // 有可能 namespace 为 "", 所以将其变成 "/"
         namespace = ActionUtil.padSlash(namespace);

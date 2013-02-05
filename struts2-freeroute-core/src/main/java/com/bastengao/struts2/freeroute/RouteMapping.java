@@ -53,6 +53,10 @@ public class RouteMapping {
     private Map<CookieValue, Field> cookieValues;
 
 
+    // 缓存 actionInfo
+    private ActionInfo actionInfo;
+
+
     public RouteMapping(Route route, Class action, Method method) {
         this(null, null, route, action, method);
     }
@@ -79,6 +83,7 @@ public class RouteMapping {
         initParams();
         initPathVariables();
         initCookieValues();
+        initActionInfo();
     }
 
     private String parseRoutePath(Route controllerRoute, Route methodRoute) {
@@ -133,6 +138,28 @@ public class RouteMapping {
         cookieValues = Collections.unmodifiableMap(cookieValues);
     }
 
+    /**
+     * 缓存 actionInfo
+     */
+    private void initActionInfo() {
+        String routePath = ActionUtil.padSlash(this.routePath);
+        routePath = RouteUtil.flatRoutePath(routePath);
+
+        String namespace = ActionUtil.namespace(routePath);
+        String actionName = ActionUtil.actionName(routePath);
+
+        String methodName = this.method.getName();
+        String className = action.getName();
+
+        // 优化：为了避免名字冲突，目前简单粗暴的使用 方法名 + 类名 的方式命名
+        // 缺点就是 actionName 太长，可能会影响性能
+        actionName = actionName + "#" + methodName + "@" + className;
+        this.actionInfo = new ActionInfo(namespace, actionName);
+    }
+
+    public ActionInfo toAction() {
+        return this.actionInfo;
+    }
 
     public ContentBase getContentBase() {
         return contentBase;
@@ -223,7 +250,6 @@ public class RouteMapping {
         }
         return sb.toString();
     }
-
 
 
     /**

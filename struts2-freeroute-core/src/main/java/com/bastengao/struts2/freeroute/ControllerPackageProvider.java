@@ -117,7 +117,7 @@ public class ControllerPackageProvider implements PackageProvider {
                 List<RouteMapping> routeMappings = parseController(classInfo.load());
                 for (RouteMapping routeMapping : routeMappings) {
                     //将路由转换为 action
-                    ActionInfo actionInfo = RouteUtil.routeToAction(routeMapping);
+                    ActionInfo actionInfo = routeMapping.toAction();
                     String namespace = actionInfo.getNamespace();
 
                     //create action config
