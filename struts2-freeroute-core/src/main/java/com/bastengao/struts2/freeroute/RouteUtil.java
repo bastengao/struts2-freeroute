@@ -26,35 +26,6 @@ public class RouteUtil {
     }
 
     /**
-     * 将路由解析为 action 信息
-     *
-     * 如果是静态路由 "/persons/new" 将变成 "/persons/new#{actionMethodName}@{actionClassName}"
-     * 如果是动态路由 "/persons/{id}" 将变成 "/persons/__id__#{actionMethodName}@{actionClassName}"
-     *
-     * @param routeMapping
-     * @return
-     * @deprecated 此方法已经转移到 RouteMapping
-     */
-    public static ActionInfo routeToAction(RouteMapping routeMapping) {
-        // TODO 优化：RouteMapping 可缓存 ActionInfo, 因为规则一致每次的结果都一样
-
-        String routePath = routeMapping.getRoutePath();
-        routePath = ActionUtil.padSlash(routePath);
-        routePath = RouteUtil.flatRoutePath(routePath);
-
-        String namespace = ActionUtil.namespace(routePath);
-        String actionName = ActionUtil.actionName(routePath);
-
-        String methodName = routeMapping.getMethod().getName();
-        String className = routeMapping.getAction().getName();
-
-        // TODO 优化：为了避免名字冲突，目前简单粗暴的使用 方法名 + 类名 的方式命名
-        // 缺点就是 actionName 太长，可能会影响性能
-        actionName = actionName + "#" + methodName + "@" + className;
-        return new ActionInfo(namespace, actionName);
-    }
-
-    /**
      * 是否有 pathVariable
      *
      * @param routePath

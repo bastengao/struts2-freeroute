@@ -151,7 +151,7 @@ public class RouteMapping {
         String methodName = this.method.getName();
         String className = action.getName();
 
-        // 优化：为了避免名字冲突，目前简单粗暴的使用 方法名 + 类名 的方式命名
+        // TODO 优化：为了避免名字冲突，目前简单粗暴的使用 方法名 + 类名 的方式命名
         // 缺点就是 actionName 太长，可能会影响性能
         actionName = actionName + "#" + methodName + "@" + className;
         this.actionInfo = new ActionInfo(namespace, actionName);
