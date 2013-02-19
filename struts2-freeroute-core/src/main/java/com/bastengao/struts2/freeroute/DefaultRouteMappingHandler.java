@@ -128,6 +128,14 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
      * 根据已经匹配 servletPath 的路由集合找出最匹配的路由, 如果没有返回 null
      *
+     * 指定 method 的要比不指定 method 的权重高 -> 1001 > 1000
+     * params 多的要比 params 少的权重高 -> 8 > 2
+     * params 匹配但没有指定 method 要比 指定 method 但没有 params 的权重高 -> 1002 > 10001
+
+     * 未指定 method 权重 1000
+     * 指定 method 权重 1001
+     * params 权重一个 2
+     *
      * @param request
      * @param routeMappings
      * @return
@@ -156,8 +164,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     /**
      * 返回请求与匹配的路由的权重. 如果不匹配返回小于 0 的值，如果匹配返回权重值。
      * 其中 method 的权重比 param 权重高
-     * weight = method(GET, POST, PUT, DELETE) * 2000  +  param * 1
-     * weight = method(          NONE        ) * 1000  +  param * 1
+     * weight = method(GET, POST, PUT, DELETE) * 1001  +  param * 2
+     * weight = method(          NONE        ) * 1000  +  param * 2
      *
      * @param request
      * @param routeMapping
@@ -186,7 +194,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
     /**
      * 返回 method 的权重，如果不匹配返回 -1
-     * 如果没有指定则为 1000, 其他为 2000
+     * 如果没有指定则为 1000, 其他为 1001
      *
      * @param request
      * @param routeMapping
@@ -204,7 +212,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
         for (MethodType m : routeMapping.getHttpMethods()) {
             if (methodType == m) {
-                return 2000;
+                return 1001;
             }
         }
 
@@ -213,7 +221,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
     /**
      * 返回 params 的权重. 如果不匹配返回 -1
-     * 如果匹配返回 params.length
+     * params 权重一个2, 如果完成匹配返回 params.length * 2
      *
      * @param request
      * @param routeMapping
@@ -232,7 +240,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             }
         }
 
-        return routeMapping.getParams().size();
+        return routeMapping.getParams().size() * 2;
     }
 
     /**

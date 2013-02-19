@@ -17,10 +17,16 @@ public class PersonController {
 
     private int id;
 
-    @Route("/persons/create")
+    @Route(value = "/persons/create", method = MethodType.GET)
     public String toCreate() {
         // "dispatcher:/my-result.html";
         return Results.html("/my-result.html");
+    }
+
+    @Route(value = "/persons/create", params = "a")
+    public String toCreate3() {
+        // "/my-result.jsp"
+        return Results.jsp("/my-result");
     }
 
     @Route("/persons/create2")
@@ -32,12 +38,6 @@ public class PersonController {
     public String toCreate2Post() {
         System.out.println("create2 post");
         return "dispatcher:/my-result2.html";
-    }
-
-    @Route("/persons/nested/create3")
-    public String toCreate3() {
-        // "/my-result.jsp"
-        return Results.jsp("/my-result");
     }
 
     // {id} value in path will be set to this#id property.
