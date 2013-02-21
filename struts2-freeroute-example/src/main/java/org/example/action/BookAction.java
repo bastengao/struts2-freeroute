@@ -19,6 +19,11 @@ public class BookAction {
         return Results.html("content");
     }
 
+    @Route("/books/{id}.json")
+    public String showJson(){
+        return Results.json().done();
+    }
+
     @Route("/books/{id}/{method}")
     public String showByMethod() {
         return Results.html("content");

@@ -128,11 +128,11 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
 
     /**
      * 根据已经匹配 servletPath 的路由集合找出最匹配的路由, 如果没有返回 null
-     *
+     * <p/>
      * 指定 method 的要比不指定 method 的权重高 -> 1001 > 1000
      * params 多的要比 params 少的权重高 -> 8 > 2
      * params 匹配但没有指定 method 要比 指定 method 但没有 params 的权重高 -> 1002 > 10001
-
+     * <p/>
      * 未指定 method 权重 1000
      * 指定 method 权重 1001
      * params 权重一个 2
@@ -150,6 +150,16 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
                 if (weight > maxWeight) {
                     maxWeight = weight;
                     maxWeightRoute = routeMapping;
+                } else if (weight == maxWeight) {
+                    // 如果权重同等，则比较正则表达式的长度.
+                    // 长度大的权重高，因为路径变量的个数相同，匹配的路径相同，正则表达式越长，则路由中静态路径比重越大
+                    // 我们的原则就是越是静态的权重越高
+                    int patternLength = routeMapping.getRoutePathPattern().pattern().length();
+                    int patternLength2 = maxWeightRoute.getRoutePathPattern().pattern().length();
+                    if (patternLength > patternLength2) {
+                        maxWeight = weight;
+                        maxWeightRoute = routeMapping;
+                    }
                 }
             }
         }
