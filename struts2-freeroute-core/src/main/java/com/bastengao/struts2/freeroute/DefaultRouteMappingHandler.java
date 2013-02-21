@@ -33,7 +33,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * routePath 中包括 pathVariable 中的路由映射
      */
     private ArrayListMultimap<String, RouteMapping> dynamicRoutes = ArrayListMultimap.create();
-    private Map<String, Pattern> dynamicRoutesPattern = new HashMap<String, Pattern>();
+    private List<Pattern> dynamicRoutesPatterns = new LinkedList<Pattern>();
 
 
     /**
@@ -53,8 +53,9 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     public void put(RouteMapping routeMapping, ActionConfig actionCfg) {
         if (routeMapping.hasPathVariables()) {
             // 正则 => 路由
-            dynamicRoutes.put(routeMapping.getRoutePathPattern().pattern(), routeMapping);
-            dynamicRoutesPattern.put(routeMapping.getRoutePathPattern().pattern(), routeMapping.getRoutePathPattern());
+            String patternStr = routeMapping.getRoutePathPattern().pattern();
+            dynamicRoutes.put(patternStr, routeMapping);
+            dynamicRoutesPatterns.add(routeMapping.getRoutePathPattern());
         } else {
             // path => 路由
             String routePath = routeMapping.getRoutePath();
@@ -92,9 +93,9 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         // 在动态路由中查找
         // 应该在匹配 servletPath 的所有路由中，寻找权重最大的
         List<RouteMapping> matchPathAllRouteMappings = new LinkedList<RouteMapping>();
-        for (Map.Entry<String, Pattern> patternEntry : dynamicRoutesPattern.entrySet()) {
-            if (patternEntry.getValue().matcher(servletPath).matches()) {
-                List<RouteMapping> matchPathRouteMappings = dynamicRoutes.get(patternEntry.getKey());
+        for (Pattern routePattern : dynamicRoutesPatterns) {
+            if (routePattern.matcher(servletPath).matches()) {
+                List<RouteMapping> matchPathRouteMappings = dynamicRoutes.get(routePattern.pattern());
                 matchPathAllRouteMappings.addAll(matchPathRouteMappings);
             }
         }
