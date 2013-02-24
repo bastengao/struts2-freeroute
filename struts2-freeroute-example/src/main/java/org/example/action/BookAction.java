@@ -9,6 +9,9 @@ import com.bastengao.struts2.freeroute.annotation.Route;
  * @date 13-1-12 20:21
  */
 public class BookAction {
+
+    private int id;
+
     @Route("/books")
     public String execute() {
         return Result.create().location("content.html").done();
@@ -16,11 +19,13 @@ public class BookAction {
 
     @Route("/books/{id}")
     public String show() {
+        System.out.println(id);
         return Results.html("content");
     }
 
     @Route("/books/{id}.json")
     public String showJson(){
+        System.out.println("json: "+ id);
         return Results.json().done();
     }
 
@@ -37,5 +42,13 @@ public class BookAction {
     @Route(value = "/books/123/{method}", params = "any")
     public String showStatic2() {
         return Results.html("content");
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
