@@ -20,29 +20,13 @@ struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts
 
 # 引用
 
-当前版本还需要有完善的地方，暂时没有同步到中央仓库. 可以通过以下仓库引用最新版本(1.0-SNAPSHOT)。
-
-```xml
-<repository>
-    <id>freeroute-snapshot</id>
-    <name>Freeroute Snapshot Repository</name>
-    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    <releases>
-        <enabled>false</enabled>
-    </releases>
-    <snapshots>
-        <enabled>true</enabled>
-    </snapshots>
-</repository>
-```
-
-当前最新版本 1.0-SNAPSHOT
+当前最新版本 1.0
 
 ```xml
 <dependency>
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
-    <version>${version}</version>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -51,7 +35,7 @@ struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts
 <dependency>
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute4spring</artifactId>
-    <version>${version}</version>
+    <version>1.0</version>
 </dependency>
 ```
 
