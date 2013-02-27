@@ -57,7 +57,7 @@ public class BookController{
     @Route("/books/{id}")
     public String show(){
         book = bookDao.find(id);
-        return "dispatcher:/book.jsp"
+        return Results.jsp("/book.jsp");
     }
 
     //setter, getter
@@ -150,7 +150,7 @@ struts.xml
 public MyController{
     @Route("/helloworld")
     public String hello(){
-        return "dispatcher:/world.html";
+        return Results.html("/world.html)";
     }
 }
 ```
@@ -311,12 +311,12 @@ method 目前有以下类型:
 ```java
 @Route("/very-long-page-path")
 public String show(){
-    return "dispatcher:/very/long/page/path/example.html";
+    return Results.html("/very/long/page/path/example.html");
 }
 
 @Route("/anothor-very-long-page-path")
 public String show2(){
-    return "dispatcher:/very/long/page/path/example2.html";
+    return Results.html("/very/long/page/path/example2.html");
 }
 ```
 
@@ -328,12 +328,12 @@ public String show2(){
 public class ExampleController{
     @Route("/very-long-page-path")
     public String show(){
-        return "dispatcher:example.html";
+        return Results.html("example.html");
     }
 
     @Route("/anothor-very-long-page-path")
     public String show2(){
-        return "dispatcher:example2.html";
+        return Results.html("example2.html");
     }
 }
 ```
