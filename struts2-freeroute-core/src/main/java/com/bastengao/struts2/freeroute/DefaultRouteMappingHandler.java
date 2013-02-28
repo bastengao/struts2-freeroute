@@ -52,10 +52,14 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
     @Override
     public void put(RouteMapping routeMapping, ActionConfig actionCfg) {
         if (routeMapping.hasPathVariables()) {
+            Pattern routePathPattern = routeMapping.getRoutePathPattern();
+            String patternStr = routePathPattern.pattern();
+            // 保证相同的 routePathPattern 只存在一次
+            if(!dynamicRoutes.keySet().contains(patternStr)){
+                dynamicRoutesPatterns.add(routePathPattern);
+            }
             // 正则 => 路由
-            String patternStr = routeMapping.getRoutePathPattern().pattern();
             dynamicRoutes.put(patternStr, routeMapping);
-            dynamicRoutesPatterns.add(routeMapping.getRoutePathPattern());
         } else {
             // path => 路由
             String routePath = routeMapping.getRoutePath();
