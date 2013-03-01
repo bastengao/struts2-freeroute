@@ -17,6 +17,11 @@ public class BookAction {
         return Result.create().location("content.html").done();
     }
 
+    @Route("/books")
+    public String execute2() {
+        return Result.create().location("content.html").done();
+    }
+
     @Route("/books/{id}")
     public String show() {
         System.out.println(id);
@@ -24,8 +29,8 @@ public class BookAction {
     }
 
     @Route("/books/{id}.json")
-    public String showJson(){
-        System.out.println("json: "+ id);
+    public String showJson() {
+        System.out.println("json: " + id);
         return Results.json().done();
     }
 

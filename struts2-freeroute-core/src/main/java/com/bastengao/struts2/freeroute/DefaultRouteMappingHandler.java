@@ -55,7 +55,7 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             Pattern routePathPattern = routeMapping.getRoutePathPattern();
             String patternStr = routePathPattern.pattern();
             // 保证相同的 routePathPattern 只存在一次
-            if(!dynamicRoutes.keySet().contains(patternStr)){
+            if (!dynamicRoutes.keySet().contains(patternStr)) {
                 dynamicRoutesPatterns.add(routePathPattern);
             }
             // 正则 => 路由
@@ -115,11 +115,11 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @return
      */
     private RouteMapping findDynamicMaxWeight(HttpServletRequest request, List<RouteMapping> routeMappings) {
-        int minVariableSize = Integer.MAX_VALUE;
+        int minVariableSize = Integer.MAX_VALUE; // 最小的路径变量个数
         List<RouteMapping> minVariableNameSizeRouteMappings = new LinkedList<RouteMapping>();
         for (RouteMapping routeMapping : routeMappings) {
             int variableSize = routeMapping.getVariableNames().size();
-            if (variableSize < minVariableSize) {
+            if (variableSize < minVariableSize) { //如果找到更小的
                 minVariableSize = variableSize;
                 minVariableNameSizeRouteMappings.clear();
                 minVariableNameSizeRouteMappings.add(routeMapping);
@@ -127,25 +127,46 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
                 minVariableNameSizeRouteMappings.add(routeMapping);
             }
         }
-        return findMaxWeight(request, minVariableNameSizeRouteMappings);
+        return findMaxWeightWithSameVariableSize(request, minVariableNameSizeRouteMappings);
     }
 
     /**
      * 根据已经匹配 servletPath 的路由集合找出最匹配的路由, 如果没有返回 null
-     * <p/>
-     * 指定 method 的要比不指定 method 的权重高 -> 1001 > 1000
-     * params 多的要比 params 少的权重高 -> 8 > 2
-     * params 匹配但没有指定 method 要比 指定 method 但没有 params 的权重高 -> 1002 > 10001
-     * <p/>
-     * 未指定 method 权重 1000
-     * 指定 method 权重 1001
-     * params 权重一个 2
+     * 适合静态路由
      *
      * @param request
      * @param routeMappings
      * @return
      */
     private RouteMapping findMaxWeight(HttpServletRequest request, List<RouteMapping> routeMappings) {
+        int maxWeight = -1;
+        RouteMapping maxWeightRoute = null;
+        for (RouteMapping routeMapping : routeMappings) {
+            int weight = weightOfRoute(request, routeMapping);
+            if (weight > 0) {
+                if (weight > maxWeight) {
+                    maxWeight = weight;
+                    maxWeightRoute = routeMapping;
+                }
+            }
+        }
+
+        if (log.isTraceEnabled()) {
+            if (maxWeightRoute != null) {
+                log.trace("max weight: {}", maxWeightRoute.prettyPath());
+            }
+        }
+        return maxWeightRoute;
+    }
+
+    /**
+     * 在拥有相同数量路径变量中找出最匹配的路由，如果没有返回 null
+     *
+     * @param request
+     * @param routeMappings
+     * @return
+     */
+    private RouteMapping findMaxWeightWithSameVariableSize(HttpServletRequest request, List<RouteMapping> routeMappings) {
         int maxWeight = -1;
         RouteMapping maxWeightRoute = null;
         for (RouteMapping routeMapping : routeMappings) {
@@ -176,11 +197,20 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         return maxWeightRoute;
     }
 
+
     /**
      * 返回请求与匹配的路由的权重. 如果不匹配返回小于 0 的值，如果匹配返回权重值。
      * 其中 method 的权重比 param 权重高
      * weight = method(GET, POST, PUT, DELETE) * 1001  +  param * 2
      * weight = method(          NONE        ) * 1000  +  param * 2
+     * <p/>
+     * 指定 method 的要比不指定 method 的权重高 -> 1001 > 1000
+     * params 多的要比 params 少的权重高 -> 8 > 2
+     * params 匹配但没有指定 method 要比 指定 method 但没有 params 的权重高 -> 1002 > 10001
+     * <p/>
+     * 未指定 method 权重 1000
+     * 指定 method 权重 1001
+     * params 权重一个 2
      *
      * @param request
      * @param routeMapping
