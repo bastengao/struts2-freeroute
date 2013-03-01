@@ -58,12 +58,14 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             if (!dynamicRoutes.keySet().contains(patternStr)) {
                 dynamicRoutesPatterns.add(routePathPattern);
             }
+            logWarningWhenSameRoute(routeMapping, dynamicRoutes.get(patternStr));
             // 正则 => 路由
             dynamicRoutes.put(patternStr, routeMapping);
         } else {
             // path => 路由
             String routePath = routeMapping.getRoutePath();
             routePath = ActionUtil.padSlash(routePath);
+            logWarningWhenSameRoute(routeMapping, staticRoutes.get(routePath));
             staticRoutes.put(routePath, routeMapping);
         }
 
@@ -301,5 +303,38 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
             names.add(nameEnum.nextElement());
         }
         return names;
+    }
+
+    /**
+     * 当有相同的路径，出现相同的路由里打印警告
+     *
+     * @param newRouteMapping
+     * @param routeMappings
+     */
+    private void logWarningWhenSameRoute(RouteMapping newRouteMapping, List<RouteMapping> routeMappings) {
+        for (RouteMapping routeMapping : routeMappings) {
+            // 路径不相等
+            if (!routeMapping.getRoutePath().equals(newRouteMapping.getRoutePath())) {
+                continue;
+            }
+
+            // http method 是或的关系, 如果没有相同的元素
+            if (routeMapping.getHttpMethods().size() > 0 || newRouteMapping.getHttpMethods().size() > 0) {
+                if (Collections.disjoint(routeMapping.getHttpMethods(), newRouteMapping.getHttpMethods())) {
+                    continue;
+                }
+            }
+
+            // http params 大小不相等
+            if (routeMapping.getParams().size() != newRouteMapping.getParams().size()) {
+                continue;
+            }
+
+            // http params 相等
+            if (routeMapping.getHttpParams().containsAll(newRouteMapping.getHttpParams())) {
+                log.warn("same route: {} and {}", newRouteMapping, routeMapping);
+            }
+
+        }
     }
 }

@@ -278,6 +278,15 @@ public class RouteMapping {
         return sb.toString();
     }
 
+    @Override
+    public String toString() {
+        return "RouteMapping{" +
+                "route=" + prettyPath() +
+                ", action=" + action +
+                ", method=" + method.getName() +
+                '}';
+    }
+
     /**
      * 表示一个 http param 表达式
      */

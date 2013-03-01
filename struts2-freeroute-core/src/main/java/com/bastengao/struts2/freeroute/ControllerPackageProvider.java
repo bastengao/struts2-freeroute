@@ -107,8 +107,8 @@ public class ControllerPackageProvider implements PackageProvider {
         }
     }
 
+    // packageName => PackageConfig.Builder
     private Map<String, PackageConfig.Builder> createPackageConfig() {
-        // packageName => PackageConfig.Builder
         Map<String, PackageConfig.Builder> packages = new HashMap<String, PackageConfig.Builder>();
 
         try {
