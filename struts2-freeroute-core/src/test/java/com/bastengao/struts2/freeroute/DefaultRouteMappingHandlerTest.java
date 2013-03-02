@@ -46,6 +46,51 @@ public class DefaultRouteMappingHandlerTest {
     }
 
     @Test
+    public void testWeightOfRoute() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path");
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfRoute(request, routeMapping);
+        Assert.assertEquals(1000, weight);
+    }
+
+    @Test
+    public void testWeightOfRoute2() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{MethodType.GET}, new String[]{});
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfRoute(request, routeMapping);
+        Assert.assertEquals(1001, weight);
+    }
+
+    @Test
+    public void testWeightOfRoute2B() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{MethodType.POST}, new String[]{});
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfRoute(request, routeMapping);
+        Assert.assertEquals(-1, weight);
+    }
+
+    @Test
     public void testWeightOfMethod() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
