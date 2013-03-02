@@ -9,8 +9,12 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author bastengao
@@ -33,6 +37,51 @@ public class DefaultRouteMappingHandlerTest {
         Assert.assertEquals(2, Sets.newHashSet(a, b).size());
 
         Assert.assertEquals(1, Sets.newHashSet("abc", "abc").size());
+    }
+
+    @Test
+    public void testWeightOfMethod() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path");
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfMethod(request, routeMapping);
+        Assert.assertEquals(1000, weight);
+    }
+
+    @Test
+    public void testWeightOfMethod2() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{MethodType.GET}, new String[]{});
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfMethod(request, routeMapping);
+        Assert.assertEquals(1001, weight);
+    }
+
+    @Test
+    public void testWeightOfMethod3() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("GET");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{MethodType.GET, MethodType.POST}, new String[]{});
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfMethod(request, routeMapping);
+        Assert.assertEquals(1001, weight);
     }
 
     @Test

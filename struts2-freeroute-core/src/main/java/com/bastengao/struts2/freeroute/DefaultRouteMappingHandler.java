@@ -219,7 +219,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @param routeMapping
      * @return
      */
-    private static int weightOfRoute(HttpServletRequest request, RouteMapping routeMapping) {
+    @VisibleForTesting
+    static int weightOfRoute(HttpServletRequest request, RouteMapping routeMapping) {
         // 测试 method 是否匹配，
         int methodWeight = weightOfMethod(request, routeMapping);
         if (methodWeight < 0) {
@@ -248,7 +249,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @param routeMapping
      * @return
      */
-    private static int weightOfMethod(HttpServletRequest request, RouteMapping routeMapping) {
+    @VisibleForTesting
+    static int weightOfMethod(HttpServletRequest request, RouteMapping routeMapping) {
         if (routeMapping.getHttpMethods().size() == 0) {
             return 1000;
         }
@@ -275,7 +277,8 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @param routeMapping
      * @return
      */
-    private static int weightOfParams(HttpServletRequest request, RouteMapping routeMapping) {
+    @VisibleForTesting
+    static int weightOfParams(HttpServletRequest request, RouteMapping routeMapping) {
         // 如果没有 params 参数, 则直接返回 0
         if (routeMapping.getHttpParams().size() == 0) {
             return 0;
