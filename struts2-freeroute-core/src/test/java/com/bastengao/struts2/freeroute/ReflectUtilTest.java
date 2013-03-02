@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author bastengao
@@ -23,5 +24,20 @@ public class ReflectUtilTest {
                 Assert.assertNotNull(cookieValue);
             }
         }
+    }
+
+    @Test
+    public void testMethodOf() {
+        Class clazz = ReflectUtilTest.class;
+        Method method = ReflectUtil.methodOf(clazz, "noExists");
+
+        Assert.assertNull(method);
+
+
+        method = ReflectUtil.methodOf(clazz, "testMethodOf");
+
+        Assert.assertNotNull(method);
+        Assert.assertEquals("testMethodOf", method.getName());
+        Assert.assertSame(clazz, method.getDeclaringClass());
     }
 }

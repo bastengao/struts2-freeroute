@@ -2,6 +2,7 @@ package com.bastengao.struts2.freeroute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * 反射工具类
@@ -11,7 +12,8 @@ import java.lang.reflect.Field;
  * @since 1.0
  */
 public class ReflectUtil {
-    private ReflectUtil(){}
+    private ReflectUtil() {
+    }
 
     /**
      * 测试某个字段上是否有指定的注解
@@ -56,10 +58,27 @@ public class ReflectUtil {
      * @param <T>
      * @return
      */
-    public static <T extends Annotation> T getAnnotation(Class clazz, Class<T> annotation){
-        if(clazz.isAnnotationPresent(annotation)){
+    public static <T extends Annotation> T getAnnotation(Class clazz, Class<T> annotation) {
+        if (clazz.isAnnotationPresent(annotation)) {
             Annotation value = clazz.getAnnotation(annotation);
             return annotation.cast(value);
+        }
+
+        return null;
+    }
+
+    /**
+     * 返回此类(包括父类)拥有某个指定名称的方法, 如果没有返回 null.
+     *
+     * @param clazz
+     * @param methodName
+     * @return
+     */
+    public static Method methodOf(Class clazz, String methodName) {
+        for (Method method : clazz.getMethods()) {
+            if (method.getName().equals(methodName)) {
+                return method;
+            }
         }
 
         return null;
