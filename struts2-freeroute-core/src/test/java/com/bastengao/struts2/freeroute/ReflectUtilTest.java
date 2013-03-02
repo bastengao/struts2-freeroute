@@ -1,7 +1,9 @@
 package com.bastengao.struts2.freeroute;
 
+import com.bastengao.struts2.freeroute.annotation.ContentBase;
 import com.bastengao.struts2.freeroute.annotation.CookieValue;
 import com.example.action.BookController;
+import com.example.action.ContentBaseController;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,6 +26,16 @@ public class ReflectUtilTest {
                 Assert.assertNotNull(cookieValue);
             }
         }
+    }
+
+    @Test
+    public void testGetAnnotation() {
+        ContentBase contentBase = ReflectUtil.getAnnotation(ContentBaseController.class, ContentBase.class);
+        Assert.assertNotNull(contentBase);
+        Assert.assertEquals("/pages", contentBase.value());
+
+        ContentBase contentBase2 = ReflectUtil.getAnnotation(String.class, ContentBase.class);
+        Assert.assertNull(contentBase2);
     }
 
     @Test
