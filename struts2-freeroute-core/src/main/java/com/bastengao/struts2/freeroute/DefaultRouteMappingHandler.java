@@ -2,6 +2,7 @@ package com.bastengao.struts2.freeroute;
 
 
 import com.bastengao.struts2.freeroute.annotation.MethodType;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ArrayListMultimap;
 import com.opensymphony.xwork2.config.entities.ActionConfig;
 import org.slf4j.Logger;
@@ -311,30 +312,46 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      * @param newRouteMapping
      * @param routeMappings
      */
-    private void logWarningWhenSameRoute(RouteMapping newRouteMapping, List<RouteMapping> routeMappings) {
+    @VisibleForTesting
+    static void logWarningWhenSameRoute(RouteMapping newRouteMapping, List<RouteMapping> routeMappings) {
+        RouteMapping routeMapping = containsSameRoute(newRouteMapping, routeMappings);
+        if(routeMapping != null){
+            log.warn("same route: {} and {}", newRouteMapping, routeMapping);
+        }
+    }
+
+    /**
+     * 是否包含相同的路由，如果是返回相同的路径，如果不是返回 null
+     * @param testingRoute
+     * @param routeMappings
+     * @return
+     */
+    static RouteMapping containsSameRoute(RouteMapping testingRoute, List<RouteMapping> routeMappings) {
         for (RouteMapping routeMapping : routeMappings) {
             // 路径不相等
-            if (!routeMapping.getRoutePath().equals(newRouteMapping.getRoutePath())) {
+            if (!routeMapping.getRoutePath().equals(testingRoute.getRoutePath())) {
                 continue;
             }
 
             // http method 是或的关系, 如果没有相同的元素
-            if (routeMapping.getHttpMethods().size() > 0 || newRouteMapping.getHttpMethods().size() > 0) {
-                if (Collections.disjoint(routeMapping.getHttpMethods(), newRouteMapping.getHttpMethods())) {
+            if (routeMapping.getHttpMethods().size() > 0 || testingRoute.getHttpMethods().size() > 0) {
+                if (Collections.disjoint(routeMapping.getHttpMethods(), testingRoute.getHttpMethods())) {
                     continue;
                 }
             }
 
             // http params 大小不相等
-            if (routeMapping.getParams().size() != newRouteMapping.getParams().size()) {
+            if (routeMapping.getHttpParams().size() != testingRoute.getHttpParams().size()) {
                 continue;
             }
 
             // http params 相等
-            if (routeMapping.getHttpParams().containsAll(newRouteMapping.getHttpParams())) {
-                log.warn("same route: {} and {}", newRouteMapping, routeMapping);
+            if (routeMapping.getHttpParams().containsAll(testingRoute.getHttpParams())) {
+                return routeMapping;
             }
 
         }
+
+        return null;
     }
 }

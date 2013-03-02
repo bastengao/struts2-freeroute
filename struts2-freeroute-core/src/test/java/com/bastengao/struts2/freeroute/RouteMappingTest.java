@@ -1,7 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
-import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
+import com.bastengao.struts2.freeroute.helper.RouteHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 /**
  * @author bastengao
@@ -26,7 +27,7 @@ public class RouteMappingTest {
 
     @Test
     public void newRouteMapping() {
-        Route route = mockRoute("/path");
+        Route route = RouteHelper.mockRoute("/path");
 
         Class clazz = RouteMappingTest.class;
         Method method = ReflectUtil.methodOf(clazz, "newRouteMapping");
@@ -42,22 +43,7 @@ public class RouteMappingTest {
         ActionInfo actionInfo = routeMapping.toAction();
         Assert.assertNotNull(actionInfo);
         Assert.assertEquals("", actionInfo.getNamespace());
-        Assert.assertEquals("path"+"#"+ method.getName() + "@" + clazz.getName(), actionInfo.getActionName());
+        Assert.assertEquals("path" + "#" + method.getName() + "@" + clazz.getName(), actionInfo.getActionName());
     }
 
-    private static Route mockRoute(String value, MethodType[] methods, String[] params) {
-        Route route = mock(Route.class);
-        when(route.value()).thenReturn(value);
-        when(route.method()).thenReturn(methods);
-        when(route.params()).thenReturn(params);
-        return route;
-    }
-
-    private static Route mockRoute(String value) {
-        Route route = mock(Route.class);
-        when(route.value()).thenReturn(value);
-        when(route.method()).thenReturn(new MethodType[]{});
-        when(route.params()).thenReturn(new String[]{});
-        return route;
-    }
 }

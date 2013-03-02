@@ -149,7 +149,7 @@ public class RouteMapping {
         String actionName = ActionUtil.actionName(routePath);
 
         String methodName = this.method.getName();
-        String className = action.getName();
+        String className = this.action.getName();
 
         // TODO 优化：为了避免名字冲突，目前简单粗暴的使用 方法名 + 类名 的方式命名
         // 缺点就是 actionName 太长，可能会影响性能
