@@ -11,6 +11,8 @@ public class BookController {
     @CookieValue("id")
     private int id;
 
+    private String name;
+
     @Route("/books/show")
     public String execute() {
         return null;

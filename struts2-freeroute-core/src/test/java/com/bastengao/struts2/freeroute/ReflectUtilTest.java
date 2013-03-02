@@ -29,6 +29,13 @@ public class ReflectUtilTest {
     }
 
     @Test
+    public void testGetAnnotationOfField() throws NoSuchFieldException {
+        Field field = BookController.class.getDeclaredField("name");
+        CookieValue cookieValue = ReflectUtil.getAnnotationOfField(field, CookieValue.class);
+        Assert.assertNull(cookieValue);
+    }
+
+    @Test
     public void testGetAnnotation() {
         ContentBase contentBase = ReflectUtil.getAnnotation(ContentBaseController.class, ContentBase.class);
         Assert.assertNotNull(contentBase);
