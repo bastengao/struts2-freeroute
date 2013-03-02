@@ -174,20 +174,22 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
         RouteMapping maxWeightRoute = null;
         for (RouteMapping routeMapping : routeMappings) {
             int weight = weightOfRoute(request, routeMapping);
-            if (weight > 0) {
-                if (weight > maxWeight) {
+            if (weight <= 0) {
+                continue;
+            }
+
+            if (weight > maxWeight) {
+                maxWeight = weight;
+                maxWeightRoute = routeMapping;
+            } else if (weight == maxWeight) {
+                // 如果权重同等，则比较正则表达式的长度.
+                // 长度大的权重高，因为路径变量的个数相同，匹配的路径相同，正则表达式越长，则路由中静态路径比重越大
+                // 我们的原则就是越是静态的权重越高
+                int patternLength = routeMapping.getRoutePathPattern().pattern().length();
+                int patternLength2 = maxWeightRoute.getRoutePathPattern().pattern().length();
+                if (patternLength > patternLength2) {
                     maxWeight = weight;
                     maxWeightRoute = routeMapping;
-                } else if (weight == maxWeight) {
-                    // 如果权重同等，则比较正则表达式的长度.
-                    // 长度大的权重高，因为路径变量的个数相同，匹配的路径相同，正则表达式越长，则路由中静态路径比重越大
-                    // 我们的原则就是越是静态的权重越高
-                    int patternLength = routeMapping.getRoutePathPattern().pattern().length();
-                    int patternLength2 = maxWeightRoute.getRoutePathPattern().pattern().length();
-                    if (patternLength > patternLength2) {
-                        maxWeight = weight;
-                        maxWeightRoute = routeMapping;
-                    }
                 }
             }
         }
