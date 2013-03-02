@@ -106,6 +106,21 @@ public class DefaultRouteMappingHandlerTest {
     }
 
     @Test
+    public void testWeightOfMethod5() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getMethod()).thenReturn("NOT_EXISTS_METHOD");
+
+        Class clazz = BookController.class;
+        Method method = ReflectUtil.methodOf(clazz, "execute");
+
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{MethodType.GET}, new String[]{});
+        RouteMapping routeMapping = new RouteMapping(route, clazz, method);
+
+        int weight = DefaultRouteMappingHandler.weightOfMethod(request, routeMapping);
+        Assert.assertEquals(-1, weight);
+    }
+
+    @Test
     public void testWeightOfParams() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
@@ -263,7 +278,7 @@ public class DefaultRouteMappingHandlerTest {
         Class clazz = BookController.class;
         Method method = ReflectUtil.methodOf(clazz, "execute");
 
-        Route route = RouteHelper.mockRoute("/path", new MethodType[]{}, new String[]{"param","param2=value", "param3!=value"});
+        Route route = RouteHelper.mockRoute("/path", new MethodType[]{}, new String[]{"param", "param2=value", "param3!=value"});
         RouteMapping routeMapping = new RouteMapping(route, clazz, method);
 
         int weight = DefaultRouteMappingHandler.weightOfParams(request, routeMapping);
