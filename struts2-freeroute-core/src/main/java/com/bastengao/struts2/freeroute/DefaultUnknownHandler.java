@@ -207,7 +207,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * @return
      */
     @VisibleForTesting
-    public static String parseResultType(String resultCode) {
+    static String parseResultType(String resultCode) {
         int index = resultCode.indexOf(":");
         if (index == -1) {
             return resultCode;

@@ -193,7 +193,7 @@ public class ControllerPackageProvider implements PackageProvider {
      * @throws java.io.IOException
      */
     @VisibleForTesting
-    public static Set<ClassPath.ClassInfo> findControllers(String controllerPackage, final Set<String> controllerSuffixes) throws IOException {
+    static Set<ClassPath.ClassInfo> findControllers(String controllerPackage, final Set<String> controllerSuffixes) throws IOException {
         ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
 
         Set<ClassPath.ClassInfo> allClasses = classPath.getTopLevelClassesRecursive(controllerPackage);
@@ -220,7 +220,7 @@ public class ControllerPackageProvider implements PackageProvider {
      * @return
      */
     @VisibleForTesting
-    public static List<RouteMapping> parseController(Class controller) {
+    static List<RouteMapping> parseController(Class controller) {
         List<RouteMapping> routes = new ArrayList<RouteMapping>();
         //遍历 Controller 的所有方法
         Method[] methods = controller.getMethods();

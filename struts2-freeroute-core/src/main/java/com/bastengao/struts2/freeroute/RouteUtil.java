@@ -97,7 +97,7 @@ public class RouteUtil {
      * @return
      */
     @VisibleForTesting
-    public static String flatRoutePath(String routePath) {
+    static String flatRoutePath(String routePath) {
         StringBuilder flatRoutePath = new StringBuilder();
         //下一次匹配的开始
         int nextStart = 0;

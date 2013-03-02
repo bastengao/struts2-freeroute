@@ -139,7 +139,7 @@ public class Results {
      * @return
      */
     @VisibleForTesting
-    public static String padEnd(String source, String suffix) {
+    static String padEnd(String source, String suffix) {
         if (!source.endsWith(suffix)) {
             return source + suffix;
         }

@@ -10,7 +10,7 @@ import com.google.common.annotations.VisibleForTesting;
  * @since 1.0
  */
 @VisibleForTesting
-public class ActionUtil {
+class ActionUtil {
     /**
      * 根据路由路径获取 namespace
      *
@@ -18,7 +18,7 @@ public class ActionUtil {
      * @return
      */
     @VisibleForTesting
-    public static String namespace(String routePath) {
+    static String namespace(String routePath) {
         int index = routePath.lastIndexOf("/");
         if (index == -1) {
             return "";
@@ -33,7 +33,7 @@ public class ActionUtil {
      * @return
      */
     @VisibleForTesting
-    public static String actionName(String routePath) {
+    static String actionName(String routePath) {
         int index = routePath.lastIndexOf("/");
         if (index == -1) {
             return routePath;
