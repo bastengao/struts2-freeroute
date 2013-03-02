@@ -1,13 +1,15 @@
 package com.bastengao.struts2.freeroute;
 
 import com.google.common.collect.Sets;
-import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author bastengao
@@ -18,9 +20,8 @@ public class ParamTest {
 
     @Before
     public void before() {
-        request = EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getParameter("foo")).andReturn("bar");
-        EasyMock.replay(request);
+        request = mock(HttpServletRequest.class);
+        when(request.getParameter("foo")).thenReturn("bar");
     }
 
     @Test
