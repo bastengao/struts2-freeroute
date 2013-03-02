@@ -73,6 +73,7 @@ public class ReflectUtil {
      * @param clazz
      * @param methodName
      * @return
+     * @since 1.0.1
      */
     public static Method methodOf(Class clazz, String methodName) {
         for (Method method : clazz.getMethods()) {

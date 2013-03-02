@@ -314,20 +314,23 @@ public class DefaultRouteMappingHandler implements RouteMappingHandler {
      *
      * @param newRouteMapping
      * @param routeMappings
+     * @since 1.0.1
      */
     @VisibleForTesting
     static void logWarningWhenSameRoute(RouteMapping newRouteMapping, List<RouteMapping> routeMappings) {
         RouteMapping routeMapping = containsSameRoute(newRouteMapping, routeMappings);
-        if(routeMapping != null){
+        if (routeMapping != null) {
             log.warn("same route: {} and {}", newRouteMapping, routeMapping);
         }
     }
 
     /**
      * 是否包含相同的路由，如果是返回相同的路径，如果不是返回 null
+     *
      * @param testingRoute
      * @param routeMappings
      * @return
+     * @since 1.0.1
      */
     static RouteMapping containsSameRoute(RouteMapping testingRoute, List<RouteMapping> routeMappings) {
         for (RouteMapping routeMapping : routeMappings) {
