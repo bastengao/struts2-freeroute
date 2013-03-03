@@ -66,4 +66,21 @@ public class ResultsTest {
         Assert.assertEquals("velocity:/test.vm", Results.vm("/test"));
         Assert.assertEquals("velocity:/test.vm", Results.velocity("/test"));
     }
+
+    @Test
+    public void testRedirect(){
+        String result = Results.redirect("/page.html");
+        Assert.assertEquals("redirect:/page.html", result);
+    }
+
+    @Test
+    public void testCustomResult() {
+        Assert.assertNotNull(Results.json());
+
+        Assert.assertNotNull(Results.chain());
+
+        Assert.assertNotNull(Results.stream());
+
+        Assert.assertNotNull(Results.httpHeader());
+    }
 }
