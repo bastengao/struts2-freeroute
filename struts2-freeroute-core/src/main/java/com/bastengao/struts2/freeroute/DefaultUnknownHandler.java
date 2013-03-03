@@ -263,7 +263,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * @param param
      * @return
      */
-    private static boolean isJSONObject(String param) {
+    static boolean isJSONObject(String param) {
         try {
             new JSONObject(param);
             return true;

@@ -17,4 +17,16 @@ public class DefaultUnknownHandlerTest {
         resultType = DefaultUnknownHandler.parseResultType("dispatcher:abc.html");
         Assert.assertEquals("dispatcher", resultType);
     }
+
+    @Test
+    public void testIsJSONObject() {
+        boolean result = DefaultUnknownHandler.isJSONObject("{\"name\":\"value\"}");
+        Assert.assertTrue(result);
+
+        result = DefaultUnknownHandler.isJSONObject("{}");
+        Assert.assertTrue(result);
+
+        result = DefaultUnknownHandler.isJSONObject("");
+        Assert.assertFalse(result);
+    }
 }
