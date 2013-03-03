@@ -42,7 +42,8 @@ public class DefaultUnknownHandler implements UnknownHandler {
 
     @Inject(value = "struts.freeroute.contentBase", required = false)
     private void setContentBase(String contentBase) {
-        this.contentBase = ActionUtil.padSlash(contentBase);
+        contentBase = ActionUtil.padSlash(contentBase);
+        this.contentBase = ActionUtil.shrinkEndSlash(contentBase);
     }
 
     @Inject("routeMappingHandler")
@@ -229,7 +230,8 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * @param originPath
      * @return
      */
-    private static String parsePath(String globalContentBase, RouteMapping routeMapping, String originPath) {
+    @VisibleForTesting
+    static String parsePath(String globalContentBase, RouteMapping routeMapping, String originPath) {
         //如果是绝对路径
         if (originPath.startsWith("/")) {
             // 啥也不干
@@ -241,7 +243,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
         //如果有 @ContentBase 配置，在 path 前追加 @ContentBase.
         if (routeMapping.getContentBase() != null) {
             String contentBase = ActionUtil.padSlash(routeMapping.getContentBase().value());
-            originPath = contentBase + ActionUtil.padSlash(originPath);
+            originPath = ActionUtil.shrinkEndSlash(contentBase) + ActionUtil.padSlash(originPath);
             return originPath;
         }
 
@@ -263,6 +265,7 @@ public class DefaultUnknownHandler implements UnknownHandler {
      * @param param
      * @return
      */
+    @VisibleForTesting
     static boolean isJSONObject(String param) {
         try {
             new JSONObject(param);
