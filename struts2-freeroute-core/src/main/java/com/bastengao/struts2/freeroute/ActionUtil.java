@@ -1,6 +1,5 @@
 package com.bastengao.struts2.freeroute;
 
-import com.google.common.annotations.VisibleForTesting;
 
 /**
  * 提供处理 action 相关工具方法
@@ -9,7 +8,6 @@ import com.google.common.annotations.VisibleForTesting;
  * @date 12-12-17 23:04
  * @since 1.0
  */
-@VisibleForTesting
 class ActionUtil {
     /**
      * 根据路由路径获取 namespace
@@ -17,7 +15,6 @@ class ActionUtil {
      * @param routePath
      * @return
      */
-    @VisibleForTesting
     static String namespace(String routePath) {
         int index = routePath.lastIndexOf("/");
         if (index == -1) {
@@ -32,7 +29,6 @@ class ActionUtil {
      * @param routePath
      * @return
      */
-    @VisibleForTesting
     static String actionName(String routePath) {
         int index = routePath.lastIndexOf("/");
         if (index == -1) {
@@ -41,7 +37,7 @@ class ActionUtil {
         return routePath.substring(index + 1);
     }
 
-    public static String padSlash(String str) {
+    static String padSlash(String str) {
         if (!str.startsWith("/")) {
             return "/" + str;
         }
@@ -55,7 +51,7 @@ class ActionUtil {
      * @param str
      * @return
      */
-    public static String shrinkEndSlash(String str) {
+    static String shrinkEndSlash(String str) {
         if (str.endsWith("/")) {
             return str.substring(0, str.length() - 1);
         }
