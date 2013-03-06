@@ -68,7 +68,7 @@ public class ResultsTest {
     }
 
     @Test
-    public void testRedirect(){
+    public void testRedirect() {
         String result = Results.redirect("/page.html");
         Assert.assertEquals("redirect:/page.html", result);
     }
@@ -77,10 +77,23 @@ public class ResultsTest {
     public void testCustomResult() {
         Assert.assertNotNull(Results.json());
 
-        Assert.assertNotNull(Results.chain());
+        Assert.assertNotNull(Results.chain()
+                .actionName("action")
+                .namespace("namespace")
+                .method("execute")
+                .skipActions("action2")
+                .done()
+        );
 
         Assert.assertNotNull(Results.stream());
 
-        Assert.assertNotNull(Results.httpHeader());
+        Assert.assertNotNull(Results.httpHeader()
+                .status("200")
+                .parse(false)
+                .error("error")
+                .errorMessage("just error")
+                .headers("Xcustom", "value")
+                .done()
+        );
     }
 }
