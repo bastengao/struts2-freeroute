@@ -3,7 +3,7 @@
     <parent>
         <artifactId>struts2-freeroute</artifactId>
         <groupId>com.bastengao.freeroute</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.bastengao.freeroute</groupId>
             <artifactId>struts2-freeroute-core</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
