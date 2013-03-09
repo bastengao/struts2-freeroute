@@ -20,13 +20,13 @@ struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts
 
 # 引用
 
-当前最新版本 1.0
+当前最新版本 1.0.1
 
 ```xml
 <dependency>
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -35,7 +35,7 @@ struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts
 <dependency>
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute4spring</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
