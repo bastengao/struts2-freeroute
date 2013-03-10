@@ -25,16 +25,16 @@ import java.util.regex.Pattern;
 public class RouteMapping {
     //可选配置(可能有，可能没有)
     private final ContentBase contentBase;
-    // 方法上的 @Route (methodRoute) . TODO change name to routeOnMethod
+    // 方法上的 @Route (methodRoute).
     private final Route route;
-    // route path. 原始路由路径
+    // route path. 路由路径
     private final String routePath;
-    // http methods.  unmodified list
+    // http methods.  unmodified
     private final List<MethodType> httpMethods;
-    // http params.  unmodified list
+    // http params.  unmodified
     private final List<String> httpParams;
 
-    // http 参数规则
+    // http 参数规则. unmodified
     private List<Param> params;
     //controller
     private final Class action;
@@ -43,13 +43,13 @@ public class RouteMapping {
 
     // routePath 上是否有 pathVariable
     private boolean hasPathVariables;
-    //路径上的变量名
+    //路径上的变量名. unmodified
     private List<String> variableNames;
     //匹配请求是否适合此路由的正则
     private Pattern routePathPattern;
 
 
-    // 被 @CookieValue 注解的 field
+    // 被 @CookieValue 注解的 field. unmodified
     private Map<CookieValue, Field> cookieValues;
 
 
