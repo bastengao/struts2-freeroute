@@ -100,14 +100,19 @@ public class ControllerPackageProvider implements PackageProvider {
     public void loadPackages() throws ConfigurationException {
         log.debug("loadPackages");
 
-        Map<String, PackageConfig.Builder> packages = createPackageConfig();
-        for (Map.Entry<String, PackageConfig.Builder> entry : packages.entrySet()) {
-            configuration.addPackageConfig(entry.getValue().getName(), entry.getValue().build());
+        Collection<PackageConfig.Builder> packages = createPackageConfig();
+        for (PackageConfig.Builder packageBuilder : packages) {
+            configuration.addPackageConfig(packageBuilder.getName(), packageBuilder.build());
         }
     }
 
-    // packageName => PackageConfig.Builder
-    private Map<String, PackageConfig.Builder> createPackageConfig() {
+    /**
+     * 创建 Package 配置与  Action 配置
+     *
+     * @return 返回 Package 配置集合
+     */
+    private Collection<PackageConfig.Builder> createPackageConfig() {
+        // packageName => PackageConfig.Builder
         Map<String, PackageConfig.Builder> packages = new HashMap<String, PackageConfig.Builder>();
 
         try {
@@ -132,7 +137,7 @@ public class ControllerPackageProvider implements PackageProvider {
             throw new IllegalStateException("could not find controllers");
         }
 
-        return packages;
+        return packages.values();
     }
 
     /**
