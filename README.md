@@ -3,7 +3,7 @@ struts2-freeroute-plugin [![Build Status](https://travis-ci.org/bastengao/struts
 
 自由的映射路由，像 Spring MVC 那样。
 
-- [API doc](http://bastengao.github.com/struts2-freeroute/1.0/apidocs/)
+- [API doc](http://bastengao.github.com/struts2-freeroute/1.0.1/apidocs/)
 - [引用](#引用)
 - [例子](#例子)
 - [配置](#配置)
