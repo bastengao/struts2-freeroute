@@ -1,7 +1,6 @@
 package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
-import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
