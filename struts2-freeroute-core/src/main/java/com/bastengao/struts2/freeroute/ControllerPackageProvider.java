@@ -1,6 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
 import com.bastengao.struts2.freeroute.annotation.ContentBase;
+import com.bastengao.struts2.freeroute.annotation.ControllerPackage;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
@@ -113,31 +114,56 @@ public class ControllerPackageProvider implements PackageProvider {
      */
     private Collection<PackageConfig.Builder> createPackageConfig() {
         // packageName => PackageConfig.Builder
-        Map<String, PackageConfig.Builder> packages = new HashMap<String, PackageConfig.Builder>();
+        List<PackageConfig.Builder> packages = new LinkedList<PackageConfig.Builder>();
 
         try {
             //分析所有的 "Controller"
             for (ClassPath.ClassInfo classInfo : findControllers(controllerPackage, controllerSuffixes)) {
-                List<RouteMapping> routeMappings = parseController(classInfo.load());
+                Class<?> controllerClass = classInfo.load();
+                PackageConfig parentPackage = findParentPackage(controllerClass);
+
+                // namespace => PackageConfig.Builder
+                Map<String, PackageConfig.Builder> controllerPackages = new HashMap<String, PackageConfig.Builder>();
+                List<RouteMapping> routeMappings = parseController(controllerClass);
                 for (RouteMapping routeMapping : routeMappings) {
                     //将路由转换为 action
                     ActionInfo actionInfo = routeMapping.toAction();
                     String namespace = actionInfo.getNamespace();
 
                     //create action config
-                    PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(namespace, packages);
+                    PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(controllerClass.getName(), namespace, parentPackage, controllerPackages);
                     ActionConfig actionCfg = createActionConfig(packageCfgBuilder, actionInfo, routeMapping);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);
 
                     //添加路由映射
                     routeMappingHandler.put(routeMapping, actionCfg);
                 }
+                packages.addAll(controllerPackages.values());
             }
         } catch (IOException e) {
             throw new IllegalStateException("could not find controllers");
         }
 
-        return packages.values();
+        return packages;
+    }
+
+    /**
+     * 返回父包
+     *
+     * @param controllerClass
+     * @return
+     * @since 1.0.2
+     */
+    private PackageConfig findParentPackage(Class<?> controllerClass) {
+        ControllerPackage pkg = ReflectUtil.getAnnotation(controllerClass, ControllerPackage.class);
+        // 父包
+        PackageConfig parentPackage = null;
+        if (pkg == null) {
+            parentPackage = this.defaultParentPackage();
+        } else {
+            parentPackage = this.configuration.getPackageConfig(pkg.parent());
+        }
+        return parentPackage;
     }
 
     /**
@@ -148,6 +174,7 @@ public class ControllerPackageProvider implements PackageProvider {
     private PackageConfig defaultParentPackage() {
         return configuration.getPackageConfig(defaultParentPackage);
     }
+
 
     /**
      * 查找 Package，如果不存在则创建
@@ -168,6 +195,27 @@ public class ControllerPackageProvider implements PackageProvider {
         }
         return packageCfgBuilder;
     }
+
+    /**
+     * 查找 Package，如果不存在则创建
+     *
+     * @param namespace
+     * @param packages
+     * @return
+     */
+    private PackageConfig.Builder findOrCreatePackage(String controllerClassName, String namespace, PackageConfig parentPackage, Map<String, PackageConfig.Builder> packages) {
+        // packageName = controller.className + namespace
+        String packageName = FREEROUTE_DEFAULT + controllerClassName + "#" + namespace;
+        PackageConfig.Builder packageCfgBuilder = packages.get(namespace);
+        if (packageCfgBuilder == null) {
+            packageCfgBuilder = new PackageConfig.Builder(packageName);
+            packageCfgBuilder.addParent(parentPackage);
+            packageCfgBuilder.namespace(namespace);
+            packages.put(namespace, packageCfgBuilder);
+        }
+        return packageCfgBuilder;
+    }
+
 
     private ActionConfig createActionConfig(PackageConfig.Builder packageCfgBuilder, ActionInfo actionInfo, RouteMapping routeMapping) {
         String actionName = actionInfo.getActionName();

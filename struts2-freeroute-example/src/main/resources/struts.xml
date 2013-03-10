@@ -17,4 +17,27 @@
             <result>/hello.html</result>
         </action>
     </package>
+
+    <package name="pkg-0" extends="struts-default" namespace="/my">
+        <interceptors>
+            <interceptor name="myInterceptor" class="org.example.action.MyInterceptor"/>
+
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="myInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="myStack"/>
+
+        <action name="hello">
+            <result>/hello.html</result>
+        </action>
+    </package>
+
+    <package name="pkg-1" extends="struts-default" namespace="/my">
+        <action name="hello2">
+            <result>/hello.html</result>
+        </action>
+    </package>
 </struts>
