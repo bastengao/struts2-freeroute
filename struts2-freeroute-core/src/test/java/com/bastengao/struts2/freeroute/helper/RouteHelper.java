@@ -17,6 +17,7 @@ public class RouteHelper {
         when(route.value()).thenReturn(value);
         when(route.method()).thenReturn(methods);
         when(route.params()).thenReturn(params);
+        when(route.interceptors()).thenReturn(new String[]{});
         return route;
     }
 
@@ -25,6 +26,7 @@ public class RouteHelper {
         when(route.value()).thenReturn(value);
         when(route.method()).thenReturn(new MethodType[]{});
         when(route.params()).thenReturn(new String[]{});
+        when(route.interceptors()).thenReturn(new String[]{});
         return route;
     }
 }
