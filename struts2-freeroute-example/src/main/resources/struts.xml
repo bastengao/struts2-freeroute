@@ -31,13 +31,26 @@
         <default-interceptor-ref name="myStack"/>
 
         <action name="hello">
+            <interceptor-ref name="myInterceptor"/>
             <result>/hello.html</result>
         </action>
     </package>
 
     <package name="pkg-1" extends="struts-default" namespace="/my">
+        <interceptors>
+            <interceptor name="myInterceptor" class="org.example.action.MyInterceptor"/>
+            <interceptor name="my2Interceptor" class="myInterceptor2"/>
+
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="myInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+
         <action name="hello2">
             <result>/hello.html</result>
         </action>
     </package>
+
+    <package name="pkg-2" extends="pkg-1"></package>
 </struts>

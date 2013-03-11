@@ -38,4 +38,12 @@ public @interface Route {
      * @since 1.0
      */
     String[] params() default {};
+
+    /**
+     * 拦截器, 排名区分先后
+     *
+     * @return
+     * @since 1.0.2
+     */
+    String[] interceptors() default {};
 }

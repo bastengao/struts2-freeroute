@@ -12,8 +12,8 @@ import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationException;
 import com.opensymphony.xwork2.config.PackageProvider;
-import com.opensymphony.xwork2.config.entities.ActionConfig;
-import com.opensymphony.xwork2.config.entities.PackageConfig;
+import com.opensymphony.xwork2.config.entities.*;
+import com.opensymphony.xwork2.config.providers.InterceptorBuilder;
 import com.opensymphony.xwork2.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +36,7 @@ public class ControllerPackageProvider implements PackageProvider {
     public static final String FREEROUTE_DEFAULT = "freeroute-default#";
 
     private Configuration configuration;
+    private ObjectFactory objectFactory;
     private RouteMappingHandler routeMappingHandler;
 
     // controller 所在的包
@@ -72,6 +73,11 @@ public class ControllerPackageProvider implements PackageProvider {
     @Inject(value = "struts.freeroute.defaultParentPackage", required = true)
     private void setDefaultParentPackage(String defaultParentPackage) {
         this.defaultParentPackage = defaultParentPackage;
+    }
+
+    @Inject
+    private void setObjectFactory(ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
     }
 
     /**
@@ -132,7 +138,7 @@ public class ControllerPackageProvider implements PackageProvider {
 
                     //create action config
                     PackageConfig.Builder packageCfgBuilder = findOrCreatePackage(controllerClass.getName(), namespace, parentPackage, controllerPackages);
-                    ActionConfig actionCfg = createActionConfig(packageCfgBuilder, actionInfo, routeMapping);
+                    ActionConfig actionCfg = createActionConfig(parentPackage, packageCfgBuilder, actionInfo, routeMapping);
                     packageCfgBuilder.addActionConfig(actionCfg.getName(), actionCfg);
 
                     //添加路由映射
@@ -217,23 +223,65 @@ public class ControllerPackageProvider implements PackageProvider {
     }
 
 
-    private ActionConfig createActionConfig(PackageConfig.Builder packageCfgBuilder, ActionInfo actionInfo, RouteMapping routeMapping) {
+    /**
+     * 创建 action 配置
+     *
+     * @param parentConfig
+     * @param packageCfgBuilder
+     * @param actionInfo
+     * @param routeMapping
+     * @return
+     */
+    private ActionConfig createActionConfig(PackageConfig parentConfig, PackageConfig.Builder packageCfgBuilder, ActionInfo actionInfo, RouteMapping routeMapping) {
         String actionName = actionInfo.getActionName();
 
         //create action config
         String actionClass = routeMapping.getAction().getName();
         String actionMethodName = routeMapping.getMethod().getName();
-        return createActionConfig(packageCfgBuilder, actionClass, actionMethodName, actionName);
+        ActionConfig.Builder actionCfgBuilder = createActionConfig(packageCfgBuilder, actionClass, actionMethodName, actionName);
+
+        // 配置拦截器
+        for (String interceptor : routeMapping.getInterceptors()) {
+            actionCfgBuilder.addInterceptors(getInterceptorMappings(parentConfig, interceptor));
+        }
+        return actionCfgBuilder.build();
     }
 
     private ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String actionName) {
-        return createActionConfig(packageConfigBuilder, className, null, actionName);
+        return createActionConfig(packageConfigBuilder, className, null, actionName).build();
     }
 
-    protected ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
+    protected ActionConfig.Builder createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
         ActionConfig.Builder actionCfgBuilder = new ActionConfig.Builder(packageConfigBuilder.getName(), actionName, className);
         actionCfgBuilder.methodName(methodName);
-        return actionCfgBuilder.build();
+        return actionCfgBuilder;
+    }
+
+    /**
+     * 返回父包下指定拦截器名称对应的 InterceptorMapping
+     *
+     * @param parentConfig
+     * @param interceptorName
+     * @return
+     * @since 1.0.2
+     */
+    private List<InterceptorMapping> getInterceptorMappings(PackageConfig parentConfig, String interceptorName) {
+        Object interceptorConfig = parentConfig.getInterceptorConfig(interceptorName);
+        Map<String, String> params = null;
+        // 如果是一般拦截器
+        if (interceptorConfig instanceof InterceptorConfig) {
+            params = ((InterceptorConfig) interceptorConfig).getParams();
+        }
+        // 如果一拦截器栈
+        else if (interceptorConfig instanceof InterceptorStackConfig) {
+            params = new LinkedHashMap<String, String>();
+        }
+
+        return InterceptorBuilder.constructInterceptorReference(parentConfig,
+                interceptorName,
+                params,
+                parentConfig.getLocation(),
+                objectFactory);
     }
 
     /**

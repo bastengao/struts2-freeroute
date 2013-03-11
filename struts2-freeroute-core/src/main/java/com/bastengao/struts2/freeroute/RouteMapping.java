@@ -5,7 +5,6 @@ import com.bastengao.struts2.freeroute.annotation.CookieValue;
 import com.bastengao.struts2.freeroute.annotation.MethodType;
 import com.bastengao.struts2.freeroute.annotation.Route;
 import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -33,6 +32,8 @@ public class RouteMapping {
     private final List<MethodType> httpMethods;
     // http params.  unmodified
     private final List<String> httpParams;
+    // struts interceptors. unmodified
+    private final List<String> interceptors;
 
     // http 参数规则. unmodified
     private List<Param> params;
@@ -79,6 +80,7 @@ public class RouteMapping {
         this.routePath = parseRoutePath(controllerRoute, methodRoute);
         this.httpMethods = Collections.unmodifiableList(Arrays.asList(route.method()));
         this.httpParams = Collections.unmodifiableList(Arrays.asList(route.params()));
+        this.interceptors = Collections.unmodifiableList(Arrays.asList(route.interceptors()));
 
         initParams();
         initPathVariables();
@@ -185,6 +187,16 @@ public class RouteMapping {
      */
     public List<MethodType> getHttpMethods() {
         return httpMethods;
+    }
+
+    /**
+     * unmodified list
+     *
+     * @return
+     * @since 1.0.2
+     */
+    public List<String> getInterceptors() {
+        return interceptors;
     }
 
     public List<Param> getParams() {

@@ -41,7 +41,7 @@ public class SpringPackageProvider extends ControllerPackageProvider {
 
 
     @Override
-    protected ActionConfig createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
+    protected ActionConfig.Builder createActionConfig(PackageConfig.Builder packageConfigBuilder, String className, String methodName, String actionName) {
         try {
             // 将 action class name 转换为 spring bean name, 如果可以转
             Class actionClass = objectFactory.getClassInstance(className);
@@ -59,6 +59,6 @@ public class SpringPackageProvider extends ControllerPackageProvider {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException(e);
         }
-        return super.createActionConfig(packageConfigBuilder, className, methodName, actionName);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.createActionConfig(packageConfigBuilder, className, methodName, actionName);
     }
 }
