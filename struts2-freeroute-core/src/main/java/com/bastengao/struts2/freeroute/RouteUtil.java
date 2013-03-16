@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * @date 12-12-18 23:25
  * @since 1.0
  */
-public class RouteUtil {
+class RouteUtil {
 
     //路径变量正则 "/{([a-zA-Z]+)}"
     public static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("/\\{([a-zA-Z]+)\\}");

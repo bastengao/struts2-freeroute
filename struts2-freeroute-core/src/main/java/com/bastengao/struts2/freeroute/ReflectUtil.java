@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * @date 13-1-7 21:44
  * @since 1.0
  */
-public class ReflectUtil {
+class ReflectUtil {
     private ReflectUtil() {
     }
 

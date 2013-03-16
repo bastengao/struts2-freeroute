@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * @date 12-12-16 20:17
  * @since 1.0
  */
-public class RouteMapping {
+class RouteMapping {
     //可选配置(可能有，可能没有)
     private final ContentBase contentBase;
     // 方法上的 @Route (methodRoute).

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 12-12-16 22:57
  * @since 1.0
  */
-public interface RouteMappingHandler {
+interface RouteMappingHandler {
     /**
      * 添加新的路由
      *
