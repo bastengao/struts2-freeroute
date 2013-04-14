@@ -337,3 +337,23 @@ public class ExampleController{
     }
 }
 ```
+
+## 包配置
+
+我们可以通过全局配置 `struts.freeroute.defaultParentPackage` 来设置默认父包，
+我们了可以通过 `ControllerPackage` 来自定义每个 Controller 的父包，
+类似于 struts 的 `package` 中的 `extends`。
+
+struts.xml
+```xml
+<package name="myPackage" extends="struts-default">
+    <!-- interceptors, actions -->
+</package>
+```
+
+```java
+@ControllerPackage(parent = "myPackage")
+public class MyController {
+    // do something
+}
+```
