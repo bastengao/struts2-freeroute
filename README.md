@@ -147,7 +147,7 @@ struts.xml
 
 例如：
 ```java
-public MyController{
+public class MyController{
     @Route("/helloworld")
     public String hello(){
         return Results.html("/world.html)";
@@ -263,6 +263,35 @@ method 目前有以下类型:
 参数存在但不等于某个值, `GET http://HOST:PROT/users?name=basten` 将会产生 404，如果 name 是其他值则不会
 ```java
 @Rotue(value = "/users", params = {"name!=basten"})
+```
+
+### 拦截器
+
+通过 `@Route.interceptors` 指定拦截器，可以指定多个，顺序为由左到右。
+
+struts.xml
+```xml
+<package name="myPackage" extends="struts-default">
+    <interceptors>
+        <interceptor name="myInterceptor" class="org.example.action.MyInterceptor"/>
+
+        <interceptor-stack name="myStack">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="myInterceptor"/>
+        </interceptor-stack>
+    </interceptors>
+</package>
+```
+
+```java
+@ControllerPackage(parent = "myPackage")
+public class MyController {
+
+    @Route(value = "/path", interceptors = "myStack")
+    public String view(){
+        //...
+    }
+}
 ```
 
 ## 返回结果
