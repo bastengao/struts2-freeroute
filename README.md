@@ -189,13 +189,35 @@ private String name
 
 @Route("/users/{id}/tags/{name}")
 public String tagedUser(){
-    //....
+    //...
 }
 
 // setter, getter
 ```
 
 注意：路径变量比参数的优先级高, 上面的例子中请求如果是 `http://HOST:PORT/users/1013/tags/free?name=never` , controller 中的 name 属性值将会是 `free` 而不是 `never`。
+
+* 路由嵌套
+
+在 controller 类中加 `@Route` 注解起到路径嵌套的作用，其中只有 `value` 属性有效
+
+```java
+@Route("/users")
+public class UserController {
+
+    // GET "/users"
+    @Route(method = MethodType.GET)
+    public String index(){
+        //...
+    }
+
+    // GET "/users/{id}"
+    @Route(values = "/{id}", method = MethodType.GET)
+    public String show(){
+        //...
+    }
+}
+```
 
 
 ### 绑定 cookie
