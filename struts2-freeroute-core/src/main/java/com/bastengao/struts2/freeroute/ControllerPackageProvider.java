@@ -166,6 +166,10 @@ public class ControllerPackageProvider implements PackageProvider {
         PackageConfig parentPackage = null;
         if (pkg == null) {
             parentPackage = this.defaultParentPackage();
+
+            if(parentPackage == null){
+                throw new IllegalStateException("defaultParentPackage not found: " + this.defaultParentPackage);
+            }
         } else {
             parentPackage = this.configuration.getPackageConfig(pkg.parent());
         }
