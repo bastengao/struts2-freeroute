@@ -62,6 +62,11 @@ public class PersonController {
         return "redirect:/persons/" + id + ".json";
     }
 
+    @Route(value = "/persons/{id}", method = MethodType.GET, params = {"redirect=true", "relative"})
+    public String showRedirect2(){
+        return "redirect:" + id + ".json";
+    }
+
     @Route("/persons/{id}.json")
     public String showJson() {
         return Results.json().done();

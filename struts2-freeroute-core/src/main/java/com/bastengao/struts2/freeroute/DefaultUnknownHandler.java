@@ -175,8 +175,11 @@ public class DefaultUnknownHandler implements UnknownHandler {
                 } else {
                     location = resultParam;
                 }
-                // 动态处理内容的路径
-                location = parsePath(contentBase, routeMapping, location);
+
+                // 页面路径的转换如果是相对路径, 但除过重定向
+                if(!resultType.equals("redirect")){
+                    location = parsePath(contentBase, routeMapping, location);
+                }
                 resultBuilder.addParam(typeConfig.getDefaultResultParam(), location);
                 return resultBuilder.build();
             }

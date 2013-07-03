@@ -6,7 +6,7 @@
     <constant name="struts.freeroute.controllerPackage" value="org.example"/>
     <constant name="struts.freeroute.controllerSuffixes" value="Controller, Action"/>
     <constant name="struts.freeroute.defaultParentPackage" value="json-default"/>
-    <constant name="struts.freeroute.contentBase" value="/pages"/>
+    <!--<constant name="struts.freeroute.contentBase" value="/pages"/>-->
 
     <package name="my-struts" extends="json-default">
         <action name="hello">
