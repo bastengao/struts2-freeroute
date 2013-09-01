@@ -27,7 +27,7 @@
     <scm>
         <url>https://github.com/bastengao/struts2-freeroute</url>
         <connection>scm:git:https://github.com/bastengao/struts2-freeroute.git</connection>
-        <developerConnection>scm:git:https://github.com/bastengao/struts2-freeroute.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:bastengao/struts2-freeroute.git</developerConnection>
     </scm>
 
     <developers>
