@@ -9,7 +9,7 @@
 
     <groupId>com.bastengao.freeroute</groupId>
     <artifactId>struts2-freeroute</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
     <name>Struts2 Freeroute</name>
     <description>Struts2 Freeroute parent project</description>
