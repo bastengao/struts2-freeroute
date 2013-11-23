@@ -19,6 +19,13 @@ public class JsonController {
         return Results.json().root("values").noCache(true).done();
     }
 
+    @Route("/json-result2")
+    public String show2(){
+        Map<String, Object> values = new HashMap<String, Object>();
+        values.put("name", "bastengao");
+        return Results.json().asRoot(values).done();
+    }
+
     public Map<String, Object> getValues() {
         return values;
     }

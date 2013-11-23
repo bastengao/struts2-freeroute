@@ -1,5 +1,7 @@
 package com.bastengao.struts2.freeroute;
 
+import com.opensymphony.xwork2.ActionContext;
+
 /**
  * json result of JSON plugin.
  * 参考 http://struts.apache.org/2.3.8/docs/json-plugin.html
@@ -11,6 +13,17 @@ package com.bastengao.struts2.freeroute;
 public class JsonResult extends Result {
     protected JsonResult() {
         super("json");
+    }
+
+    /**
+     * 将 data 做为 root
+     *
+     * @param data
+     * @return
+     */
+    public JsonResult asRoot(Object data){
+        ActionContext.getContext().put("_jsonRootData", data);
+        return root("_jsonRootData");
     }
 
     public JsonResult root(String root) {
